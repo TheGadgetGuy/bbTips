@@ -255,7 +255,11 @@ $versions = array(
      
      '0.3.4'    => array( 
      
-     // spellicon
+     // this is a bugfix because wowhead changed alot of backend urls
+		'config_update'  => array(
+		
+			array('bbtips_maxparse', 200), 
+			)   
      ), 
                 
 

@@ -19,7 +19,8 @@ if (!defined('IN_PHPBB'))
 }
 if (! defined('EMED_BBDKP')) 
 {
-    trigger_error('bbDkp is currently disabled.', E_USER_WARNING);
+	$user->add_lang ( array ('mods/dkp_admin' ));
+	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
 require ($phpbb_root_path . 'includes/acp/acp_dkp.' . $phpEx); 
