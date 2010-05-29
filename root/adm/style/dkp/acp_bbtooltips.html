@@ -1,0 +1,77 @@
+<!-- INCLUDE overall_header.html -->
+<a name="maincontent"></a>
+<h1>{L_BBTOOLTIPS}</h1>
+<p>{L_BBTOOLTIPS_EXPLAIN}</p>
+
+<form method="post" action="{F_BBTOOLTIPS}" name="post">
+
+<fieldset>
+<legend>{L_BBTIPS_SETTING}</legend>
+<br />
+
+<dl>
+	<dt><label for="maxparse">{L_BBTIPS_MAXPARSE}:</label>{L_BBTIPS_MAXPARSE_EXPLAIN}</dt>
+	<dd><input class="small" type="text" id="maxparse" name="maxparse" value="{MAXPARSE}" /></dd>
+</dl>
+ 
+ <dl>
+   <dt><label for="site_lang">{L_BBTOOLTIPS_LANG}:</label>{L_BBTOOLTIPS_LANG_EXPLAIN}</dt>
+   <dd>
+     <select name="site_lang" class="input">
+       <!-- BEGIN site_lang_row -->
+     	 <option value="{site_lang_row.VALUE}"{site_lang_row.SELECTED}>{site_lang_row.OPTION}</option>
+       <!-- END site_lang_row -->
+     </select>
+   </dd>
+ </dl>
+ 
+ <dl>
+ <dt><label for="aut_search">{L_BBTOOLTIPS_LOCALJS}</label>{L_BBTOOLTIPS_LOCALJS_EXPLAIN}</dt>
+  <dd>
+     <input type="radio" name="aut_search" value="1"{LOCALJS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+     <input type="radio" name="aut_search" value="0"{LOCALJS_NO_CHECKED} /> {L_NO}
+   </dd>
+</dl>
+ 
+ <p class="quick">
+    <input type="submit" name="site_submit" value="{L_SUBMIT}" class="button1" />
+ </p>
+</fieldset>
+  
+<!-- IF S_CUSTOM -->  
+<fieldset>
+<legend>Tooltip customisation</legend>
+  <dl>
+	  <dt><label for="showsiteintooltip">Show site in tooltips</label></dt>
+      <dd><input type="checkbox" name="showsiteintooltip" value="{showsiteintooltip}"/>
+  </dl>
+  
+  
+   <dl>
+   <dt><label for="ttlabeltype">{L_TOOLTIPLABEL}:</label></dt>
+   <dd>
+     <select name="ttlabeltype" class="input">
+       <!-- BEGIN ttlabeltype_row -->
+     	 <option value="{ttlabeltype_row.VALUE}"{ttlabeltype_row.SELECTED}>{ttlabeltype_row.OPTION}</option>
+       <!-- END ttlabeltype_row -->
+     </select>
+   </dd>
+   </dl>
+  
+  
+    <dl>
+        <dt><label for="ttlabeltxt">Label to append to tooltip - (20 char)</label></dt>
+        <dd><input class="medium" type="text" name="ttlabeltxt" value="{ttlabeltxt}" /></dd>
+    </dl>
+  
+
+  <p class="quick">
+    <input type="submit" name="tt_submit" value="{L_SUBMIT}" class="button1" />
+  </p>
+</fieldset>
+<!-- ENDIF -->
+
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->

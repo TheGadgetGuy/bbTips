@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!-- $id $ -->
+<!--For security purposes, please check: http
+://www.phpbb.com/mods/ for the latest version of this MOD. 
+Although MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems 
+within the MOD. No support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
+<header>
+    <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
+    <title lang="en-gb">bbDKP Tooltips Plugin 0.3.4</title>
+    <description lang="en-gb">
+	This bbdkp plugin provides Tooltips for Warcraft.
+</description>
+
+    <author-notes lang="en-gb">Pworks with bbdkp 1.1.0 or higher
+    1) Press Install to let Automod copy the files and do the core edits. 
+    2) Then browse to install/installbbtips.php and run the bbTips plugin table installer. Afterwards, delete the install folder.</author-notes>
+    <author-group>
+      <author>
+        <username>Sajaki</username>
+        <contributions-group>
+      	<contributions status="past" from="2008-04-04"   position="Developer"/>
+      	</contributions-group>	
+      </author>   
+    </author-group>
+	<mod-version>0.3.4</mod-version>
+    <installation>
+      <level>easy</level>
+      <time>300</time>
+	<target-version>3.0.7-PL1</target-version>
+    </installation>
+
+<link-group>
+	<link type="parent" lang="en-gb" href="../install.xml">Manual</link>
+	<link type="dependency" lang="en-gb" href="http://www.bbdkp.com/viewtopic.php?f=2&amp;amp;t=1320">bbDkp 1.1</link>
+</link-group>			
+</header>
+
+<action-group>
+
+<copy>
+    <file from="root/styles/subsilver2/theme/*.*" to="styles/subsilver2/theme/*.*" />    
+</copy>
+    
+<open src="/styles/subsilver2/template/dkp/dkpheader.html">
+	    <edit>
+	    <comment lang="en">wowhead links subsilver2</comment>
+	     <find><![CDATA[<!-- BBTIPS -->]]></find>
+	     <action type="after-add"><![CDATA[
+<!-- Wowhead Item Links -->
+<link href="{T_THEME_PATH}/wowhead.css" rel="stylesheet" type="text/css" />
+<!-- IF S_BBTIPS_WHREMOTE -->
+<script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script>
+<!-- ELSE -->
+<script src="./includes/bbdkp/bbtips/js/power.js" type="text/javascript"></script>
+<!-- ENDIF -->
+]]></action>
+</edit>
+</open>
+
+<open src="/styles/subsilver2/theme/stylesheet.css">
+      <edit>
+      <comment lang="en">bbdkp css</comment>
+        <find><![CDATA[@import url("bbdkp.css");
+        ]]></find>
+		<action type="after-add"><![CDATA[@import url("wowhead.css");
+
+]]></action>
+      </edit>
+</open>
+
+    <diy-instructions lang="en">See general install.xml file
+    </diy-instructions>
+  </action-group>
+</mod>

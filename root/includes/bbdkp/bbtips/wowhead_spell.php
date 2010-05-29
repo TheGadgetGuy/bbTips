@@ -1,0 +1,299 @@
+<?php
+/**
+* bbdkp-wowhead Link Parser v3 - Spell Extension
+*
+* @package bbDkp.includes
+* @version $Id $
+* @Copyright (c) 2008 Adam Koch
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+* Wowhead (wowhead.com) Link Parser v3 - Spell Extension
+* @author: Adam "craCkpot" Koch (admin@crackpot.us) -- 
+* @author: Adapted by bbdkp Team (sajaki9@gmail.com)
+*
+**/
+
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+        
+class wowhead_spell extends wowhead
+{
+	var $lang;
+	var $patterns; 
+	/**
+	* Constructor
+	* @access public
+	**/
+	function wowhead_spell()
+	{
+		global $phpEx, $phpbb_root_path; 
+		
+		if (!class_exists('wowhead_patterns')) 
+        {
+            require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
+        }
+        $this->patterns = new wowhead_patterns();
+	}
+
+	/**
+	* Parses information
+	* @access public
+	**/
+	function parse($name, $args = array())
+	{
+	    global $phpbb_root_path, $phpEx, $config;
+	    
+		if (trim($name) == '')
+		{
+		    return false;
+		}
+
+		if ( !class_exists('wowhead_cache')) 
+        {
+            require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx);    
+        }
+        $cache = new wowhead_cache();
+
+		$this->lang = $config['bbtips_lang'];
+		$rank = (!array_key_exists('rank', $args)) ? '' : $args['rank'];
+
+		if (!$result = $cache->getObject($name, 'spell', $this->lang, $rank))
+		{
+			if (is_numeric($name))
+			{
+				$result = $this->_getSpellByID($name);
+			}
+			else
+			{
+				$result = $this->_getSpellByName($name, $rank);
+			}
+
+			if (!$result)
+			{
+				return $this->_notfound('spell', $name);
+			}
+			else
+			{
+				$cache->saveObject($result);
+				return $this->_generateHTML($result, 'spell', '', $rank);
+			}
+		}
+		else
+		{
+			
+			return $this->_generateHTML($result, 'spell', '', $rank);
+		}
+	}
+
+	
+	/*
+	 * search using Dom parser
+	 */
+	public function _getSpellByName($name, $rank = 0)
+	{
+		global $phpEx, $phpbb_root_path; 
+        if ( !class_exists('simple_html_dom_node')) 
+        {
+            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
+        }
+        $built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($name);
+		//$html = file_get_html($built_url);
+		
+        $html = $this->_read_url($name, 'spell', false);
+		if ($html == NULL)
+		{
+		    //in case of bad request
+		    return false; 
+		}
+		
+		//searches that return 1 result
+		if (preg_match('#Location: \/spell=([0-9]{1,10})#s', $html, $match))
+		{
+			$spell = array(
+				'name'			=>	ucwords(strtolower($name)),
+				'search_name'	=>	$name,
+				'itemid'		=>	$match[1],
+				'rank'			=>	0,
+				'type'			=>	'spell',
+				'lang'			=>	$this->lang
+			);
+			
+			return $spell;
+		}
+		
+		// get the line we need to pull the data
+		$line = $this->spellLine($html, $name);
+		//var_dump($line); die;
+		if (!$line)
+			return false;
+		else
+		{
+			// decode the JSON result
+			if (!$json = json_decode($line, true))
+				return false;
+				
+			// loop through the resulting array and pull out the ones that match the name
+			$json_array = array();
+			foreach ($json as $spell)
+			{
+				$spell['name'] = substr($spell['name'], 1);
+				if (stripslashes(strtolower($spell['name'])) == stripslashes(strtolower($name)))
+					$json_array[] = $spell;	// add it to the array
+			}
+			
+			if (sizeof($json_array) == 0)
+				return false;
+			
+			// which one we grab depends on the $rank variable
+			$result = ($rank != '') ? $json_array[$rank - 1] : $json_array[sizeof($json_array) - 1];
+
+			$spell = array(	// finally return what we found
+				'name'			=>	stripslashes($result['name']),
+				'search_name'	=>	$name,
+				'itemid'		=>	$result['id'],
+				'rank'			=>	($rank != '') ? $rank : 0,
+				'type'			=>	'spell',
+				'lang'			=>	$this->lang
+			);
+			
+			return $spell; 
+			
+		}
+		
+		
+		
+	}
+	
+	/**
+	* Generates HTML for link
+	* @access private
+	**/
+	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	{
+	    $info['link'] = $this->_generateLink($info['itemid'], $type);
+		if (trim($rank) != '')
+		{
+			return $this->_replaceWildcards($this->patterns->pattern('spell_rank'), $info);
+		}
+		else
+		{
+			return $this->_replaceWildcards($this->patterns->pattern('spell'), $info);
+		}
+
+	}
+	
+
+	/**
+	* Queries Wowhead for Spell info by ID
+	* @access private
+	**/
+	function _getSpellByID($id)
+	{
+		if (!is_numeric($id))
+		{
+		    return false;
+		}
+			
+
+		$data = $this->_read_url($id, 'spell', false);
+
+		if ($data == '$WowheadPower.registerSpell')
+		{
+			return false;
+		}
+		else
+		{
+			switch ($this->lang)
+			{
+				case 'de':
+					$str = 'dede';
+					break;
+				case 'fr':
+					$str = 'frfr';
+					break;
+				case 'es':
+					$str = 'eses';
+					break;
+				case 'en':
+				default:
+					$str = 'enus';
+					break;
+			}
+			if (preg_match('#name_' . $str . ': \'(.+?)\',#s', $data, $match))
+			{
+				return array(
+					'name'			=>	stripslashes($match[1]),
+					'itemid'		=>	$id,
+					'search_name'	=>	$id,
+					'type'			=>	'spell',
+					'rank'			=>	'',
+					'lang'			=>	$this->lang
+				);
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	
+	
+	private function spellLine($data, $name)
+	{
+		$found = false;		// assume failure
+		$parts = explode(chr(10), $data);
+		$name = strtolower($name);
+		foreach ($parts as $line)
+		{
+			if (strpos($line, "new Listview({template: 'spell', id: 'abilities',") !== false && strpos(strtolower($line), '@' . $name) !== false)
+			{
+				$found = true;
+				break;
+			}
+			elseif (strpos($line, "new Listview({template: 'spell', id: 'talents',") !== false && strpos(strtolower($line), '@' . $name) !== false)
+			{
+				$found = true;
+				break;
+			}
+			elseif (strpos($line, "new Listview({template: 'spell', id: 'professions',") !== false && strpos(strtolower($line), '@' . $name) !== false)
+			{
+				$found = true;
+				break;
+			}
+			elseif (strpos($line, "new Listview({template: 'spell', id: 'uncategorized-spells',") !== false && strpos(strtolower($line), '@' . $name) !== false)
+			{
+				$found = true;
+				break;
+			}
+			elseif (strpos($line, "new Listview({template: 'spell', id: 'companions',") !== false && strpos(strtolower($line), '@' . $name) !== false)
+			{
+				$found = true;
+				break;	
+			}
+		}
+		
+		if ($found && sizeof($line) > 0)
+		{
+			// clean the line up to make it valid JSON
+			$line = substr($line, strpos($line, 'data: [{') + 6);
+			$line = str_replace('});', '', $line);
+			return $line;				
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	
+
+	
+}
+?>
