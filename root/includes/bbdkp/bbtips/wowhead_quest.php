@@ -142,44 +142,6 @@ class wowhead_quest extends wowhead
 	}
 
 	
-	/**
-	* Uses Wowhead's search to find our info
-	* @access private
-	**/
-	public function _findQuestBySearch($name)
-	{
-		$data = $this->_read_url($name, $type, false);
-
-		if (preg_match('#Location: /\?' . $type . '=(.+?)\n#s', $data, $match))
-		{
-			// for searches with only one result
-			return array(1 => $match[1], 2 => ucwords(strtolower($name)));
-		}
-		else
-		{
-			$the_line = $data;
-			$pattern = '#<a href="/quest=([0-9]{1,10})">(.+?)</a>#s';
-
-			// then we'll use preg_match to find any matches
-			while (preg_match($pattern, $the_line, $match))
-			{
-				// do we have a match?
-				if (stripslashes(strtolower($match[2])) == strtolower($name))
-				{
-					return $match;
-					break;
-				}
-				else
-				{
-					// remove the found entry to prevent a never ending loop
-					$the_line = str_replace($match[0], '', $the_line);
-				}
-			}
-
-		}
-		return false;
-	}
-	
 	
 	/**
 	* Queries Wowhead for Quest by Name
@@ -192,23 +154,80 @@ class wowhead_quest extends wowhead
 		    return false;
 		}
 		
-		$query = $this->_findQuestBySearch($name);
-
-		if ($query != false)
-		{
-			return array(
-				'name'			=>	stripslashes($query[2]),
-				'search_name'	=>	$name,
-				'itemid'		=>	$query[1],
-				'type'			=>	'quest',
-				'lang'			=>  $this->lang
-			);
-		}
-		else
+		$html = $this->_read_url($name, 'quest', false);
+		
+		if (!$html)
 		{
 			return false;
 		}
+		
+		// make sure it didn't redirect
+		if (preg_match('#Location: \/quest=([0-9]{1,10})#s', $html, $match))
+		{
+			$quest =  array(
+				'name'			=>	ucwords(strtolower($name)),
+				'search_name'	=>	$name,
+				'type'			=>	'quest',
+				'itemid'		=>	$match[1],
+				'lang'			=>	$this->lang
+			);	
+			
+			return $quest; 
+		}
+		
+		// get the JSON line from the data
+		$line = $this->_questLine($data);
+		
+		if (!$line)
+		{
+			return false;
+		}
+		else
+		{
+			// decode the json
+			if (!$json = json_decode($line, true))
+			{
+				return false;
+			}
+			
+			foreach ($json as $quests)
+			{
+				if (stripslashes(strtolower($quests['name'])) == stripslashes(strtolower($name)))
+				{
+					$quest = array(
+						'name'			=>	$quests['name'],
+						'search_name'	=>	$name,
+						'type'			=>	'quest',
+						'itemid'		=>	$quests['id'],
+						'lang'			=>	$this->lang
+					);
+					return $quest; 
+				}
+			}
+			
+			return false;
+		}
+			
 	}
+	
+	private function _questLine($data)
+	{
+		$parts = explode(chr(10), $data);
+		foreach ($parts as $line)
+		{
+			if (strpos($line, "new Listview({template: 'quest', id: 'quests',") !== false)
+			{
+				$line = substr($line, strpos($line, 'data: [{') + 6);
+				$line = str_replace('});', '', $line);
+				return $line;
+				break;
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	
 	
 }
