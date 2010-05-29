@@ -132,7 +132,7 @@ class wowhead_itemset extends wowhead
 								'itemid'	=>	(int)$xml->item['id'],
 								'name'		=>	(string)$xml->item->name,
 								'quality'	=>	(int)$xml->item->quality['id'],
-								'icon'		=>	'http://static.wowhead.com/images/icons/small/' . strtolower($xml->item->icon) . '.jpg'
+								'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($xml->item->icon) . '.jpg'
 							));
 						}
 						else

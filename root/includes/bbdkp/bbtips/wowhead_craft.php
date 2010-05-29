@@ -88,7 +88,7 @@ class wowhead_craft extends wowhead
 						'search_name'	=>	(string) $name,
 						'quality'		=>	(int) $xml->item->quality['id'],
 						'lang'			=>	(string) $this->lang,
-						'icon'			=>	'http://static.wowhead.com/images/icons/small/' . strtolower($xml->item->icon) . '.jpg'
+						'icon'			=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($xml->item->icon) . '.jpg'
 					);
 
 					$id = (int) $xml->item['id']; 
@@ -114,7 +114,7 @@ class wowhead_craft extends wowhead
 								'name'		=>	(string) $reagent['name'],
 								'quantity'	=>	(int) $reagent['count'],
 								'quality'	=>	$reagent['quality'],
-								'icon'		=>	'http://static.wowhead.com/images/icons/small/' . strtolower($reagent['icon']) . '.jpg'
+								'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($reagent['icon']) . '.jpg'
 							));
 						}
 					}
