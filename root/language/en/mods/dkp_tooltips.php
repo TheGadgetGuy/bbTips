@@ -74,17 +74,16 @@ $lang = array_merge($lang, array(
 'BBTIPS_MAXPARSE' => 'Maximum Parsing',
 'BBTIPS_MAXPARSE_EXPLAIN' => 'Maximum number of bbcode parsing on a given page. Setting this to 0 (unlimited) or too high (>200) may cause excessive load times which will cause PHP execution to timeout.', 
 
-'ITEM' => 'Install Wowhead Item bbCode',
-'ITEMICO' =>  'Install Wowhead Item icon bbCode',
-'ITEMDKP' =>  'Install ItemDkp bbCode', 
-'CRAFT' => 'Install Wowhead Craftables bbCode',
-'QUEST' => 'Install Wowhead Quest bbCode', 
-'SPELL' => 'Install Wowhead Spell bbCode', 
-'ACHIEVEMENT' => 'Install Wowhead Achievement bbCode', 
-'ARMORY' =>  'Install Wowhead character Armorylink bbCode', 
-'PROFILE' =>  'Install Wowhead Character Profile bbCode', 
-'GUILD' =>  'Install Wowhead Guild Armorylink bbCode',
- 
+'ITEM' => 'Install Wowhead Item  Tooltip bbCode',
+'ITEMICO' =>  'Install Wowhead Item icon Tooltip bbCode',
+'ITEMDKP' =>  'Install ItemDkp Tooltip bbCode', 
+'CRAFT' => 'Install Wowhead Craftables Tooltip bbCode',
+'QUEST' => 'Install Wowhead Quest Tooltip bbCode', 
+'SPELL' => 'Install Wowhead Spell Tooltip bbCode', 
+'ACHIEVEMENT' => 'Install Wowhead Achievement Tooltip bbCode', 
+'CHARACTER' =>  'Install Warcraft character Overlay bbCode', 
+
+
 'BBTOOLTIPS_LOCALJS' => 'Remote wowheadscript', 
 'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'Setting this to \'no\' will speed up pageloads. ', 
 'BBTOOLTIPS_LANG' => 'Tooltips Language',

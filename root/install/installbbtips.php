@@ -42,6 +42,7 @@ if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
+
 // The name of the mod to be displayed during installation.
 $mod_name = 'bbtips';
 
@@ -79,11 +80,8 @@ $options = array(
 'quest'   => array('lang' => 'QUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'spell'   => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'achievement'   => array('lang' => 'ACHIEVEMENT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+'wowchar'   => array('lang' => 'CHARACTER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 
-/*'armory'   => array('lang' => 'ARMORY', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-'profile'   => array('lang' => 'PROFILE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-'guild'   => array('lang' => 'GUILD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-*/
 );
 
 
@@ -101,7 +99,6 @@ $bbdkp_table_prefix = "bbeqdkp_";
  * Welcome to the bbtips installer
  * 
 ****************************************************************/
-
 
 $versions = array(
     
@@ -260,9 +257,14 @@ $versions = array(
 		
 			array('bbtips_maxparse', 200), 
 			)   
-     ), 
-                
+     ),
+      
+     '0.3.5'    => array( 
+     // character cache table 
+     // so we don't query blizzard when character is listed in this
+	 // char achievements are done with feed so they will still be dynamic
 
+     ),
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -355,54 +357,45 @@ function insert_bbcodes_wrapper($action, $version)
 		case 'update' :
 			if(request_var('item', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'item');
+				 insert_bbcodes($action, $version, 'item', 'Item tooltip');
 			}
 		
 			if(request_var('itemico', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'itemico'); 			
+				 insert_bbcodes($action, $version, 'itemico', 'Item icon'); 			
 			}
 		
 			if(request_var('itemdkp', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'itemdkp'); 			
+				 insert_bbcodes($action, $version, 'itemdkp', 'Item DKP'); 			
 			}
 		
 			if(request_var('craft', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'craft'); 			
+				 insert_bbcodes($action, $version, 'craft', 'Craftable Items'); 			
 			}
 			
 			if(request_var('quest', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'quest'); 			
+				 insert_bbcodes($action, $version, 'quest' , 'Quest Tag'); 			
 			}
 			
 			if(request_var('spell', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'spell'); 			
+				 insert_bbcodes($action, $version, 'spell' , 'Spell tooltip'); 			
 			}
 			
 			if(request_var('achievement', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'achievement'); 			
+				 insert_bbcodes($action, $version, 'achievement', 'Achievement tooltip'); 			
+			}
+		
+			if(request_var('wowchar', 0) == 1)
+			{
+				 insert_bbcodes($action, $version, 'wowchar', 'Character overlay'); 			
 			}
 			
-			if(request_var('armory', 0) == 1)
-			{
-				 insert_bbcodes($action, $version, 'armory'); 			
-			}
-			
-			if(request_var('profile', 0) == 1)
-			{
-				 insert_bbcodes($action, $version, 'profile'); 			
-			}
-			
-			if(request_var('guild', 0) == 1)
-			{
-				 insert_bbcodes($action, $version, 'guild'); 			
-			}
-			 return array('command' => 'UMIL_BBCODE_ITEM_ADDED', 'result' => 'SUCCESS'); 
+			return array('command' => 'UMIL_BBCODE_ITEM_ADDED', 'result' => 'SUCCESS'); 
 				
 	      break;
 		case 'uninstall' :
@@ -413,7 +406,8 @@ function insert_bbcodes_wrapper($action, $version)
 			delete_bbcodes($action, $version, 'craft');
 			delete_bbcodes($action, $version, 'quest');
 			delete_bbcodes($action, $version, 'spell');
-			delete_bbcodes($action, $version, 'achievement');																		
+			delete_bbcodes($action, $version, 'achievement');
+			delete_bbcodes($action, $version, 'wowchar');																		
 			return array('command' => 'UMIL_BBCODE_ITEM_REMOVED', 'result' => 'SUCCESS'); 												
 		    
 		  break; 
@@ -429,7 +423,7 @@ function insert_bbcodes_wrapper($action, $version)
  * @param string $action
  * @param string $version
  */
-function insert_bbcodes($action, $version, $tag)
+function insert_bbcodes($action, $version, $tag, $helpline)
 {	
 	global $db, $user, $auth, $template, $cache;
 	global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -438,7 +432,6 @@ function insert_bbcodes($action, $version, $tag)
 		// build each field for the sql query
 		$bbcode_match 	=	"[$tag]{SIMPLETEXT}[/$tag]";
 		$bbcode_tpl 	=	$bbcode_match;// same as match
-		$helpline = 'Wowhead ' . $tag;
 			
 		$sql = 'SELECT count(*) as checkcount FROM ' . BBCODES_TABLE . 
 			" WHERE LOWER(bbcode_tag) = '" . $db->sql_escape(strtolower($tag)) . "'";

@@ -6,7 +6,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP Tooltips Plugin 0.3.4]]></title>
+		<title lang="en"><![CDATA[bbDKP Tooltips Plugin 0.3.5]]></title>
 		<description lang="en"><![CDATA[This bbDKP plugin provides Tooltips for Warcraft.]]></description>
 		<author-notes lang="en"><![CDATA[works with bbdkp 1.1.0 or higher
     1) Press Install to let Automod copy the files and do the core edits. 
@@ -19,7 +19,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.3.4</mod-version>
+		<mod-version>0.3.5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>300</time>
@@ -39,6 +39,7 @@
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
+			<file from="root/styles/prosilver/template/*.*" to="styles/prosilver/template/*.*"/>			
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src="config.php">

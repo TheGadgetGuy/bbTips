@@ -1,15 +1,16 @@
 <?php
 /**
-* bbdkp-wowhead Link Parser v3 - Parse Script
+* bbTips Parser 
 *
 * @package bbDkp.includes
-* @version $Id $
-* @Copyright (c) 2008 Adam Koch
+* @version 0.3.5 $Id $
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @copyright (c) 2008 Adam Koch
+* @copyright (c) 2010 bbdkp <http://code.google.com/p/bbdkp/>
+* @author : Adam "craCkpot" Koch (admin@crackpot.us) 
+* @author : Sajaki (sajaki@bbdkp.com)
 *
-* Wowhead (wowhead.com) Link Parser v3 - Spell Extension
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
-*
+* 
 **/
 
 /**
@@ -36,8 +37,8 @@ class bbtips
 	    
 	    while (
 	    	($parses < $maxparse) &&
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc)\]#s', $whp_message, $match) or
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc) (.+?)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc)\]#s', $whp_message, $match) 
+		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $whp_message, $match) or
+		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar) (.+?)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $whp_message, $match) 
 		  	)
 		  {
 				$args = array();
@@ -45,8 +46,7 @@ class bbtips
 				if (  (count($match)>= 5) && ( 
 						strpos($match[2], 'lang=') !== false || strpos($match[2],'nomats') !== false || strpos($match[2], 'enchant=') !== false ||
 						strpos($match[2], 'size=') !== false || strpos($match[2],'rank=')  !== false || strpos($match[2], 'gems=') !== false ||
-						strpos($match[2], 'loc=') !== false  || strpos($match[2],'noicons') !== false || strpos($match[2], 'noclass') !== false ||
-						strpos($match[2], 'norace') !== false)
+						strpos($match[2], 'loc=') !== false || strpos($match[2],'realm=')  !== false || strpos($match[2],'region=')  !== false  )
 					)
 				{
 					// we have arguments
@@ -133,6 +133,15 @@ class bbtips
 		                }
 		                $object = new wowhead_npc();
 						break;
+					case 'wowchar':	
+						// uses the arguments realm and region
+			            if ( !class_exists('wowcharacter')) 
+			                { 
+			                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowcharacter.' . $phpEx);    
+			                }
+			                $object = new wowcharacter();
+						break;
+												
 						
 					default:
 						break;
@@ -185,18 +194,15 @@ class bbtips
 					'nomats'	=>	true
 				);
 			}
-			elseif (trim($in) == 'noicons')
+			elseif (trim($in) == 'realm')
 			{
-				// force a reload from the armory
-				return array('noicons'	=>	true);
+				// used with wowchar				
+				return array('realm' => true);
 			}
-			elseif (trim($in) == 'noclass')
+			elseif (trim($in) == 'region')
 			{
-				return array('noclass' => true);
-			}
-			elseif (trim($in) == 'norace')
-			{
-				return array('norace' => true);
+				// used with wowchar				
+				return array('region' => true);
 			}
 			else
 			{
@@ -219,18 +225,16 @@ class bbtips
 				{
 					$args['nomats'] = true;
 				}
-				elseif ($value == 'noicons')
+				elseif ($value == 'realm')
 				{
-					$args['noicons'] = true;
+					// used with wowchar
+					$args['realm'] = true;
 				}
-				elseif ($value == 'noclass')
+				elseif ($value == 'region')
 				{
-					$args['noclass'] = true;
-				}
-				elseif ($value == 'norace')
-				{
-					$args['norace'] = true;
-				}
+					// used with wowchar					
+					$args['region'] = true;
+				}				
 				else
 				{
 					$pre = substr($value, 0, strpos($value, '='));
