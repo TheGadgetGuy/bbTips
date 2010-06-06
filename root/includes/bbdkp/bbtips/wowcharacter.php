@@ -210,7 +210,7 @@ class wowcharacter
 			foreach ($skills as $k => $v) 
 			{
 			    $skills[$k] = $v->attributes();
-				$this->professions .='<img src="'.$phpbb_root_path.'images/apply_icon/Trade_'.$skills[$k]['name'] . '.jpg" width="20" height="20" alt="'.$skills[$k]['name'] . '">[color=#105289] '.$skills[$k]['name'] . '[/color] '. $skills[$k]['value'] . '/'. $skills[$k]['max'] .'<br/>';
+				$this->professions .='<img src="'.$phpbb_root_path.'images/bbtips/Trade_'.$skills[$k]['name'] . '.jpg" width="20" height="20" alt="'.$skills[$k]['name'] . '">[color=#105289] '.$skills[$k]['name'] . '[/color] '. $skills[$k]['value'] . '/'. $skills[$k]['max'] .'<br/>';
 			}
 		}	
 		else 
@@ -443,9 +443,9 @@ class wowcharacter
 		$search['{T_IMAGES_PATH}']  = $phpbb_root_path . 'images/'; 
 		//total3d
 		$search['{TALENT1NAME}'] = $this->talent1name;
-		$search['{TALENT1ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/dkp/apply/spec_icons/' . strtolower($this->class) . '_' . $this->talent1name . '.png';  
+		$search['{TALENT1ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $this->talent1name . '.png';  
 		$search['{TALENT2NAME}'] = $this->talent2name;
-		$search['{TALENT2ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/dkp/apply/spec_icons/' . strtolower($this->class) . '_' . $this->talent2name . '.png';  
+		$search['{TALENT2ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $this->talent2name . '.png';  
 		$search['{TALENTTREE1}'] = $this->talent1;  
 		$search['{TALENTTREE2}'] = $this->talent2;
 		$search['{GLYPHMINOR}'] = $this->glyphminor;
@@ -455,7 +455,7 @@ class wowcharacter
 		//gearlist
 		$search['{TALENTS}'] = $this->talent1 . '  ' . $this->talent2;  
 		$search['{MEMBERURL}'] = $memberportraiturl;
-		$search['{FRAME}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/dkp/apply/gear_list_portrait_frame.png';  
+		$search['{FRAME}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/gear_list_portrait_frame.png';  
 		
 		for($slot = 0 ; $slot <= 18; $slot++)
 		{
