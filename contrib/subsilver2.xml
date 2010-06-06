@@ -66,7 +66,7 @@ within the MOD. No support will be given for MODs not found within the MODs Data
         <find><![CDATA[@import url("bbdkp.css");
         ]]></find>
 		<action type="after-add"><![CDATA[@import url("wowhead.css");
-
+						@import url("bbtips.css");
 ]]></action>
       </edit>
 </open>
