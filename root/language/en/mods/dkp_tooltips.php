@@ -67,7 +67,7 @@ $lang = array_merge($lang, array(
 'UMIL_BBCODE_GUILD_REMOVED' => 'Not Removed Guild bbcode',
 
 'ACP_BBTOOLTIPS' => 'Popup Configuration',
-'BBTOOLTIPS' => 'bbTips 0.3.3 Plugin', 
+'BBTOOLTIPS' => 'bbTips 0.3.5 Plugin', 
 'BBTOOLTIPS_EXPLAIN' => 'bbDKP Tooltips from Wowhead', 
 
 'BBTIPS_SETTING' => 'Tooltip Settings', 

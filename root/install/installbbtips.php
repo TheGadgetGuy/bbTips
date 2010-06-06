@@ -68,8 +68,7 @@ $language_file = 'mods/dkp_tooltips';
 * Run Options 
 */
 $options = array(
-/*	'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),*/
-/*'realm'	    => array('lang' => 'realm_name', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false, 'default' => 'Lightbringer'),*/
+
 'region'   => array('lang' => 'region', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
 'bbtips_lang'   => array('lang' => 'lang', 'type' => 'select', 'function' => 'langoptions', 'explain' => true),
 
@@ -260,9 +259,7 @@ $versions = array(
      ),
       
      '0.3.5'    => array( 
-     // character cache table 
-     // so we don't query blizzard when character is listed in this
-	 // char achievements are done with feed so they will still be dynamic
+ 		// no db change
 
      ),
 );
