@@ -15,7 +15,7 @@
 	width: 517px;
 	height: 695px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/bbtips/3d_model_armory.png") no-repeat;
+	background: url("./images/bbtips/3d_model_armory.png") no-repeat;
 }
 
 .wowchar_armory_shadow {
@@ -44,7 +44,7 @@
 	width: 673px;
 	height: 952px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/bbtips/gear_list.png") no-repeat;
+	background: url("./images/bbtips/gear_list.png") no-repeat;
 }
 
 .gear_list_pane_overlay_container {
@@ -71,7 +71,7 @@
 	width: 593px;
 	height: 867px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/bbtips/achievements_list.png") no-repeat;
+	background: url("./images/bbtips/achievements_list.png") no-repeat;
 }
 
 .achievements_list_pane_overlay_container {
@@ -112,7 +112,7 @@
 }
 
 .Horde {
-	background: url("{T_THEME_PATH}/images/bbtips/achievements_list_horde_top.jpg") no-repeat;
+	background: url("./images/bbtips/achievements_list_horde_top.jpg") no-repeat;
 	position: absolute;
 	top: 22px;
 	left: 173px;
@@ -125,7 +125,7 @@
 }
 
 .Alliance {
-	background: url("{T_THEME_PATH}/images/bbtips/achievements_list_alliance_top.jpg") no-repeat;
+	background: url("./images/bbtips/achievements_list_alliance_top.jpg") no-repeat;
 	position: absolute;
 	top: 22px;
 	left: 173px;
@@ -155,7 +155,7 @@
 /* styling */
                             
 
-/* background: transparent url("{T_THEME_PATH}/images/row2_bg.png") top repeat-x; */
+/* background: transparent url("./images/row2_bg.png") top repeat-x; */
     width: auto;
 	padding: 0px 0px 0px 0px;
 	min-height: 600px;
@@ -172,7 +172,7 @@
 /* start close button positioned on upper right corner */
 
 .simple_overlay .close {
-	background-image: url("{T_THEME_PATH}/images/bbtips/close.png");
+	background-image: url("./images/bbtips/close.png");
 	background-position: 0px 0px;
 	position: absolute;
 	right: -40px;
@@ -183,7 +183,7 @@
 }
 
 .simple_overlay .close:hover {
-	background-image: url("{T_THEME_PATH}/images/bbtips/close.png");
+	background-image: url("./images/bbtips/close.png");
 	background-position: 0px 36px;
 }
 
@@ -299,7 +299,7 @@ ul.tabs li {
 /* link inside the tab. uses a background image */
 
 ul.tabs a {
-	background: url("{T_THEME_PATH}/images/bbtips/bliz_red.png") no-repeat;
+	background: url("./images/bbtips/bliz_red.png") no-repeat;
 	font-size: 14px;
 	font-weight: bold;
 	font-family: arial;
