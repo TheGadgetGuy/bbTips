@@ -79,7 +79,7 @@ $options = array(
 'craft'   => array('lang' => 'CRAFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'quest'   => array('lang' => 'QUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'spell'   => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-'npc'     => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+'npc'     => array('lang' => 'NPC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'achievement'   => array('lang' => 'ACHIEVEMENT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'wowchar'   => array('lang' => 'CHARACTER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 
@@ -266,7 +266,11 @@ $versions = array(
      ),
      
       '0.3.6'    => array( 
- 		// no db change, but added itemset bbcode
+ 	
+       'custom' => array( 
+            'bbdkp_caches',  'insert_bbcodes_wrapper' 
+         ) 
+     
 
      ),
 );
@@ -359,61 +363,84 @@ function insert_bbcodes_wrapper($action, $version)
 	{
 		case 'install' :
 		case 'update' :
+			
+			// uninstall then install or reinstall
+			delete_bbcodes($action, $version, 'item'); 
+			delete_bbcodes($action, $version, 'itemico');
+			delete_bbcodes($action, $version, 'itemdkp');
+			delete_bbcodes($action, $version, 'itemset');
+			delete_bbcodes($action, $version, 'craft');
+			delete_bbcodes($action, $version, 'quest');
+			delete_bbcodes($action, $version, 'spell');
+			delete_bbcodes($action, $version, 'npc');
+			delete_bbcodes($action, $version, 'achievement');
+			delete_bbcodes($action, $version, 'wowchar');	
+			
 			if(request_var('item', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'item', 'Item tooltip');
 			}
 		
 			if(request_var('itemico', 0) == 1)
 			{
+				  
 				 insert_bbcodes($action, $version, 'itemico', 'Item icon'); 			
 			}
 		
 			if(request_var('itemdkp', 0) == 1)
 			{
+				  
 				 insert_bbcodes($action, $version, 'itemdkp', 'Item DKP'); 			
 			}
 			
 			if(request_var('itemset', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'itemset', 'Item Set'); 			
 			}
 		
 			if(request_var('craft', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'craft', 'Craftable Items'); 			
 			}
 			
 			if(request_var('quest', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'quest' , 'Quest Tag'); 			
 			}
 			
 			if(request_var('spell', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'spell' , 'Spell tooltip'); 			
 			}
 			
 			if(request_var('npc', 0) == 1)
 			{
-				 insert_bbcodes($action, $version, 'spell' , 'NPC tooltip'); 			
+				 
+				 insert_bbcodes($action, $version, 'npc' , 'NPC tooltip'); 			
 			}
 			
 			if(request_var('achievement', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'achievement', 'Achievement tooltip'); 			
 			}
 		
 			if(request_var('wowchar', 0) == 1)
 			{
+				 
 				 insert_bbcodes($action, $version, 'wowchar', 'Character overlay'); 			
 			}
 			
-			return array('command' => 'UMIL_BBCODE_ITEM_ADDED', 'result' => 'SUCCESS'); 
+			return array('command' => array('UMIL_BBCODE_ADDED') , 'result' => 'SUCCESS'); 
 				
 	      break;
 		case 'uninstall' :
-
+	
 			delete_bbcodes($action, $version, 'item'); 
 			delete_bbcodes($action, $version, 'itemico');
 			delete_bbcodes($action, $version, 'itemdkp');
@@ -424,7 +451,7 @@ function insert_bbcodes_wrapper($action, $version)
 			delete_bbcodes($action, $version, 'npc');
 			delete_bbcodes($action, $version, 'achievement');
 			delete_bbcodes($action, $version, 'wowchar');																		
-			return array('command' => 'UMIL_BBCODE_ITEM_REMOVED', 'result' => 'SUCCESS'); 												
+			return array('command' => 'UMIL_BBCODE_REMOVED', 'result' => 'SUCCESS'); 												
 		    
 		  break; 
         

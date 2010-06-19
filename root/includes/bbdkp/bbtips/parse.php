@@ -198,10 +198,12 @@ class bbtips
 		{ 
 			$in = str_replace('"', '', $in); 
 		}
+		
 		if (strpos($in, '&quot;') !== false) 
 		{ 
 			$in = str_replace('&quot;', '', $in); 
 		}
+		
 		if (strpos($in, ' ') === false)
 		{ 
 			$args = array();
