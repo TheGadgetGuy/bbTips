@@ -65,11 +65,9 @@ class wowhead_item_dkp extends wowhead
 		if (!$result = $cache->getObject($name, 'itemdkp', $this->lang))
 		{
 			// not in the cache
-
 			if (!$result = $this->_getItemInfo($name))
 			{
 				// item not found
-				
 				return $this->_notfound('item', $name);
 			}
 			else
@@ -129,11 +127,20 @@ class wowhead_item_dkp extends wowhead
 	* Queries Wowhead for Item Info
 	* @access private
 	**/
+/**
+	* Queries Wowhead for Item Info
+	* @access private
+	**/
 	function _getItemInfo($name)
 	{
 		if (trim($name) == '')
+		{
 			return false;
-
+		}
+		
+		// will hold return
+		$item = array();
+		
 		// gets the XML data from wowhead and remove CDATA tags
 		$data = $this->_read_url($name);
 
@@ -141,9 +148,17 @@ class wowhead_item_dkp extends wowhead
 		{ 
 			return false; 
 		}
-		
+
+		if(preg_match('#HTTP/1.1 503 Service Unavailable#s',$data,$match))
+		{
+			return $this->_notFound('Item', $name);
+		}
+
 		if ($this->_useSimpleXML())
 		{
+			// switch libxml error handler on
+			libxml_use_internal_errors(true);
+			
 			// accounts for SimpleXML not being able to handle 3 parameters if you're using PHP 5.1 or below.
 			if (!$this->_allowSimpleXMLOptions())
 			{
@@ -154,11 +169,20 @@ class wowhead_item_dkp extends wowhead
 			{
 				$xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
 			}
-
-			if ($xml->error == '')
-			{
+			
+			unset($errors); 
+			$errors = libxml_get_errors();
+			 if (empty($errors))
+			 {
+			 	libxml_clear_errors();
 				// this will hold our results
-				return array(
+				
+			 	if(isset($xml->error))
+			 	{
+			 		return false;
+			 	}
+			 	
+			 	$item = array(
 					'name'			=>	(string)$xml->item->name,
 					'search_name'	=>	$name,
 					'itemid'		=>	(string)$xml->item['id'],
@@ -166,12 +190,19 @@ class wowhead_item_dkp extends wowhead
 					'type'			=>	'itemdkp',
 					'lang'			=>	$this->lang
 				);
-			}
+				unset($xml);
+				return $item; 
+				
+			 }
 			else
 			{
+				// set error handler off - to free memory
+				unset($xml);
+				unset($errors); 
+				libxml_clear_errors();
 				return false;
 			}
-			unset($xml);
+			
 		}
 	}
 }

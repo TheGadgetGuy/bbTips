@@ -75,6 +75,7 @@ $options = array(
 'item'   => array('lang' => 'ITEM', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'itemico'   => array('lang' => 'ITEMICO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'itemdkp'   => array('lang' => 'ITEMDKP', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+'itemset'   => array('lang' => 'ITEMSET', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'craft'   => array('lang' => 'CRAFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'quest'   => array('lang' => 'QUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'spell'   => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
@@ -259,7 +260,12 @@ $versions = array(
      ),
       
      '0.3.5'    => array( 
- 		// no db change
+ 		// no db change, but added wowchar bbcode
+
+     ),
+     
+      '0.3.6'    => array( 
+ 		// no db change, but added itemset bbcode
 
      ),
 );
@@ -367,6 +373,11 @@ function insert_bbcodes_wrapper($action, $version)
 				 insert_bbcodes($action, $version, 'itemdkp', 'Item DKP'); 			
 			}
 		
+			if(request_var('itemset', 0) == 1)
+			{
+				 insert_bbcodes($action, $version, 'itemset', 'Item Set'); 			
+			}
+		
 			if(request_var('craft', 0) == 1)
 			{
 				 insert_bbcodes($action, $version, 'craft', 'Craftable Items'); 			
@@ -400,6 +411,7 @@ function insert_bbcodes_wrapper($action, $version)
 			delete_bbcodes($action, $version, 'item'); 
 			delete_bbcodes($action, $version, 'itemico');
 			delete_bbcodes($action, $version, 'itemdkp');
+			delete_bbcodes($action, $version, 'itemset');
 			delete_bbcodes($action, $version, 'craft');
 			delete_bbcodes($action, $version, 'quest');
 			delete_bbcodes($action, $version, 'spell');

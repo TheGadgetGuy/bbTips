@@ -40,7 +40,6 @@ class wowhead_itemset extends wowhead
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
-
 	}
 
 	/**
@@ -67,12 +66,22 @@ class wowhead_itemset extends wowhead
 		
 		if (!$result = $cache->getItemset($name, $this->lang))
 		{
-			// not in the cache
-			
-				//search on name
+				//not in the cache
+				//search wowhead on name
 				$data = $this->_read_url($name, 'itemset', false);
 				
-				if (!preg_match('#Location: /\?itemset=([\-0-9]{1,10})#s', $data, $match))
+				if (trim($data) == '' || empty($data)) 
+				{ 
+					return false; 
+				}
+
+				if(preg_match('#HTTP/1.1 503 Service Unavailable#s',$data,$match))
+				{
+					return $this->_notFound('Itemset', $name);
+				}
+				
+				// search header
+				if (!preg_match('#Location: /itemset=([\-0-9]{1,10})#s', $data, $match))
 				{
 					// didn't find the redirect header, -> find correct json from search 
 					$summary = $this->_summaryLine($data);
@@ -85,15 +94,22 @@ class wowhead_itemset extends wowhead
 				}
 				
 				// is the itemset the one were looking for? 
-				if (!strpos($match[2],$name))
+				if(isset($match[1]))
 				{
-					return $this->_notFound('Itemset', $name);
+					if(is_numeric($match[1]))
+					{
+						$this->setid = $match[1];
+					}
+					else 
+					{
+						return $this->_notFound('Itemset', $name);
+					}
+					
 				}
 
 				// we now have the set id, and can query wowhead for the info we need
-				$this->setid = $match[1];
 				$data = $this->_read_url($this->setid, 'itemset', false);
-
+				
 				$this->itemset['setid'] = $this->setid;
 				$this->itemset['name'] = ucwords($name);
 				$this->itemset['search_name'] = $name;

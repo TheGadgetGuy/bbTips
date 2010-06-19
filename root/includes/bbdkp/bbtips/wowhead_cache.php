@@ -514,7 +514,7 @@ class wowhead_cache
 	{
 	    global $db;
 	      
-		if (!is_array($info) || sizeof($info) == 0 )
+		if (!is_array($info) || sizeof($info) == 0 || !isset($info['name']) || !isset($info['itemid']))
 		{
 			return false;    
 		}

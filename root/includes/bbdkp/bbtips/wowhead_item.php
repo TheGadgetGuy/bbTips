@@ -60,16 +60,14 @@ class wowhead_item extends wowhead
 		// check if its already in the cache
 		if (!$result = $cache->getObject($name, 'item', $this->lang))
 		{
-			// not in the cache
-
+			// not in the cache so call wowhead
 			if (!$result = $this->_getItemInfo($name))
 			{
-				// item not found
-				
+				// item not found 
 				return $this->_notfound('item', $name);
 			}
 			else
-			{
+			{   
 				$cache->saveObject($result);	// save it to cache
 				
 				if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
@@ -131,14 +129,28 @@ class wowhead_item extends wowhead
 		{
 			return false;
 		}
-
+		
+		// will hold return
+		$item = array();
+		
 		// gets the XML data from wowhead and remove CDATA tags
 		$data = $this->_read_url($name);
 
-		if (trim($data) == '' || empty($data)) { return false; }
-
+		if (trim($data) == '' || empty($data)) 
+		{ 
+			return false; 
+		}
+		
+		if(preg_match('#HTTP/1.1 503 Service Unavailable#s',$data,$match))
+		{
+			return $this->_notFound('Item', $name);
+		}
+		
 		if ($this->_useSimpleXML())
 		{
+			// switch libxml error handler on
+			libxml_use_internal_errors(true);
+			
 			// accounts for SimpleXML not being able to handle 3 parameters if you're using PHP 5.1 or below.
 			if (!$this->_allowSimpleXMLOptions())
 			{
@@ -149,11 +161,19 @@ class wowhead_item extends wowhead
 			{
 				$xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
 			}
-
-			if ($xml->error == '')
-			{
-				// this will hold our results
-				return array(
+			
+			$errors = libxml_get_errors();
+			 if (empty($errors))
+			 {
+			 	libxml_clear_errors();
+			 	
+			 	if(isset($xml->error))
+			 	{
+			 		return false;
+			 	}
+			 	
+			 	// item found
+				$item = array(
 					'name'			=>	(string)$xml->item->name,
 					'search_name'	=>	$name,
 					'itemid'		=>	(string)$xml->item['id'],
@@ -161,13 +181,22 @@ class wowhead_item extends wowhead
 					'type'			=>	'item',
 					'lang'			=>	$this->lang
 				);
-			}
+				unset($xml);
+				return $item; 
+				
+			 }
 			else
 			{
+				// set error handler off - to free memory
+				unset($xml);
+				unset($errors); 
+				libxml_clear_errors();
 				return false;
 			}
+			
+	        
 
-			unset($xml);
+			
 		}
 		
 		

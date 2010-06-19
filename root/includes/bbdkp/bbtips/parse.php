@@ -147,17 +147,18 @@ class bbtips
 						break;
 				}
 		
-				$name = (sizeof($args) > 0) ? html_entity_decode($match[3], ENT_QUOTES) : html_entity_decode($match[2], ENT_QUOTES);
+				$namein = (sizeof($args) > 0) ? html_entity_decode($match[3], ENT_QUOTES) : html_entity_decode($match[2], ENT_QUOTES);
 		   		
 			   	// prevent any unwanted script execution or html formatting
-				$name = strip_tags($name);
-				if (trim($name) == '')
+				$nameout = $this->html2txt($namein);
+				if ($nameout != $namein)
 				{
-				    $whp_message = str_replace($match[0], "<span class=\"notfound\">Illegal HTML/JavaScript found. Tags removed.</span>", $whp_message);
+				    $whp_message = str_replace($match[0], "<span class=\"notfound\">Illegal HTML/JavaScript found.</span>", $whp_message);
 				}
 				else
 				{
-				    $whp_message = str_replace($match[0], $object->parse($name, $args), $whp_message);
+					// ok tag content allowed, go to parser
+				    $whp_message = str_replace($match[0], $object->parse(trim($nameout), $args), $whp_message);
 				}
 		   		
 		   		$parses++;
@@ -167,6 +168,23 @@ class bbtips
 		return $whp_message;
 	}
 	
+	/**
+	 * strips illegal html/javascript
+	 */
+	function html2txt($document)
+	{
+	  $search = array('@]*?>.*?@si',          // Strip out javascript
+	                 '@]*?>.*?@siU',          // Strip style tags properly
+	                 '@<[\/\!]*?[^<>]*?>@si', // Strip out HTML tags
+	                 '@@',                    // Strip multi-line comments including CDATA
+	  				 '@http@si' , 			  // strip out http 
+	  				 '@HTTP@si' , 			  // strip out HTTP
+	  				 '@https@si' , 			  // strip out https 
+	  );
+	  $text = preg_replace($search, '', $document);
+	  return trim($text);
+	}
+
 	
 	// turn the arguments into an array
 	function whp_arguments($in)
