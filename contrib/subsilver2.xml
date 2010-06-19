@@ -8,7 +8,7 @@ within the MOD. No support will be given for MODs not found within the MODs Data
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
 <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en-gb">bbDKP Tooltips Plugin 0.3.5</title>
+    <title lang="en-gb">bbDKP Tooltips Plugin 0.3.6</title>
     <description lang="en-gb">
 	This bbdkp plugin provides Tooltips for Warcraft.
 </description>
@@ -24,7 +24,7 @@ within the MOD. No support will be given for MODs not found within the MODs Data
       	</contributions-group>	
       </author>   
     </author-group>
-	<mod-version>0.3.5</mod-version>
+	<mod-version>0.3.6</mod-version>
     <installation>
       <level>easy</level>
       <time>300</time>
