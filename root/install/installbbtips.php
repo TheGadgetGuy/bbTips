@@ -79,6 +79,7 @@ $options = array(
 'craft'   => array('lang' => 'CRAFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'quest'   => array('lang' => 'QUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'spell'   => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+'npc'     => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'achievement'   => array('lang' => 'ACHIEVEMENT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'wowchar'   => array('lang' => 'CHARACTER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 
@@ -372,7 +373,7 @@ function insert_bbcodes_wrapper($action, $version)
 			{
 				 insert_bbcodes($action, $version, 'itemdkp', 'Item DKP'); 			
 			}
-		
+			
 			if(request_var('itemset', 0) == 1)
 			{
 				 insert_bbcodes($action, $version, 'itemset', 'Item Set'); 			
@@ -391,6 +392,11 @@ function insert_bbcodes_wrapper($action, $version)
 			if(request_var('spell', 0) == 1)
 			{
 				 insert_bbcodes($action, $version, 'spell' , 'Spell tooltip'); 			
+			}
+			
+			if(request_var('npc', 0) == 1)
+			{
+				 insert_bbcodes($action, $version, 'spell' , 'NPC tooltip'); 			
 			}
 			
 			if(request_var('achievement', 0) == 1)
@@ -415,6 +421,7 @@ function insert_bbcodes_wrapper($action, $version)
 			delete_bbcodes($action, $version, 'craft');
 			delete_bbcodes($action, $version, 'quest');
 			delete_bbcodes($action, $version, 'spell');
+			delete_bbcodes($action, $version, 'npc');
 			delete_bbcodes($action, $version, 'achievement');
 			delete_bbcodes($action, $version, 'wowchar');																		
 			return array('command' => 'UMIL_BBCODE_ITEM_REMOVED', 'result' => 'SUCCESS'); 												

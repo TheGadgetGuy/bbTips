@@ -90,7 +90,7 @@ class wowhead_npc extends wowhead
 		{
 			$data = $this->_read_url($name, 'npc', false);
 			// get the id of the npc
-			if (preg_match('#Location: /\npc=([0-9]{1,10})#s', $data, $match))
+			if (preg_match('#Location: /npc=([0-9]{1,10})#s', $data, $match))
 			{
 				$id = $match[1];
 			}

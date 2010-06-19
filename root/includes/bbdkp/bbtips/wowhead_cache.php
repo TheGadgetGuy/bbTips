@@ -9,9 +9,9 @@
 * @copyright (c) 2009 bbDkp - Sajaki 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
-* Wowhead (wowhead.com) Link Parser v3 - Cache Class
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
-* Adapted for phpbb by Sajaki
+* Wowhead Cache Class By: Adam "craCkpot" Koch (admin@crackpot.us)
+* Adapted for phpbb by Sajaki (sajaki9@gmail.com)
+*  
 **/
 
 /**
@@ -201,12 +201,11 @@ class wowhead_cache
 
 	function getNPC($name, $lang)
 	{
+		global $config, $db; 
 		if (trim($lang) == '')
 		{
-		    $lang = BBTIPS_LANG;
+		    $lang = $config['bbtips_lang'];
 		}
-		
-		global $db; 
 		
         $search = $db->sql_like_expression($db->any_char . $db->sql_escape($name) . $db->any_char) ; 
 		
@@ -241,7 +240,7 @@ class wowhead_cache
 
 		if (trim($lang) == '')
 		{
-		    $lang = $config['BBTIPS_lang'];
+		    $lang = $config['bbtips_lang'];
 		}
 		
 		$search = $db->sql_like_expression($db->any_char . $db->sql_escape($name) . $db->any_char) ; 
@@ -277,7 +276,7 @@ class wowhead_cache
 
 		if (trim($lang) == '')
 		{
-		    $lang = $config['BBTIPS_lang'];
+		    $lang = $config['bbtips_lang'];
 		}
 
 		$search = $db->sql_like_expression($db->any_char . $db->sql_escape($name) . $db->any_char) ; 
@@ -466,7 +465,7 @@ class wowhead_cache
 
 		if (trim($lang) == '')
 		{
-		    $lang = $config['BBTIPS_lang'];
+		    $lang = $config['bbtips_lang'];
 		}
 		
 		$search = $db->sql_like_expression($db->any_char . $db->sql_escape($name) . $db->any_char) ; 
