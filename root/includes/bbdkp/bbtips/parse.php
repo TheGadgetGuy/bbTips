@@ -32,8 +32,9 @@ class bbtips
 	
 	    $parses = 0;
 	    
-	    //max 30 items will be parsed whatever the setting of maxparse
-	    $maxparse = min(100,(int) $config['bbtips_maxparse']); 
+	    //max 600 items will be parsed no matter what the setting of maxparse is set too
+		//600 will parse approximetly 8 different wowchar character profiles...
+	    $maxparse = min(600,(int) $config['bbtips_maxparse']); 
 	    
 	    while (
 	    	($parses < $maxparse) &&
