@@ -223,7 +223,8 @@ class wowcharacter
 		}	
 		else 
 		{
-			$this->professions .=" NONE";
+				//return false; 
+				//If no professions are detected
 		}
 				
 		$talent = $xml->xpath('characterInfo/characterTab/talentSpecs/talentSpec');
