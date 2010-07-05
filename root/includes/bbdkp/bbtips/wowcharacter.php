@@ -14,6 +14,13 @@
 /**
  * This class describes a wow character 
  */
+ function replace_specchar($str) {
+  $str = htmlentities($str, ENT_COMPAT, "UTF-8");
+  $str = preg_replace(
+'/&([a-zA-Z])(uml|acute|grave|circ|tilde);/',
+'',$str);
+  return html_entity_decode($str);
+}
 class wowcharacter
 {
 	// character definition
@@ -116,7 +123,8 @@ class wowcharacter
 		
 		if(isset($arguments['realm']))
 		{
-			$this->realm = str_replace("_", " ",  $arguments['realm'] );  
+			$spaceChars = array("+", "_");
+			$this->realm = str_replace($spaceChars, " ",  $arguments['realm'] );  
 		}
 		else 
 		{
@@ -215,7 +223,7 @@ class wowcharacter
 		}	
 		else 
 		{
-			return false;
+			$this->professions .=" NONE";
 		}
 				
 		$talent = $xml->xpath('characterInfo/characterTab/talentSpecs/talentSpec');
@@ -419,7 +427,7 @@ class wowcharacter
 		// we get the icon from bbDkp roster --> bbdkp must be installed !
 		$memberportraiturl = $phpbb_root_path. './images/roster_portraits/wow'. $bracketlevel .'/' . 
 			$this->genderid . '-' . $this->raceid . '-' . $this->classid . '.gif';
-		$innerdiv = str_replace('{PLAYERID}',  $this->name  , $innerdiv);
+		$innerdiv = str_replace('{PLAYERID}', replace_specchar($this->name)  , $innerdiv);
 		
 		// replace placeholders with content	
 		$innerdiv = str_replace('{PLAYERNAME}',  $this->name . ', ' . $this->realm . '/' . $this->region , $innerdiv);
