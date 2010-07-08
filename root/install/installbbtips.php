@@ -268,11 +268,22 @@ $versions = array(
       '0.3.6'    => array( 
  	
        'custom' => array( 
-            'bbdkp_caches',  'insert_bbcodes_wrapper' 
+            'bbdkp_caches', 
+            'insert_bbcodes_wrapper' 
          ) 
      
 
      ),
+     
+     '0.3.7'    => array( 
+ 	
+		// no db change 
+	  'custom' => array( 
+	         'bbdkp_caches', 
+         ) 
+
+     ),
+     
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
