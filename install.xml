@@ -139,8 +139,6 @@ define('BBTIPS_NPC_TBL', $bbdkp_table_prefixx . 'wowhead_npc');								// npc ta
 <!-- ELSE -->
 <script src="./includes/bbdkp/bbtips/js/power.js" type="text/javascript"></script>
 <!-- ENDIF -->
-   <script type="text/javascript" src="{T_TEMPLATE_PATH}/dkp/jquery-ui-1.8.2.custom.min.js"></script>
-   <link href="{T_THEME_PATH}/jquery-ui-1.8.2.custom.css" rel="stylesheet" type="text/css" />
    <script type="text/javascript">
       $(document).ready(function()
       {
@@ -152,8 +150,6 @@ define('BBTIPS_NPC_TBL', $bbdkp_table_prefixx . 'wowhead_npc');								// npc ta
 ]]></action>
 			</edit>
 		</open>
-
-
 		
 		<diy-instructions lang="en"><![CDATA[1) Press Install to let Automod copy the files and do the core edits. 
 2) Then browse to install/installbbtips.php and run the bbTips plugin table installer. Afterwards, delete the install folder.]]></diy-instructions>
