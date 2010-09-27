@@ -7,15 +7,17 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP Tooltips Plugin 0.3.7]]></title>
-		<description lang="en"><![CDATA[This bbDKP plugin provides Tooltips for Warcraft.]]></description>
-		<author-notes lang="en"><![CDATA[works with bbdkp 1.1.0 or higher
-    1) Press Install to let Automod copy the files and do the core edits. 
-    2) Then browse to install/installbbtips.php and run the bbTips plugin table installer. Afterwards, delete or rename the install folder.]]></author-notes>
+		<description lang="en"><![CDATA[BBCode for bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)]]></description>
+		<description lang="de"><![CDATA[BBCode für bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)]]></description>
+		<description lang="fr"><![CDATA[BBCode pour bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)]]></description>
+		<author-notes lang="en"><![CDATA[requirement : bbDKP 1.1]]></author-notes>
+		<author-notes lang="de"><![CDATA[Voraussetzung : bbDKP 1.1]]></author-notes>
+		<author-notes lang="fr"><![CDATA[prérequis : bbDKP 1.1]]></author-notes>
 		<author-group>
 			<author>
 				<username><![CDATA[Sajaki]]></username>
 				<contributions-group>
-					<contributions status="past" from="2008-04-04" position="Developer"/>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 		</author-group>
@@ -26,8 +28,16 @@
 			<target-version>3.0.7-PL1</target-version>
 		</installation>
 		<link-group>
-			<link type="dependency" href="http://www.bbdkp.com/viewtopic.php?f=2&amp;t=1320" lang="en">bbDkp 1.1.0</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">Manual for subsilver2 Style</link>
+			<link type="dependency" href="http://www.bbdkp.com/downloads.php" lang="en">bbDKP 1.1</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2 Style</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="de">subsilver2 Style</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="fr">Style subsilver2</link>
+			<link type="language" href="contrib/fr.xml" lang="en">French</link>
+			<link type="language" href="contrib/fr.xml" lang="fr">Français</link>
+			<link type="language" href="contrib/fr.xml" lang="de">Franzözisch</link>
+			<link type="language" href="contrib/de.xml" lang="en">German</link>
+			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
+			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -39,7 +49,7 @@
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
-			<file from="root/styles/prosilver/template/*.*" to="styles/prosilver/template/*.*"/>			
+			<file from="root/styles/prosilver/template/*.*" to="styles/prosilver/template/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src="config.php">
@@ -50,18 +60,17 @@
         ]]></action>
 			</edit>
 		</open>
-		<open src="/adm/style/overall_header.html">
+		<open src="/adm/style/dkp/overall_footer.html">
 			<edit>
 				<comment lang="en"><![CDATA[wowhead links in the ACP]]></comment>
-				<find><![CDATA[</head>]]></find>
+				<find><![CDATA[</html>]]></find>
 				<action type="before-add"><![CDATA[<!-- Wowhead Item Links -->
 <link href="style/wowhead.css" rel="stylesheet" type="text/css" />
 <!-- IF S_BBTIPS_WHREMOTE -->
 <script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script>
 <!-- ELSE -->
 <script src="../includes/bbdkp/bbtips/js/power.js" type="text/javascript"></script>
-<!-- ENDIF -->
-]]></action>
+<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
 		<open src="/styles/prosilver/theme/stylesheet.css">
@@ -69,7 +78,7 @@
 				<comment lang="en"><![CDATA[bbdkp css prosilver]]></comment>
 				<find><![CDATA[@import url("bbdkp.css");]]></find>
 				<action type="after-add"><![CDATA[@import url("wowhead.css");
-				@import url("bbtips.css");
+@import url("bbtips.css");
 ]]></action>
 			</edit>
 		</open>
@@ -90,7 +99,7 @@
 			<edit>
 				<comment lang="en"><![CDATA[Adding script selector for overall_header.html, either local wowhead js or remote]]></comment>
 				<find><![CDATA['S_USER_NEW'					=> $user->data['user_new'],]]></find>
-				<action type="after-add"><![CDATA[		'S_BBTIPS_WHREMOTE'				=> (isset($config['bbtips_localjs']) ? $config['bbtips_localjs'] : ' '),]]></action>
+				<action type="after-add"><![CDATA['S_BBTIPS_WHREMOTE'				=> (isset($config['bbtips_localjs']) ? $config['bbtips_localjs'] : ' '),]]></action>
 			</edit>
 		</open>
 		<open src="includes/functions_content.php">
@@ -131,27 +140,29 @@ define('BBTIPS_NPC_TBL', $bbdkp_table_prefixx . 'wowhead_npc');								// npc ta
 			<edit>
 				<comment lang="en"><![CDATA[wowhead links prosilver]]></comment>
 				<find><![CDATA[<!-- BBTIPS -->]]></find>
-				<action type="after-add"><![CDATA[
-<!-- Wowhead Item Links -->
+				<action type="after-add"><![CDATA[<!-- Wowhead Item Links -->
 <link href="{T_THEME_PATH}/wowhead.css" rel="stylesheet" type="text/css" />
 <!-- IF S_BBTIPS_WHREMOTE -->
 <script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script>
 <!-- ELSE -->
 <script src="./includes/bbdkp/bbtips/js/power.js" type="text/javascript"></script>
 <!-- ENDIF -->
-   <script type="text/javascript">
+<script type="text/javascript">
       $(document).ready(function()
       {
          $("img[rel]").overlay();
          $("#ul.tabs").tabs("div.panes > div");
       }
       );
-   </script>
+</script>
 ]]></action>
 			</edit>
 		</open>
-		
-		<diy-instructions lang="en"><![CDATA[1) Press Install to let Automod copy the files and do the core edits. 
-2) Then browse to install/installbbtips.php and run the bbTips plugin table installer. Afterwards, delete the install folder.]]></diy-instructions>
+		<php-installer><![CDATA[install/installbbtips.php]]></php-installer>
+		<diy-instructions lang="en"><![CDATA[Browse to install/installbbtips.php]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[Rufe install/installbbtips.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
+oder eine Aktualisierung.]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[Surfez vers install/installbbtips.php et lancez l’installateur/mise à jour]]></diy-instructions>
+
 	</action-group>
 </mod>
