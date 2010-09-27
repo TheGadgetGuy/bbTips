@@ -45,37 +45,36 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 
 // installer
-    'UMIL_BBCODE_ADDED' => 'BBCodes hinzugefügt',
-    'UMIL_BBCODE_REMOVED' => 'BBCodes entfernt',
+    'UMIL_BBCODE_ADDED' => 'BBCodes ajoutés',
+    'UMIL_BBCODE_REMOVED' => 'BBCodes supprimés',
 
-    'ACP_BBTOOLTIPS' => 'Popup Einstellungen',
-    'BBTOOLTIPS' => 'bbTips 0.3.6 Plugin',
-    'BBTOOLTIPS_EXPLAIN' => 'Tooltips von Wowhead',
+    'ACP_BBTOOLTIPS' => 'Réglages Popup ',
+    'BBTOOLTIPS' => 'bbTips 0.3.7',
+    'BBTOOLTIPS_EXPLAIN' => 'BBCode pour Wowhead Tooltips',
 
-    'BBTIPS_SETTING' => 'Tooltip Einstellungen',
-    'BBTIPS_MAXPARSE' => 'Maximum Parsing',
-    'BBTIPS_MAXPARSE_EXPLAIN' => 'Maximum number of bbcode parsing on a given page. Setting this to 0 (unlimited) or too high (>200) may cause excessive load times which will cause PHP execution to timeout.',
+    'BBTIPS_SETTING' => 'Règlages bbTips',
+    'BBTIPS_MAXPARSE' => 'Analyse maximum',
+    'BBTIPS_MAXPARSE_EXPLAIN' => 'Nombre maximal de BBCodes analyséeds par page (0=illimité). Si immilité ou trop haut (>200), impacte négatif sur vitesse. ',
 
-    'ITEM' => 'Installiere Wowhead Gegenstand Tooltip BBCode',
-    'ITEMICO' =>  'Installiere Wowhead Gegenstandsicon Tooltip BBCode',
-    'ITEMDKP' =>  'Installiere Gegenstandsdkp Tooltip BBCode',
-    'ITEMSET' =>  'Installiere Gegenstandset BBCode',
-    'CRAFT' => 'Installiere Wowhead herrstellbare Tooltip BBCode',
-    'QUEST' => 'Installiere Wowhead Quest Tooltip BBCode',
-    'SPELL' => 'Installiere Wowhead Zauber Tooltip BBCode',
-    'NPC' => 'Installiere NPC Tooltip BBCode',
-    'ACHIEVEMENT' => 'Installiere Wowhead Erfolgs Tooltip BBCode',
-    'CHARACTER' =>  'Installiere Warcraft Charakter Overlay BBCode',
+    'ITEM' => 'Installer BBCode [item]',
+    'ITEMICO' =>  'Installer BBCode [itemico]',
+    'ITEMDKP' =>  'Installer BBCode [itemdkp]',
+    'ITEMSET' =>  'Installer BBCode [itemset]',
+    'CRAFT' => 'Installer BBCode [craft]',
+    'QUEST' => 'Installer BBCode [quest]',
+    'SPELL' => 'Installer BBCode [quest]',
+    'NPC' => 'Installer BBCode [npc]',
+    'ACHIEVEMENT' => 'Installer BBCode [achievement]',
+    'CHARACTER' =>  'Installer BBCode [wowchar]',
 
-    'BBTOOLTIPS_LOCALJS' => 'Entferne wowheadscript',
-    'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'Setzen dieser Einstellung auf \'nein\' beschleunigt den Aufbau der Seite. ',
-    'BBTOOLTIPS_LANG' => 'Tooltip Sprache',
-    'BBTOOLTIPS_LANG_EXPLAIN' => 'bbtips wird die Tooltips in der ausgewählten Sprache anzeigen.',
+    'BBTOOLTIPS_LOCALJS' => 'Supprime Script Wowhead',
+    'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'mettre ceci à  ’non’ hätera la vitesse de chargement.',
+    'BBTOOLTIPS_LANG' => 'Langue',
+    'BBTOOLTIPS_LANG_EXPLAIN' => 'bbTips s’addressera au site Wowhead localisé',
 
-    'BBTOOLTIPS_ARM' => 'Armory tooltip Standarts',
-    'BBTOOLTIPS_REG' => 'Armory Region',
-    'BBTOOLTIPS_REA' => 'Realm',
-
+    'BBTOOLTIPS_ARM' => 'Règleages BBCode [wowchar]',
+    'BBTOOLTIPS_REA' => 'Royaume',
+    'BBTOOLTIPS_REG' => 'Région',
 
 
 
