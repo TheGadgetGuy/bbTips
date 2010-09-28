@@ -76,8 +76,8 @@ $lang = array_merge($lang, array(
     'BBTOOLTIPS_REG' => 'Armory Region',
     'BBTOOLTIPS_REA' => 'Realm',
 
-
-
+	'ITEMNOTFOUND' => ' nicht gefunden',
+	'INSERTFAILED' => 'Einführung von %s in die Datenbank gescheitert.',
 
 ));
 

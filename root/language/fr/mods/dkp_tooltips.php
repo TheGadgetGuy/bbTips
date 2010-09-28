@@ -54,7 +54,7 @@ $lang = array_merge($lang, array(
 
     'BBTIPS_SETTING' => 'Règlages bbTips',
     'BBTIPS_MAXPARSE' => 'Analyse maximum',
-    'BBTIPS_MAXPARSE_EXPLAIN' => 'Nombre maximal de BBCodes analyséeds par page (0=illimité). Si immilité ou trop haut (>200), impacte négatif sur vitesse. ',
+    'BBTIPS_MAXPARSE_EXPLAIN' => 'Nombre maximal de BBCodes analysées par page (0=illimité). Si immilité ou trop haut (>200), risque d’impacte négatif sur vitesse de chargement.',
 
     'ITEM' => 'Installer BBCode [item]',
     'ITEMICO' =>  'Installer BBCode [itemico]',
@@ -68,14 +68,16 @@ $lang = array_merge($lang, array(
     'CHARACTER' =>  'Installer BBCode [wowchar]',
 
     'BBTOOLTIPS_LOCALJS' => 'Supprime Script Wowhead',
-    'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'mettre ceci à  ’non’ hätera la vitesse de chargement.',
+    'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'mettre ceci à ’non’ hâtera la vitesse de chargement.',
     'BBTOOLTIPS_LANG' => 'Langue',
     'BBTOOLTIPS_LANG_EXPLAIN' => 'bbTips s’addressera au site Wowhead localisé',
 
-    'BBTOOLTIPS_ARM' => 'Règleages BBCode [wowchar]',
+    'BBTOOLTIPS_ARM' => 'Règlages BBCode [wowchar]',
     'BBTOOLTIPS_REA' => 'Royaume',
     'BBTOOLTIPS_REG' => 'Région',
 
+	'ITEMNOTFOUND' => ' pas trouvé',
+	'INSERTFAILED' => 'l’objet %s n’a pas pu être inseré dans la base de données.',
 
 
 ));

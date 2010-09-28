@@ -511,9 +511,9 @@ class wowhead_cache
 	**/
 	function saveObject($info)
 	{
-	    global $db;
+	    global $db, $user; 
 	      
-		if (!is_array($info) || sizeof($info) == 0 || !isset($info['name']) || !isset($info['itemid']))
+		if (!is_array($info) || sizeof($info) == 0 || !isset($info['name']) || !isset($info['itemid']) || ($info['itemid'] == '') || ($info['name'] == '') )
 		{
 			return false;    
 		}
@@ -540,7 +540,7 @@ class wowhead_cache
 		$result = $db->sql_query($sql);
     	if (!$result)
 		{
-			trigger_error('Failed to insert ' . $info['name'] . ' in the cache. <br/><br/>'  ) ;
+			trigger_error(sprintf($user->lang['INSERTFAILED'],  $info['name'], E_USER_WARNING)) ;
 			return false;
 		}
 		

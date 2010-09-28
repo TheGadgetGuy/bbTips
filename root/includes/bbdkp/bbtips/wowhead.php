@@ -265,7 +265,9 @@ class wowhead
 	**/
 	function _notFound($type, $name)
 	{
-		return '<span class="notfound">[' . ucwords($type) . ' "' . $name . '" not found]</span>';
+		global $user; 
+		$user->add_lang ( array ('mods/dkp_tooltips' ));
+		return '<span class="notfound">[' . ucwords($type) . ' "' . $name  . '" ' . $user->lang['ITEMNOTFOUND']  . ']</span>';
 	}
 
 	/**

@@ -45,30 +45,30 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 
 // installer
-'UMIL_BBCode_ADDED' => 'Added BBCodes', 
-'UMIL_BBCode_REMOVED' => 'Removed BBCodes', 
+'UMIL_BBCODE_ADDED' => 'Added bbcodes', 
+'UMIL_BBCODE_REMOVED' => 'Removed bbcodes', 
 
 'ACP_BBTOOLTIPS' => 'Popup Configuration',
-'BBTOOLTIPS' => 'bbTips 0.3.7 Plugin', 
+'BBTOOLTIPS' => 'bbTips 0.3.6 Plugin', 
 'BBTOOLTIPS_EXPLAIN' => 'Tooltips from Wowhead', 
 
 'BBTIPS_SETTING' => 'Tooltip Settings', 
 'BBTIPS_MAXPARSE' => 'Maximum Parsing',
-'BBTIPS_MAXPARSE_EXPLAIN' => 'Maximum number of BBCode parsing on a given page. Setting this to 0 (unlimited) or too high (>200) may cause excessive load times which will cause PHP execution to timeout.', 
+'BBTIPS_MAXPARSE_EXPLAIN' => 'Maximum number of bbcode parsing on a given page. Setting this to 0 (unlimited) or too high (>200) may cause excessive load times which will cause PHP execution to timeout.', 
 
-'ITEM' => 'Install Wowhead Item Tooltip BBCode',
-'ITEMICO' =>  'Install Wowhead Item icon Tooltip BBCode',
-'ITEMDKP' =>  'Install ItemDkp Tooltip BBCode', 
-'ITEMSET' =>  'Install ItemSet BBCode',
-'CRAFT' => 'Install Wowhead Craftables Tooltip BBCode',
-'QUEST' => 'Install Wow	head Quest Tooltip BBCode', 
-'SPELL' => 'Install Wowhead Spell Tooltip BBCode', 
-'NPC' => 'Install NPC Tooltip BBCode',
-'ACHIEVEMENT' => 'Install Wowhead Achievement Tooltip BBCode', 
-'CHARACTER' =>  'Install Warcraft character Overlay BBCode', 
+'ITEM' => 'Install Wowhead Item  Tooltip bbCode',
+'ITEMICO' =>  'Install Wowhead Item icon Tooltip bbCode',
+'ITEMDKP' =>  'Install ItemDkp Tooltip bbCode', 
+'ITEMSET' =>  'Install ItemSet bbCode',
+'CRAFT' => 'Install Wowhead Craftables Tooltip bbCode',
+'QUEST' => 'Install Wow	head Quest Tooltip bbCode', 
+'SPELL' => 'Install Wowhead Spell Tooltip bbCode', 
+'NPC' => 'Install NPC Tooltip bbCode',
+'ACHIEVEMENT' => 'Install Wowhead Achievement Tooltip bbCode', 
+'CHARACTER' =>  'Install Warcraft character Overlay bbCode', 
 
 'BBTOOLTIPS_LOCALJS' => 'Remote wowheadscript', 
-'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'Setting this to ’no’ will speed up pageloads. ', 
+'BBTOOLTIPS_LOCALJS_EXPLAIN' => 'Setting this to \'no\' will speed up pageloads. ', 
 'BBTOOLTIPS_LANG' => 'Tooltips Language',
 'BBTOOLTIPS_LANG_EXPLAIN' => 'bbtips will show tooltips in the language you choose.', 
 
@@ -76,6 +76,8 @@ $lang = array_merge($lang, array(
 'BBTOOLTIPS_REG' => 'Armory Region', 
 'BBTOOLTIPS_REA' => 'Realm', 
 
+'ITEMNOTFOUND' => ' not found',
+'INSERTFAILED' => 'Failed to insert %s in the cache.',
 
 
 ));
