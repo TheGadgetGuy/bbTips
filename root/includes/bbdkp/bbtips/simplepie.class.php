@@ -7,8 +7,6 @@
 * @version $Id$
 * @copyright (c) 2010 bbDkp <http://code.google.com/p/bbdkp/>
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @author Kapli, Malfate, Sajaki, Blazeflack, Twizted
-*
 *
 **/
 
@@ -767,10 +765,10 @@ class SimplePie
 	{
 		if (version_compare(PHP_VERSION, '5.0', '<'))
 		{
-			trigger_error('PHP 4.x is no longer supported. Please upgrade to PHP 5.2 or newer.');
-			die();
+			trigger_error('PHP 4.x is no longer supported. Please upgrade to PHP 5.2 or newer.', E_USER_WARNING);
+			
 		}
-
+		
 		// Other objects, instances created here so we can set options on them
 		$this->sanitize = new SimplePie_Sanitize();
 
