@@ -69,9 +69,7 @@ $language_file = 'mods/dkp_tooltips';
 */
 $options = array(
 
-'region'   => array('lang' => 'region', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
 'bbtips_lang'   => array('lang' => 'lang', 'type' => 'select', 'function' => 'langoptions', 'explain' => true),
-
 'item'   => array('lang' => 'ITEM', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'itemico'   => array('lang' => 'ITEMICO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'itemdkp'   => array('lang' => 'ITEMDKP', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
@@ -286,31 +284,6 @@ $versions = array(
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
-/**************************************
- *  
- * function for rendering region list
- * 
- */
-function regionoptions($selected_value, $key)
-{
-	global $user;
-
-    $regions = array(
-    	'EU'     			=> "WoW European region", 
-    	'US'     			=> "WoW US region",     	 
-    );
-    
-    $default = 'US'; 
-	$pass_char_options = '';
-	foreach ($regions as $key => $region)
-	{
-		$selected = ($selected_value == $default) ? ' selected="selected"' : '';
-		$pass_char_options .= '<option value="' . $key . '"' . $selected . '>' . $region . '</option>';
-	}
-
-	return $pass_char_options;
-}
-
 
 /**************************************
  *  

@@ -17,8 +17,25 @@
 		[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
 		
 		]]></description>
-		<description lang="de"><![CDATA[BBCode für bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)]]></description>
-		<description lang="fr"><![CDATA[BBCode pour bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)]]></description>
+		<description lang="de"><![CDATA[BBCode für bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)
+		example BBCode usage : 
+		[item gems="40133" enchant="3825"]50468[/item]
+		[itemico gems="40133" enchant="3825"]50468[/item]
+		[itemico gems="40133" enchant="3825" size=small]Des ehrwürdigen Dal'Rends hochheilige Attacke[/itemico]
+		[itemico gems="40133" enchant="3825" size=medium]Andonisus, Der Seelenschlächter[/itemico]
+		[itemico gems="40133" enchant="3825" size=large]Akil'zons Krallenklinge[/itemico]
+		
+		]]></description>
+		<description lang="fr"><![CDATA[BBCode pour bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)
+		
+		example BBCode usage : 
+		[item gems="40133" enchant="3825"]50468[/item]
+		[itemico gems="40133" enchant="3825"]50468[/item]
+		[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]
+		[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
+		[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
+		
+		]]></description>
 		<author-notes lang="en"><![CDATA[requirement : bbDKP 1.1]]></author-notes>
 		<author-notes lang="de"><![CDATA[Voraussetzung : bbDKP 1.1]]></author-notes>
 		<author-notes lang="fr"><![CDATA[prérequis : bbDKP 1.1]]></author-notes>
