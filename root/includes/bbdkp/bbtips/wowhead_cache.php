@@ -23,7 +23,8 @@ if (!defined('IN_PHPBB'))
 }
 if (! defined('EMED_BBDKP')) 
 {
-    trigger_error('bbDkp is currently disabled. Cannot use wowhead links', E_USER_WARNING);
+	$user->add_lang ( array ('mods/dkp_admin' ));
+	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
 class wowhead_cache
@@ -51,13 +52,14 @@ class wowhead_cache
 
 	function saveCraftable($craft, $craft_spell, $craft_reagents = array())
 	{
-		if ( !is_array($craft) || !is_array($craft_spell))
+		if ( !is_array($craft) || !is_array($craft_spell)  || !isset($craft['itemid']) || !isset($craft['name'])  )
 		{
 		    return false;
 		}
 
-	    global $config, $db;
-	    
+	    global $config, $db, $user;
+	    $user->add_lang(array('mods/dkp_tooltips'));
+	     
 	    // save the main craftable entry
         $sql_ary = array(
 		    'itemid'      => (int) $craft['itemid'],
@@ -68,13 +70,11 @@ class wowhead_cache
 	        'icon'        => (string) $craft['icon'] 
 		);
 		
-		
 		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
-
 		$result = $db->sql_query($sql);
 		if (!$result)
 		{
-			trigger_error('Failed to insert ' . $craft['name'] . ' in the ' . BBTIPS_CRAFT_TBL . 'table <br/><br/>') ;
+			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $craft['name'] , BBTIPS_CRAFT_TBL), E_USER_WARNING ) ;
 			return false;
 		}
 		
@@ -122,12 +122,13 @@ class wowhead_cache
 
 	function saveNPC($info)
 	{
-		if (sizeof($info) == 0)
+		if (sizeof($info) == 0  || !isset($info['npcid']) || !isset($info['name'])  )
 		{
 		    return false;
 		}
 		
-        global $db;
+        global $db, $user;
+	    $user->add_lang(array('mods/dkp_tooltips'));
         
         // save the npc
         $sql_ary = array(
@@ -141,7 +142,7 @@ class wowhead_cache
 		$result = $db->sql_query($sql);
 		if (!$result)
 		{
-			trigger_error('Failed to add ' . $info['name'] . ' to the cache.<br/><br/>') ;
+			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $info['name'] , BBTIPS_NPC_TBL), E_USER_WARNING ) ;
 			return false;
 		}
 
@@ -151,28 +152,29 @@ class wowhead_cache
 	* Saves itemset
 	* @access public
 	**/
-	function saveItemset($itemset, $items)
+	function saveItemset($itemset, $items )
 	{
-	    global $db;
+	    global $db, $user;
+	    $user->add_lang(array('mods/dkp_tooltips'));
 	    
-		if (!is_array($itemset) || !is_array($items))
+		if (!is_array($itemset) || !is_array($items) || !isset($itemset['setid']) || !isset($itemset['name']) )
 		{
 		    return false;
 		}
 
 		// save the itemset first, then we'll handle each item
         $sql_ary = array(
-		    'setid'        => (int) $itemset['setid'],
+		    'setid'         => (int) $itemset['setid'],
 		    'name'    	    => $itemset['name'],
-		    'search_name'  => $itemset['search_name'],
-		    'lang'         => $itemset['lang'],
+		    'search_name'   => $itemset['search_name'],
+		    'lang'          => $itemset['lang'],
 		 );
 		 
 		$sql = 'INSERT INTO ' . BBTIPS_ITEMSET_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
 		if ($db->sql_affectedrows() == 0)
 		{
-			trigger_error('Failed to add ' . $itemset['name'] . ' to the cache.<br/><br/>', E_USER_WARNING) ;
+			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $itemset['name'] , BBTIPS_ITEMSET_TBL), E_USER_WARNING ) ;
 			return false;
 		}
 		else
@@ -192,7 +194,7 @@ class wowhead_cache
 				$db->sql_query($sql);
 				if ($db->sql_affectedrows() == 0)
 				{
-           			trigger_error('Failed to add ' . $item['name'] . ' to the cache.<br/><br/>', E_USER_WARNING) ;
+           			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $item['name'] , BBTIPS_ITEMSET_REAGENT_TBL), E_USER_WARNING ) ;
            			return false;
 				}
 			}
@@ -488,7 +490,6 @@ class wowhead_cache
 		    $query_text .= " AND icon_size='" . $size . "'";  
 		}
 		
-	
 	    $result = $db->sql_query($query_text);
 							
 	    if ( $db->sql_affectedrows() == 0)
@@ -511,9 +512,10 @@ class wowhead_cache
 	**/
 	function saveObject($info)
 	{
-	    global $db, $user; 
+	    global $db,$user;
+	    $user->add_lang(array('mods/dkp_tooltips'));
 	      
-		if (!is_array($info) || sizeof($info) == 0 || !isset($info['name']) || !isset($info['itemid']) || ($info['itemid'] == '') || ($info['name'] == '') )
+		if (!is_array($info) || sizeof($info) == 0 || !isset($info['name']) || !isset($info['itemid']))
 		{
 			return false;    
 		}
@@ -540,7 +542,7 @@ class wowhead_cache
 		$result = $db->sql_query($sql);
     	if (!$result)
 		{
-			trigger_error(sprintf($user->lang['INSERTFAILED'],  $info['name'], E_USER_WARNING)) ;
+			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $info['name'] , BBTIPS_CACHE_TBL), E_USER_WARNING ) ;
 			return false;
 		}
 		

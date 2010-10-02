@@ -69,7 +69,6 @@ class wowhead_item extends wowhead
 			else
 			{   
 				$cache->saveObject($result);	// save it to cache
-				
 				if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
 				{
 					$enhance = $this->_buildEnhancement($args);
@@ -83,8 +82,7 @@ class wowhead_item extends wowhead
 		}
 		else
 		{
-			
-
+			// already in db
 			if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
 			{
 				$enhance = $this->_buildEnhancement($args);

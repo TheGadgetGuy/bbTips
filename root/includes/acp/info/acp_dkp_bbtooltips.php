@@ -28,7 +28,7 @@ class acp_dkp_bbtooltips_info
 		return array(
 			'filename'	=> 'acp_dkp_bbtooltips',
 			'title'		=> 'ACP_DKP_DKPTOOLTIPS',
-			'version'	=> '1.0.0',
+			'version'	=> '0.3.7',
 			'modes'		=> array(
     			'bbtooltips'	=> array('title' => 'ACP_DKP_DKPTOOLTIPS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM')),
 			),

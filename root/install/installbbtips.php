@@ -277,10 +277,8 @@ $versions = array(
      
      '0.3.7'    => array( 
  	
-		// no db change 
-	  'custom' => array( 
-	         'bbdkp_caches', 
-         ) 
+     'config_remove' => array( 'bbtips_realm', 'bbtips_region'), 
+	 'custom' => array( 'bbdkp_caches') 
 
      ),
      
@@ -390,13 +388,13 @@ function insert_bbcodes_wrapper($action, $version)
 			if(request_var('item', 0) == 1)
 			{
 				 
-				 insert_bbcodes($action, $version, 'item', 'Item tooltip');
+				 insert_bbcodes($action, $version, 'item', 'Item tooltip: example [item gems="40133" enchant="3825"]50468[/item]');
 			}
 		
 			if(request_var('itemico', 0) == 1)
 			{
 				  
-				 insert_bbcodes($action, $version, 'itemico', 'Item icon'); 			
+				 insert_bbcodes($action, $version, 'itemico', 'Item icon : example [itemico size="large" gems="40133" enchant="3825"]50468[/itemico]'); 			
 			}
 		
 			if(request_var('itemdkp', 0) == 1)

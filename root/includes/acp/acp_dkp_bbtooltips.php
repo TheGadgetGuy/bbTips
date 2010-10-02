@@ -37,7 +37,7 @@ class acp_dkp_bbtooltips extends acp_dkp
      
       $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>Return to Index</h3></a>'; 
       
-	  $user->add_lang(array('mods/dkp_tooltips'));
+	  $user->add_lang(array('mods/dkp_tooltips', 'mods/dkp_admin'));
 	
       switch($mode)
       {
@@ -70,21 +70,11 @@ class acp_dkp_bbtooltips extends acp_dkp
 			    set_config('bbtips_maxparse', request_var('maxparse', 0), true );				    
 				set_config('bbtips_lang', request_var('site_lang', ''), true ); 
 			    set_config('bbtips_localjs', request_var('localjs', 0), true );
-				
-				$cache->destroy('config');
-
-			    trigger_error('bbtips Settings saved.' . $link);
-				
-			}
-			
-			elseif ($submit2)
-			{
-			    set_config('bbtips_region', request_var('site_id', ''), true );				    
-				set_config('bbtips_realm', request_var('realm_name', ''), true ); 
+			    set_config('bbdkp_default_region', request_var('region', ''), true );				    
+				set_config('bbdkp_default_realm', request_var('realm', ''), true ); 
 
 				$cache->destroy('config');
-
-			    trigger_error('bbtips Armory Settings saved.' . $link);
+			    trigger_error($user->lang['BBTOOLTIPS_SETTINGSAVED']. $link, E_USER_NOTICE);
 			}
 			
 			else 
@@ -101,7 +91,7 @@ class acp_dkp_bbtooltips extends acp_dkp
     		    {
         			$template->assign_block_vars ( 'region_row', array (
     	    			'VALUE' => $regionid, 
-    		    		'SELECTED' => ($regionid == $config['bbtips_region'] ) ? ' selected="selected"' : ''  ,
+    		    		'SELECTED' => ($regionid == $config['bbdkp_default_region'] ) ? ' selected="selected"' : ''  ,
     			    	'OPTION' =>   $regionnname  ));  
     		    }
     		    
@@ -110,7 +100,7 @@ class acp_dkp_bbtooltips extends acp_dkp
                  	'MAXPARSE'			=> $config['bbtips_maxparse'],
                  	'LOCALJS_YES_CHECKED' => ( $config['bbtips_localjs'] == '1' ) ? ' checked="checked"' : '',
     				'LOCALJS_NO_CHECKED' => ( $config['bbtips_localjs'] == '0' ) ? ' checked="checked"' : '',
-                	'REALM_NAME'		=> $config['bbtips_realm'],  
+                	'REALM_NAME'		 => $config['bbdkp_default_realm'],  
                  )
     			);
 			}

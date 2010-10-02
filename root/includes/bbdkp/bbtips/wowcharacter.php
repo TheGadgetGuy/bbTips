@@ -128,10 +128,10 @@ class wowcharacter
 		}
 		else 
 		{
-			if(isset( $config['bbtips_realm']))
+			if(isset( $config['bbdkp_default_realm']))
 			{
 				//take default realm
-				$this->realm = $config['bbtips_realm']; 
+				$this->realm = $config['bbdkp_default_realm']; 
 			}
 			else 
 			{
@@ -148,10 +148,10 @@ class wowcharacter
 		else
 		{
 		
-			if(isset( $config['bbtips_region']))
+			if(isset( $config['bbdkp_default_region']))
 			{
 				//take default region
-				$this->region = $config['bbtips_region']; 
+				$this->region = $config['bbdkp_default_region']; 
 			}
 			else 
 			{

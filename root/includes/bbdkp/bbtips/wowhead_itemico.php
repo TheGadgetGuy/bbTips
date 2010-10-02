@@ -7,8 +7,6 @@
 * @Copyright (c) 2008 Adam Koch
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
-*
 **/
 
 /**
@@ -61,7 +59,7 @@ class wowhead_itemico extends wowhead
 		// is in cache ?
 		if (!$result = $cache->getObject($name, 'itemico', $this->lang, '', $size))
 		{   
-			// not in the cache so call wowhead
+			// not in db so call wowhead
 			if (!$result = $this->_getItemIcon($name, $size))
 			{
 				
@@ -71,24 +69,49 @@ class wowhead_itemico extends wowhead
 			{
 				$cache->saveObject($result);
 				
-				return $this->_generateHTML($result, 'itemico', $size);
+				if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
+				{
+					$enhance = $this->_buildEnhancement($args);
+					return $this->_generateHTML($result, $size, $enhance);
+				}
+				else
+				{
+					return $this->_generateHTML($result, $size);
+				}
 			}
 		}
 		else
 		{
+			// already in db
+			if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
+			{
+				$enhance = $this->_buildEnhancement($args);
+				return $this->_generateHTML($result, $size, $enhance);
+			}
+			else
+			{
+				return $this->_generateHTML($result, $size);
+			}
 			
-			return $this->_generateHTML($result, 'itemico', $size);
 		}
 	}
 	
 	/**
-	* Generates HTML for link
+	* Generates HTML for itemico link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	function _generateHTML($info, $size = '',$gems = '')
 	{
-		 $info['link'] = $this->_generateLink($info['itemid'], $type);
-		 return $this->_replaceWildcards($this->patterns->pattern('icon_' . $size), $info);
+		$info['link'] = $this->_generateLink($info['itemid'], 'itemico');
+	 	if (trim($gems) != '')
+		{
+			$info['gems'] = $gems;
+			return $this->_replaceWildcards($this->patterns->pattern('icon_'.$size.'_gems'), $info);
+		}
+		else
+		{
+			return $this->_replaceWildcards($this->patterns->pattern('icon_' . $size), $info);
+		}
 	
 	}
 	

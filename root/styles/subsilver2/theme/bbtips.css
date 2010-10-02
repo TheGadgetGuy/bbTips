@@ -400,3 +400,312 @@ div.panes div.pane {
 }
 
 /*end of jquery tools*/
+
+/**
+* WoW Head Item Links
+* 
+*/
+
+/* Poor (Gray) */
+
+.quality0, .quality0 a:link, .quality0 a:active, .quality0 a:visited, .quality0 a:hover {
+	color: gray !important;
+	text-decoration: none;
+}
+
+/* Common (White) */
+
+.quality1, .quality1 a:link, .quality1 a:active, .quality1 a:visited, .quality1 a:hover {
+	color: #4679A6 !important;
+	text-decoration: none;
+}
+
+/* Uncommon (Green) */
+
+.quality2, .quality2 a:link, .quality2 a:active, .quality2 a:visited, .quality2 a:hover {
+	color: #1EFF00 !important;
+	text-decoration: none;
+}
+
+/* Rare (Blue) */
+
+.quality3, .quality3 a:link, .quality3 a:active, .quality3 a:visited, .quality3 a:hover {
+	color: #0870C1 !important;
+	text-decoration: none;
+}
+
+/* Epic (Purple) */
+
+.quality4, .quality4 a:link, .quality4 a:active, .quality4 a:visited, .quality4 a:hover {
+	color: #9035CF !important;
+	text-decoration: none;
+}
+
+/* Legendary (Orange) */
+
+.quality5, .quality5 a:link, .quality5 a:active, .quality5 a:visited, .quality5 a:hover {
+	color: #DE800D !important;
+	text-decoration: none;
+}
+
+/* Artifact (Tan-ish) */
+
+.quality6, .quality6 a:link, .quality6 a:active, .quality6 a:visited, .quality6 a:hover {
+	color: #E5CC63 !important;
+	text-decoration: none;
+}
+
+/* Heirloom (Tan-ish) - Added in Wrath of the Lich King*/
+
+.quality7, .quality7 a:link, .quality7 a:active, .quality7 a:visited, .quality7 a:hover {
+	color: #E5CC63 !important;
+	text-decoration: none;
+}
+
+/* Quests */
+
+.quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
+	color: #0000FF !important;
+	text-decoration: none;
+}
+
+/* Spells */
+
+.spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
+	color: navy !important;
+	text-decoration: none;
+}
+
+/* Achievements */
+
+.achievement, .achievement a:link, .achievement a:active, .achievement a:visited, .achievement a:hover,
+.itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
+	color: #D53057;
+	text-decoration: none;
+}
+
+/* NPC's */
+
+.npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
+	color: #C09E79 !important;
+	text-decoration: none;
+}
+
+/* Profiles */
+
+.wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
+	color: #4679A6 !important;
+	text-decoration: none;
+}
+
+/* Guilds */
+
+.guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
+	color: #099F2C !important;
+	text-decoration: none;
+}
+
+/* Armory */
+
+.armory, .armory a:link, .armory a:active, .armory a:visited, .armory a:hover {
+	color: #CFA60C;
+	text-decoration: none;
+}
+
+/* For Item Icons */
+
+.iconlarge {
+	background: transparent none no-repeat scroll 6px 6px;
+	height: 68px;
+	position: relative;
+	width: 68px;
+	display: inline-block;
+}
+
+.iconlarge .tile {
+	background-image: url(http://static.wowhead.com/images/Icon/large/border/default.png);
+	height: 68px;
+	width: 68px;
+}
+
+.iconlarge a {
+	border: 0 none;
+	display: block;
+	height: 56px;
+	left: 6px;
+	position: absolute;
+	top: 6px;
+	width: 56px;
+	z-index: 20;
+}
+
+.iconlarge a:hover {
+	background-position: -62px 0;
+}
+
+.iconmedium {
+	background: transparent none no-repeat scroll 4px 4px;
+	height: 44px;
+	position: relative;
+	width: 44px;
+	display: inline-block;
+}
+
+.iconmedium .tile {
+	background-image: url(http://static.wowhead.com/images/Icon/medium/border/default.png);
+	height: 44px;
+	width: 44px;
+}
+
+.iconmedium a {
+	border: 0 none;
+	display: block;
+	height: 38px;
+	left: 4px;
+	position: absolute;
+	top: 4px;
+	width: 38px;
+	z-index: 20;
+}
+
+.iconmedium a:hover {
+	background-position: -38px 0;
+}
+
+.iconsmall {
+	background: transparent none no-repeat scroll 4px 4px;
+	height: 26px;
+	position: relative;
+	width: 26px;
+	display: inline-block;
+}
+
+.iconsmall .tile {
+	background-image: url(http://static.wowhead.com/images/Icon/small/border/default.png);
+	height: 26px;
+	width: 26px;
+}
+
+.iconsmall a {
+	background: transparent url(http://static.wowhead.com/images/Icon/small/hilite/default.png) no-repeat scroll 20px 0;
+	border: 0 none;
+	display: block;
+	height: 20px;
+	left: 4px;
+	position: absolute;
+	top: 4px;
+	width: 20px;
+	z-index: 20;
+}
+
+.itemname {
+	display: inline;
+	clear: left;
+}
+
+.iconsmall a:hover {
+	background-position: 0 0;
+}
+
+.qual {
+	color: #ffd100 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* yellow/description */
+
+.qual0, .qual0 a {
+	color: gray !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* grey/poor */
+
+.qual1, .qual1 a {
+	color: #4679A6 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* white/common */
+
+.qual2, .qual2 a {
+	color: #1eff00 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* green/uncommon*/
+
+.qual3, .qual3 a {
+	color: #0070dd !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* blue/rare */
+
+.qual4, .qual4 a {
+	color: #a335ee !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* purple/epic */
+
+.qual5, .qual5 a {
+	color: #ff8000 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* orange/legendary */
+
+.qual6, .qual6 a {
+	color: #e5cc80 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+/* red/artifact */
+
+.qual7, .qual7 a {
+	color: #ff0000 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+.qual8, .qual8 a {
+	color: #ffff98 !important;
+	position: absolute;
+	padding-top: 2px;
+	padding-left: 2px;
+}
+
+.notfound {
+	color: #FF0000;
+	font-weight: bold;
+}
+
+ul.itemset-items {
+	list-style-position: none !important;
+	padding: 0px;
+	margin: 0px;
+}
+
+li.itemset-item {
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none !important;
+}
