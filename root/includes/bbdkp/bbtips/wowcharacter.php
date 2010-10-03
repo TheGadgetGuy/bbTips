@@ -15,6 +15,7 @@
 * 
 * <code>
 * [wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
+* [wowchar realm=Blade's_Edge region=US]Johnjohnson[/wowchar] 
 * </code>
 *
 *
