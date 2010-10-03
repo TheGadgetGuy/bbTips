@@ -22,6 +22,14 @@
 **/
 
 /**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+        
+/**
  * This class describes a wow character 
  */
 
