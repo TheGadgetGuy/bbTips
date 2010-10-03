@@ -1,14 +1,12 @@
 <?php
 /**
-* bbdkp-wowhead Link Parser v3 - NPC Extension
-*
+* bbdkp-wowhead NPC
 * @package bbDkp.includes
+* @author sajaki9@gmail.com
 * @version $Id $
-* @Copyright (c) 2008 Adam Koch
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-* By: Adam "craCkpot" Koch (admin@crackpot.us) Adapted by bbdkp Team (sajaki9@gmail.com)
-*
+* @Copyright bbDKP
+* 
 **/
 
 /**
@@ -23,31 +21,34 @@ class wowhead_npc extends wowhead
 {
 	var $lang;
 	var $patterns;
-	function wowhead_npc()
+	var $args; 
+	
+	function wowhead_npc($arguments = array())
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $config, $phpbb_root_path; 
 		
 		if (!class_exists('wowhead_patterns')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
+		$this->args = $arguments;
+		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name, $args = array())
+	function parse($name)
 	{
 		if (trim($name) == '')
 		{
 			return false;
 		}
 		
-		global $config; 
-		global $phpEx, $phpbb_root_path; 
+		global $config, $phpEx, $phpbb_root_path; 
 	
 		$this->lang = $config['bbtips_lang'];
 		
 		if (!class_exists('wowhead_cache')) 
-        {
+		{
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx); 
         }
 		$cache = new wowhead_cache();
@@ -55,12 +56,10 @@ class wowhead_npc extends wowhead
 		if (!$result = $cache->getNPC($name, $this->lang))
 		{
 			// not found in cache
-
 			$result = $this->_getNPCInfo($name);
 			if (!$result)
 			{
 				// not found
-				
 				return $this->_notFound('NPC', $name);
 			}
 			else
@@ -80,7 +79,6 @@ class wowhead_npc extends wowhead
 
 	function _getNPCInfo($name)
 	{
-
 		if (trim($name) == '')
 		{
 			return false;
@@ -92,70 +90,91 @@ class wowhead_npc extends wowhead
 			// get the id of the npc
 			if (preg_match('#Location: /npc=([0-9]{1,10})#s', $data, $match))
 			{
-				$id = $match[1];
+				return array(
+					'npcid'			=>	$match[1],
+					'name'			=>	ucwords(strtolower($name)),
+					'search_name'	=>	$name,
+					'lang'			=>	$this->lang
+				);	
 			}
 			else
 			{
-				$id = $this->_getIDFromSearch($name, $data);
-
-				if (!$id) { return false; }
+				$npc = $this->_getIDFromSearch($name, $data);
+				if (!$npc) 
+				{
+					return false; 
+				}
+				else 
+				{
+					return $npc; 
+				}
+				
 			}
-			$npc_name = ucwords($name);
 		}
 		else
 		{
 			$data = $this->_read_url($name, 'npc', false);
 			$npc_name = $this->_getNPCNameFromID($data);
-			$id = $name;
+			return array(
+				'npcid'			=>	$name,
+				'name'			=>	$npc_name,
+				'search_name'	=>	$name,
+				'lang'			=>	$this->lang
+			);
+			
+			
+			
 		}
 
-		return array(
-			'npcid'			=>	$id,
-			'name'			=>	$npc_name,
-			'search_name'	=>	$name,
-			'lang'			=>	$this->lang
-		);
 	}
 
 	function _getIDFromSearch($name, $data)
 	{
 		if (trim($data) == '')
-			return false;
-
-		// the line we need to pull the info from
-		$line = $this->_npcSearchLine($data);
-		//new regex
-		while (preg_match('#"id":([0-9]{1,10}),"location":\[[0-9]{1,9}\],"maxlevel":[0-9]{1,9},"minlevel":[0-9]{1,9},"name":"(.+?)"#s', $line, $match))
 		{
-			if (urldecode(addslashes(strtolower($match[2]))) == urldecode(addslashes(strtolower($name))))
-			{
-				// we have a match
-				return $match[1];
-			}
-			else
-			{
-				// no match so replace the line to prevent a never-ending loop
-				$line = str_replace($match[0], '', $line);
-			}
+			return false;
 		}
 
+		// the line we need to pull the info from
+		$line = '';
+		$parts = explode(chr(10), $data);
+		foreach ($parts as $line)
+		{
+			if (strpos($line, "new Listview({template: 'npc', id: 'npcs',") !== false)
+			{
+				$line = substr($line, strpos($line, 'data: [{') + 6);
+				$line = str_replace('});', '', $line);
+				break 1;	
+			}
+		}
+		
+		if ($line == '')
+		{
+			return false;	
+		}
+		
+		// json decode
+		if (!$json = json_decode($line, true))
+		{
+			return false;
+		}
+			
+		foreach ($json as $npc)
+		{
+			if (stripslashes(strtolower($npc['name'])) == stripslashes(strtolower($name)))
+			{
+				return array(
+					'npcid'			=>	$npc['id'],
+					'name'			=>	stripslashes($npc['name']),
+					'search_name'	=>	$name,
+					'lang'			=>	$this->lang
+				);
+			}
+		}
 		// otherwise, return false
 		return false;
 	}
 
-	function _npcSearchLine($data)
-	{
-		$parts = explode(chr(10), $data);
-
-		foreach ($parts as $line)
-		{
-			if (strpos($line, "new Listview({template: 'npc', id: 'npcs'") !== false)
-			{
-				return $line;
-			}
-		}
-		return false;
-	}
 
 	function _getNPCNameFromID($data)
 	{

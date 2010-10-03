@@ -4,10 +4,9 @@
 *
 * @package bbDkp.includes
 * @version $Id $
-* @Copyright (c) 2008 Adam Koch
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
+* @copyright 2010 bbdkp <http://code.google.com/p/bbdkp/>
+* @author: Adam "craCkpot" Koch (admin@crackpot.us) -- 
+* @author: Sajaki (sajaki9@gmail.com)
 *
 **/
 
@@ -23,22 +22,24 @@ class wowhead_achievement extends wowhead
 {
 	var $lang;
 	var $patterns;
+	var $args; 
 
-	function wowhead_achievement()
+	function wowhead_achievement($arguments = array())
 	{
-		global $config; 
-		global $phpEx, $phpbb_root_path; 
+		global $config, $phpEx, $phpbb_root_path; 
 	    
         if (!class_exists('wowhead_patterns')) 
         {
 			require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
+        $this->args = $arguments;
+		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name, $args = array())
+	function parse($name)
 	{
-	    global $phpbb_root_path, $config, $phpEx;
+	    global $phpbb_root_path, $phpEx;
 	    
 		if (trim($name) == '')
 		{
@@ -51,7 +52,6 @@ class wowhead_achievement extends wowhead
         }
 		$cache = new wowhead_cache();
 
-		$this->lang = $config['bbtips_lang'];
 
 		if (!$result = $cache->getObject($name, 'achievement', $this->lang))
 		{
@@ -85,8 +85,6 @@ class wowhead_achievement extends wowhead
 		}
 	}
 
-
-	
 	/**
 	* Queries Wowhead for Achievement info by ID
 	* @acess private

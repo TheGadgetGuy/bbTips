@@ -3,12 +3,11 @@
 * bbdkp-wowhead Link Parser v3 - Quest Extension
 *
 * @package bbDkp.includes
+* @Copyright bbDKP
 * @version $Id $
-* @Copyright (c) 2008 Adam Koch
+* @author sajaki9@gmail.com
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
-*
+* 
 **/
 
 /**
@@ -23,29 +22,29 @@ class wowhead_quest extends wowhead
 {
 	var $lang;
 	var $patterns;
-	function wowhead_quest()
+	var $args = array();
+		
+	function wowhead_quest($arguments = array())
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $config, $phpbb_root_path; 
 		
 		if (!class_exists('wowhead_patterns')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
+        $this->args = $arguments;
+		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name, $args = array())
+	function parse($name)
 	{
-		
 		if (trim($name) == '')
 		{
 		    return false;
 		}
 
-		global $config; 
-		global $phpEx, $phpbb_root_path; 
-
-		$this->lang = $config['bbtips_lang'];
+		global $config, $phpEx, $phpbb_root_path; 
 		
 		if (!class_exists('wowhead_cache')) 
         {
@@ -176,8 +175,7 @@ class wowhead_quest extends wowhead
 		}
 		
 		// get the JSON line from the data
-		$line = $this->_questLine($data);
-		
+		$line = $this->_questLine($html);
 		if (!$line)
 		{
 			return false;
@@ -210,6 +208,9 @@ class wowhead_quest extends wowhead
 			
 	}
 	
+	/*
+	 * loop lines and extract from json 
+	 */
 	private function _questLine($data)
 	{
 		$parts = explode(chr(10), $data);

@@ -4,12 +4,14 @@
 *
 * @package bbDkp.includes
 * @version $Id $
-* @Copyright (c) 2008 Adam Koch
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-* Wowhead (wowhead.com) Link Parser v3 - Spell Extension
+* @copyright 2010 bbdkp <http://code.google.com/p/bbdkp/>
 * @author: Adam "craCkpot" Koch (admin@crackpot.us) -- 
-* @author: Adapted by bbdkp Team (sajaki9@gmail.com)
+* @author: Sajaki (sajaki9@gmail.com)
+* 
+* 
+* example
+* [spell rank=14]Power Word: Shield[/spell]
 *
 **/
 
@@ -26,26 +28,30 @@ class wowhead_spell extends wowhead
 {
 	var $lang;
 	var $patterns; 
+	var $args = array();
+	
 	/**
 	* Constructor
 	* @access public
 	**/
-	function wowhead_spell()
+	function wowhead_spell($arguments = array())
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $config, $phpEx, $phpbb_root_path; 
 		
 		if (!class_exists('wowhead_patterns')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
+        $this->args = $arguments;
+        $this->lang = $config['bbtips_lang'];
 	}
 
 	/**
 	* Parses information
 	* @access public
 	**/
-	function parse($name, $args = array())
+	function parse($name)
 	{
 	    global $phpbb_root_path, $phpEx, $config;
 	    
@@ -60,8 +66,7 @@ class wowhead_spell extends wowhead
         }
         $cache = new wowhead_cache();
 
-		$this->lang = $config['bbtips_lang'];
-		$rank = (!array_key_exists('rank', $args)) ? '' : $args['rank'];
+		$rank = (!array_key_exists('rank', $this->args)) ? '' : $this->args['rank'];
 
 		if (!$result = $cache->getObject($name, 'spell', $this->lang, $rank))
 		{
@@ -102,9 +107,7 @@ class wowhead_spell extends wowhead
         {
             include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
         }
-        $built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($name);
-		//$html = file_get_html($built_url);
-		
+        
         $html = $this->_read_url($name, 'spell', false);
 		if ($html == NULL)
 		{
@@ -129,14 +132,17 @@ class wowhead_spell extends wowhead
 		
 		// get the line we need to pull the data
 		$line = $this->spellLine($html, $name);
-		//var_dump($line); die;
 		if (!$line)
+		{
 			return false;
+		}
 		else
 		{
 			// decode the JSON result
 			if (!$json = json_decode($line, true))
+			{
 				return false;
+			}
 				
 			// loop through the resulting array and pull out the ones that match the name
 			$json_array = array();
@@ -148,7 +154,9 @@ class wowhead_spell extends wowhead
 			}
 			
 			if (sizeof($json_array) == 0)
+			{
 				return false;
+			}
 			
 			// which one we grab depends on the $rank variable
 			$result = ($rank != '') ? $json_array[$rank - 1] : $json_array[sizeof($json_array) - 1];
