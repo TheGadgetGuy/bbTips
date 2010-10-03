@@ -7,6 +7,15 @@
 * @copyright (c) 2010 bbDkp <http://code.google.com/p/bbdkp/>
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @author Kapli, Malfate, Sajaki, Blazeflack, Twizted
+* 
+* @syntax 
+* <code>
+* [wowchar realm={realmname} region={regioncode}]{charactername}[/wowchar]
+* </code>  
+* 
+* <code>
+* [wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
+* </code>
 *
 *
 **/
@@ -14,14 +23,8 @@
 /**
  * This class describes a wow character 
  */
- function replace_specchar($str) {
-  $str = htmlentities($str, ENT_COMPAT, "UTF-8");
-  $str = preg_replace(
-'/&([a-zA-Z])(uml|acute|grave|circ|tilde);/',
-'',$str);
-  return html_entity_decode($str);
-}
-class wowcharacter
+
+class wowcharacter extends wowhead
 {
 	// character definition
 	
@@ -87,44 +90,24 @@ class wowcharacter
 	public $gems1 = array();
 	public $gems2 = array();
 	public $gems3 = array();
-	public $ench = array();
-	public $gearNameLink = array();
+	public $gemlist = array();
+	public $ench = array();		   // the effect
+	public $enchItemid = array();  // the item id
+	public $gearID = array();  // The item ID
 	
 	public $modeltemplate; 
-
+	public $arguments;
 	
-
-	function wowcharacter()
+	function wowcharacter($arguments)
 	{
-
-	}
-	
-	
-	/**
- 	 * main parser function to get character from armory
-	 * 
-	 * @tutorial usage [wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
-	 * 
-	 * @access public
-	 * @return boolean or object
-	 * 
-	 * @param $name = content between brackets
-	 * @param $arguments = optional array holding two arguments realm and region 
-	 * 
-	 */
-	public function parse($name, $arguments)
-	{
-		global $db, $user, $config;
+		global $config;
 		
-		if (strlen($name) == 0 )
-		{
-			return false;
-		}
+		$this->args = $arguments; 
 		
-		if(isset($arguments['realm']))
+		if(isset($this->args['realm']))
 		{
 			$spaceChars = array("+", "_");
-			$this->realm = str_replace($spaceChars, " ",  $arguments['realm'] );  
+			$this->realm = str_replace($spaceChars, " ",  $this->args['realm'] );  
 		}
 		else 
 		{
@@ -140,10 +123,10 @@ class wowcharacter
 		}
 		
 		//region either EU or US
-		if(isset($arguments['region']))
+		if(isset($this->args['region']))
 		{
 			//take default region
-			$this->region = $arguments['region']; 
+			$this->region = $this->args['region']; 
 		}
 		else
 		{
@@ -160,6 +143,28 @@ class wowcharacter
 			
 		}
 		
+	}
+	
+	/**
+ 	 * main parser function to get character from armory
+	 * 
+	 * 
+	 * @access public
+	 * @return boolean or object
+	 * 
+	 * @param $name = content between brackets
+	 * @param $arguments = optional array holding two arguments realm and region 
+	 * 
+	 */
+	public function parse($name)
+	{
+		global $db, $user; 
+				
+		if (strlen($name) == 0 )
+		{
+			return false;
+		}
+		
 		$this->name = $name; 
 		
 		$base_url = ($this->region == "US") ? "http://www.wowarmory.com" : "http://eu.wowarmory.com"; 
@@ -168,21 +173,20 @@ class wowcharacter
 		$this->feedurl = $base_url . "/character-feed.atom?r=" . $this->realm  . "&cn=" . $name . '&filters=ACHIEVEMENT,RESPEC&achCategories=168&locale=en_US'; 
 		$this->ModelViewURL = $base_url . "/character-model-embed.xml?r=" . urlencode($this->realm ) . "&cn=" . urlencode($name) . "&rhtml=true";
 		$this->url = $base_url . "/character-sheet.xml?r=" . urlencode($this->realm ) . "&n=" . urlencode($name);
-
 		
 		//calling static bbdkp urlreader function. 
 		$xml_data = bbDkp_Admin::read_php ( $this->url,false,false );
 		
 		if (empty($xml_data))
 		{
-    	    return false;
+			return $this->_notFound('Character', $name);
 		}
 		else
 		{
 		    $xml = simplexml_load_string($xml_data);
 		    if (!isset($xml->characterInfo->character['name']))
 		    {
-        	    return false;
+        	    return $this->_notFound('Character', $name);
 		    }
 		}
 		
@@ -194,7 +198,7 @@ class wowcharacter
 		}
 		else 
 		{
-			return false;
+			return $this->_notFound('Character', $name);
 		}
 		
 	}
@@ -310,11 +314,14 @@ class wowcharacter
 			// is item enchanted ?
 			if (!empty($item[$k]['permanentEnchantItemId'])) 
 			{
-				$this->ench[$gearslot] = '[itemico size=small]' . (string) $item[$k]['permanentEnchantItemId'] . '[/itemico]';
+				// permanentEnchantItemId="44456" permanentenchant="3825" = 15 haste rating
+				$this->enchItemid[$gearslot] = '[itemico size=small]' . (string) $item[$k]['permanentEnchantItemId'] . '[/itemico]'; 
+				$this->ench[$gearslot] = (string) $item[$k]['permanentenchant'];
 			}
 			else
 			{
-				$this->ench[$gearslot] = '';
+				$this->enchItemid[$gearslot] = '';
+				$this->ench[$gearslot] = ''; 
 			}
 
 			// is item gemmed ?
@@ -336,12 +343,26 @@ class wowcharacter
 				$this->gems[$gearslot] .= '[itemico size=small]' . $geargem3 . '[/itemico]';
 			}
 
-			//Icon link using bbcodes --> icon type set in html
-			$this->gear[$gearslot] = (string) $item[$k]['id'];
+			//gear id
+			$this->gearID[$gearslot] = (string)  $item[$k]['id']; 
 			
-			//Item name only(no icon) using bbcodes
-			$this->gearNameLink[$gearslot] = '[item]' . (string)  $item[$k]['id'] . '[/item]';
-			
+			//gearlist text : Item name only(no icon) using bbcodes
+			$this->gemlist[$gearslot] = ''; 
+			if ($geargem1!="0") 
+			{
+				$this->gemlist[$gearslot] = $geargem1;
+				if ($geargem2!="0") 
+				{
+					$this->gemlist[$gearslot] .= ':'. $geargem2; 
+				}
+				
+				if ($geargem3!="0") 
+				{
+					$this->gemlist[$gearslot] .= ':'. $geargem3; 
+				}
+			}
+
+			// item iLvl
 			$this->ilvl[$gearslot] = (string) $item[$k]['level'];
 		}
 		
@@ -422,10 +443,10 @@ class wowcharacter
 			$bracketlevel="-default";
 		}
 		
-		// we get the icon from bbDkp roster --> bbdkp must be installed !
+		// we get the icon from bbDKP roster !
 		$memberportraiturl = $phpbb_root_path. './images/roster_portraits/wow'. $bracketlevel .'/' . 
 			$this->genderid . '-' . $this->raceid . '-' . $this->classid . '.gif';
-		$innerdiv = str_replace('{PLAYERID}', replace_specchar($this->name)  , $innerdiv);
+		$innerdiv = str_replace('{PLAYERID}', $this->replace_specchar($this->name)  , $innerdiv);
 		
 		// replace placeholders with content	
 		$innerdiv = str_replace('{PLAYERNAME}',  $this->name . ', ' . $this->realm . '/' . $this->region , $innerdiv);
@@ -471,13 +492,35 @@ class wowcharacter
 		for($slot = 0 ; $slot <= 18; $slot++)
 		{
 			//TOTAL3D (ico) and GEARLIST (smallico)
-			$search['{GEAR'.$slot .'}'] = (isset($this->gear[$slot]) ? '[itemico]' . $this->gear[$slot] . '[/itemico]' : '' );
-			$search['{GEARICO'.$slot .'}'] = (isset($this->gear[$slot]) ? '[itemico size=small]' . $this->gear[$slot] . '[/itemico]': '' );
-			//GEARLIST 
-			$search['{GEARNAMELINK'.$slot.'}'] = (isset($this->gearNameLink[$slot]) ? $this->gearNameLink[$slot]  : '' );
+			if ($this->gemlist[$slot] != '') 
+			{
+				//gemmed
+				$search['{GEAR'.$slot .'}'] = (isset($this->gearID[$slot]) ? '[itemico size=medium gems="'.$this->gemlist[$slot].'"]' . $this->gearID[$slot] . '[/itemico]' : '' );
+				$search['{GEARICO'.$slot .'}'] = (isset($this->gearID[$slot]) ? '[itemico size=small gems="'.$this->gemlist[$slot].'"]' . $this->gearID[$slot] . '[/itemico]': '' );
+				$search['{GEARNAMELINK'.$slot.'}'] = (isset($this->gearID[$slot]) ? '[item gems="'.$this->gemlist[$slot].'"]' .$this->gearID[$slot] . '[/item]'  : '' );
+			}
+			else 
+			{
+				// not gemmed
+				$search['{GEAR'.$slot .'}'] = (isset($this->gearID[$slot]) ? '[itemico]' . $this->gearID[$slot] . '[/itemico]' : '' );
+				$search['{GEARICO'.$slot .'}'] = (isset($this->gearID[$slot]) ? '[itemico size=small]' . $this->gearID[$slot] . '[/itemico]': '' );
+				$search['{GEARNAMELINK'.$slot.'}'] = (isset($this->gearID[$slot]) ? '[item]' .$this->gearID[$slot] . '[/item]'  : '' );
+			}
+			
+			if ($this->ench[$slot] != '')
+			{
+				// insert enchant effect in the 3d view, gearlist and smallicon list
+				$search['{GEAR'.$slot .'}'] = str_replace( '[itemico' , '[itemico enchant="' . $this->ench[$slot] . '" ', $search['{GEAR'.$slot .'}']  ); 
+				$search['{GEARICO'.$slot .'}'] = str_replace( '[itemico' , '[itemico enchant="' . $this->ench[$slot] . '" ', $search['{GEARICO'.$slot .'}']  );
+				$search['{GEARNAMELINK'.$slot.'}'] = str_replace( '[item' , '[item enchant="' . $this->ench[$slot] . '" ', $search['{GEARNAMELINK'.$slot.'}'] );
+				
+			}
+			
 			$search['{ILVL'.$slot.'}'] = (isset($this->ilvl[$slot]) ? $this->ilvl[$slot] : '' );
 			$search['{GEMS'.$slot.'}'] = (isset($this->gems[$slot]) ? $this->gems[$slot] : '' );
-			$search['{ENCH'.$slot.'}'] = (isset($this->ench[$slot]) ? $this->ench[$slot] : '' );
+			// the actual enchant formula applied
+			$search['{ENCH'.$slot.'}'] = (isset($this->enchItemid[$slot]) ? $this->enchItemid[$slot] : '' );
+			
 		}
 		
 		// replace slots with content
@@ -490,6 +533,15 @@ class wowcharacter
 		//return innerdiv for insertion in post
 		return $innerdiv; 		
 		
+	}
+	
+	function replace_specchar($str) 
+    {
+		  $str = htmlentities($str, ENT_COMPAT, "UTF-8");
+		  $str = preg_replace(
+		'/&([a-zA-Z])(uml|acute|grave|circ|tilde);/',
+		'',$str);
+		  return html_entity_decode($str);
 	}
 
 }

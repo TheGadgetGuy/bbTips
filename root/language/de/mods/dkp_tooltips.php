@@ -48,7 +48,7 @@ $lang = array_merge($lang, array(
     'UMIL_BBCODE_ADDED' => 'BBCodes hinzugefügt',
     'UMIL_BBCODE_REMOVED' => 'BBCodes entfernt',
 
-    'ACP_BBTOOLTIPS' => 'Popup Einstellungen',
+    'ACP_BBTOOLTIPS' => 'bbTips Einstellungen',
     'BBTOOLTIPS' => 'bbTips 0.3.7 Plugin',
     'BBTOOLTIPS_EXPLAIN' => 'Tooltips von Wowhead',
 
@@ -76,8 +76,9 @@ $lang = array_merge($lang, array(
     'BBTOOLTIPS_REG' => 'Armory Region',
     'BBTOOLTIPS_REA' => 'Realm',
 
-	'ITEMNOTFOUND' => ' nicht gefunden',
+	'ITEMNOTFOUND' => '%s "%s" wurde nicht gefunden',
 	'INSERTFAILED' => 'Einführung von %s in die Datenbank gescheitert.',
+	'BBTOOLTIPS_SETTINGSAVED' => 'BBTips einstellungen gespeichert', 
 
 ));
 

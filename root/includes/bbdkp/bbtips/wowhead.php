@@ -276,7 +276,7 @@ class wowhead
 	{
 		global $user; 
 		$user->add_lang ( array ('mods/dkp_tooltips' ));
-		return '<span class="notfound">[' . ucwords($type) . ' "' . $name  . '" ' . $user->lang['ITEMNOTFOUND']  . ']</span>';
+		return '<span class="notfound">[' . sprintf($user->lang['ITEMNOTFOUND'], ucwords($type) , $name) . ']</span>';
 	}
 
 	/**

@@ -76,8 +76,9 @@ $lang = array_merge($lang, array(
     'BBTOOLTIPS_REA' => 'Royaume',
     'BBTOOLTIPS_REG' => 'Région',
 
-	'ITEMNOTFOUND' => ' pas trouvé',
+	'ITEMNOTFOUND' => '%s "%s" pas trouvé',
 	'INSERTFAILED' => 'l’objet %s n’a pas pu être inseré dans la base de données.',
+	'BBTOOLTIPS_SETTINGSAVED' => 'Paramètres BBTips sauvegardés', 
 
 
 ));

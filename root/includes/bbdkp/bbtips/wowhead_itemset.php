@@ -35,6 +35,7 @@ class wowhead_itemset extends wowhead
 	var $itemset_items = array();
 	var $setid;
 	var $patterns; 
+	var $args;
 
 	/**
 	* Constructor
@@ -150,7 +151,7 @@ class wowhead_itemset extends wowhead
 				'itemid'	=>	$items[2],
 				'name'		=>	stripslashes($items[3]),
 				'quality'	=>	$items[1],
-				'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . $this->getItemIcon($items[2])
+				'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . $this->_getItemIcon($items[2])
 			);
 			$data = str_replace($items[0], '', $data);
 		}		
@@ -170,12 +171,12 @@ class wowhead_itemset extends wowhead
 		if (!$this->_allowSimpleXMLOptions())
 		{
 			// remove CDATA tags
-			$data = $this->_removeCData($data);
-			$xml = simplexml_load_string($data, 'SimpleXMLElement');
+			$xml_data = $this->_removeCData($xml_data);
+			$xml = simplexml_load_string($xml_data, 'SimpleXMLElement');
 		}
 		else
 		{
-			$xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+			$xml = simplexml_load_string($xml_data, 'SimpleXMLElement', LIBXML_NOCDATA);
 		}
 			
 		$errors = libxml_get_errors();
@@ -189,7 +190,7 @@ class wowhead_itemset extends wowhead
 			 	}
 			 	
 			 	$iconname = strtolower($xml->item->icon) . '.jpg';
-				unset($xml);
+				unset($xml, $xml_data);
 				return $iconname; 
 		}
 		else
