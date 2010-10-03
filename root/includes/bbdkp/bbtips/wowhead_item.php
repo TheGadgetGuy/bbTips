@@ -1,13 +1,10 @@
 <?php
 /**
 * bbdkp-wowhead Link Parser v3 - Link Parser v3 - Item Extension
-*
 * @package bbDkp.includes
 * @version $Id $
-* @Copyright (c) 2008 Adam Koch
+* @Copyright bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
 *
 **/
 
@@ -23,26 +20,36 @@ class wowhead_item extends wowhead
 {
 	var $lang;
 	var $patterns;
+	var $type; 
+	var $size;
+	var $args = array();
 
-	function wowhead_item()
+	/*
+	 * $bbcode : either 'item' or 'itemico'
+	 */
+	function wowhead_item($bbcode, $argin = array())
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $phpbb_root_path, $config; 
 		
 		if (!class_exists('wowhead_patterns')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
         $this->patterns = new wowhead_patterns();
+		$this->type = $bbcode;
+		$this->args = $argin;
+		$this->lang = $config['bbtips_lang'];
+		$this->size = (!array_key_exists('size', $this->args)) ? 'medium' : $this->args['size'];
 	}
 
 	/**
 	* Parses Items
+	*
 	* @access public
 	**/
-	function parse($name, $args = array())
+	function parse($name)
 	{
-		global $config; 
-		global $phpEx, $phpbb_root_path; 
+		global $config, $phpEx, $phpbb_root_path; 
 
 		if (trim($name) == '')
 		{
@@ -51,46 +58,56 @@ class wowhead_item extends wowhead
 		
 	    if (!class_exists('wowhead_cache')) 
         {
-            require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx); 
+          	   require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx); 
         }
 		$cache = new wowhead_cache();
 
-		$this->lang = $config['bbtips_lang'];
-
 		// check if its already in the cache
-		if (!$result = $cache->getObject($name, 'item', $this->lang))
+		if (!$result = $cache->getObject($name, $this->type, $this->lang, '', $this->size))
 		{
+			//not in db so call wowhead
+			if(is_numeric($name))
+			{
+				//xmlsearch
+				$result = $this->_getItembyID($name);
+			}
+			else 
+			{
+				//json search
+				$result = $this->_getItemByName($name);
+			}
+			
 			// not in the cache so call wowhead
-			if (!$result = $this->_getItemInfo($name))
+			if (!$result)
 			{
 				// item not found 
-				return $this->_notfound('item', $name);
+				return $this->_notfound($this->type, $name);
 			}
 			else
-			{   
-				$cache->saveObject($result);	// save it to cache
-				if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
+			{   //insert 
+				$cache->saveObject($result); 
+				if (array_key_exists('gems', $this->args) || array_key_exists('enchant', $this->args))
 				{
-					$enhance = $this->_buildEnhancement($args);
-					return $this->_generateHTML($result, 'item', '', '', $enhance);
+					$enhance = $this->_buildEnhancement($this->args);
+					return $this->_generateHTML($result, $enhance);
 				}
 				else
 				{
-					return $this->_generateHTML($result, 'item');
+					return $this->_generateHTML($result);
 				}
 			}
 		}
 		else
 		{
 			// already in db
-			if (array_key_exists('gems', $args) || array_key_exists('enchant', $args))
+			if (array_key_exists('gems', $this->args) || array_key_exists('enchant', $this->args))
 			{
-				$enhance = $this->_buildEnhancement($args);
-				return $this->_generateHTML($result, 'item', '', '', $enhance);
+				$enhance = $this->_buildEnhancement($this->args);
+				return $this->_generateHTML($result, $enhance);
 			}
 			else
 			{
-				return $this->_generateHTML($result, 'item');
+				return $this->_generateHTML($result);
 			}
 		}
 	}
@@ -99,59 +116,70 @@ class wowhead_item extends wowhead
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	function _generateHTML($info, $gems = '')
 	{
 		
-		$info['link'] = $this->_generateLink($info['itemid'], $type);
-			
-     	if (trim($gems) != '')
+		$info['link'] = $this->_generateLink($info['itemid'], $this->type);
+		if (trim($gems) != '')
 		{
 			$info['gems'] = $gems;
-			return $this->_replaceWildcards($this->patterns->pattern('item_gems'), $info);
+			if ($this->type =='item')
+			{
+			    return $this->_replaceWildcards($this->patterns->pattern('item_gems'), $info);
+			}
+            elseif  ($this->type =='itemico')
+            {
+			    return $this->_replaceWildcards($this->patterns->pattern('icon_'.$this->size.'_gems'), $info);
+            }
 		}
 		else
 		{
-			return $this->_replaceWildcards($this->patterns->pattern($type), $info);
+			if ($this->type =='item')
+			{
+				return $this->_replaceWildcards($this->patterns->pattern('item'), $info);
+			}
+			elseif  ($this->type =='itemico')
+			{
+				return $this->_replaceWildcards($this->patterns->pattern('icon_'.$this->size), $info);
+			}
 		}
-	
-		
 	}
 
 	/**
-	* Queries Wowhead for Item Info
+	* Queries Wowhead for Item id
 	* @access private
 	**/
-	function _getItemInfo($name)
+	function _getItembyID($id, $search='')
 	{
-		if (trim($name) == '')
+		
+		$id = (int) $id;
+		if ($id == 0)
 		{
 			return false;
 		}
 		
-		// will hold return
-		$item = array();
-		
-		// gets the XML data from wowhead and remove CDATA tags
-		$data = $this->_read_url($name);
+		//get the raw XML data from wowhead 
+		$data = $this->_read_url($id);
 
 		if (trim($data) == '' || empty($data)) 
 		{ 
 			return false; 
 		}
 		
+		//if wowhead is down
 		if(preg_match('#HTTP/1.1 503 Service Unavailable#s',$data,$match))
 		{
-			return $this->_notFound('Item', $name);
+			return $this->_notFound('Item', $id);
 		}
 		
 		if ($this->_useSimpleXML())
 		{
 			// switch libxml error handler on
 			libxml_use_internal_errors(true);
-			
 			// accounts for SimpleXML not being able to handle 3 parameters if you're using PHP 5.1 or below.
 			if (!$this->_allowSimpleXMLOptions())
 			{
+				// remove CDATA tags
 				$data = $this->_removeCData($data);
 				$xml = simplexml_load_string($data, 'SimpleXMLElement');
 			}
@@ -161,7 +189,7 @@ class wowhead_item extends wowhead
 			}
 			
 			$errors = libxml_get_errors();
-			 if (empty($errors))
+			if (empty($errors))
 			 {
 			 	libxml_clear_errors();
 			 	
@@ -170,13 +198,15 @@ class wowhead_item extends wowhead
 			 		return false;
 			 	}
 			 	
-			 	// item found
+			 	// will hold return
 				$item = array(
 					'name'			=>	(string)$xml->item->name,
-					'search_name'	=>	$name,
+					'search_name'		=>	(trim($search) == '') ? $id : $search,
 					'itemid'		=>	(string)$xml->item['id'],
+					'icon'			=>	'http://static.wowhead.com/images/wow/icons/' . $this->size . '/' . strtolower($xml->item->icon) . '.jpg',
+					'icon_size'		=>	$this->size,
 					'quality'		=>	(string)$xml->item->quality['id'],
-					'type'			=>	'item',
+					'type'			=>	$this->type,
 					'lang'			=>	$this->lang
 				);
 				unset($xml);
@@ -191,13 +221,81 @@ class wowhead_item extends wowhead
 				libxml_clear_errors();
 				return false;
 			}
-			
-	        
-
-			
+		}
+		else 
+		{
+			return $this->_notFound('Item', $item);
+		}
+	}
+	
+	function _getItemByName($name)
+	{
+		if (trim($name) == '')
+		{
+			return false;
 		}
 		
+		$data = $this->_read_url($name, 'item', false);
 		
+		if (!$data)
+		{
+			return false;
+		}
+		
+		// for searches with only one result (aka redirect header)
+		// example http://www.wowhead.com/search?q=Blighted Leggings
+		if (preg_match('#Location: \/item=([0-9]{1,10})#s', $data, $match))
+		{
+			return $this->_getItembyID($match[1], $name);
+		}
+		
+		// lots of results, so read the 
+		$line = $this->_itemLine($data);
+		
+		if (!$line)
+		{
+			return false;
+		}
+		else
+		{
+			if (!$json = json_decode($line, true))
+			{
+				return false;
+			}
+				
+			foreach ($json as $item)
+			{
+				// strip the first character, if necessary
+				if (is_numeric(substr($item['name'], 0, 1)))
+				{
+					$item['name'] = substr($item['name'], 1);
+				}
+				
+				if (strtolower(stripslashes($item['name'])) == strtolower(stripslashes($name)))
+				{
+					return $this->_getItembyID($item['id'], $name);
+				}
+			}
+			return false;
+		}
 	}
+	
+	function _itemLine($data)
+	{
+		$parts = explode(chr(10), $data);
+		foreach ($parts as $line)
+		{
+			if (strpos($line, "new Listview({template: 'item', id: 'items',") !== false)
+			{
+				// clean the line up to make it valid JSON
+				$line = substr($line, strpos($line, 'data: [{') + 6);
+				$line = str_replace('});', '', $line);
+				return $line;	
+			}
+		}
+		return false;
+	}
+	
+	
 }
 ?>

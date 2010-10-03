@@ -523,7 +523,7 @@ class wowhead_cache
 		$quality = (array_key_exists('quality', $info)) ? $info['quality'] : 0;
 		$rank = (array_key_exists('rank', $info) && $info['rank'] != '') ? $info['rank'] :0 ;
 		$icon = (array_key_exists('icon', $info)) ? $info['icon'] : 'NULL';
-		$icon_size = (array_key_exists('icon_size', $info)) ? $info['icon_size'] : 'NULL';
+		$icon_size = (array_key_exists('icon_size', $info)) ? $info['icon_size'] : 'medium';
 		
 		$sql_ary = array(
     		'itemid'        => $info['itemid'],

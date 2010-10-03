@@ -83,8 +83,20 @@ class wowhead
 				$html_data = bbDkp_Admin::read_php($built_url, 1, 0 );
 				break;
 			case 'item':      
+		    case 'itemico':   
 		    case 'itemdkp':   
-			case 'itemico':   
+				if(is_numeric($url))
+				{
+					$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
+					$html_data = bbDkp_Admin::read_php($built_url, 0, 0 );
+				}
+				else 
+				{
+					//use search and parse page
+					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$html_data = bbDkp_Admin::read_php($built_url, 1, 0 );
+				}
+				break;
 			case 'craftable':
 			default:
 				//xml
