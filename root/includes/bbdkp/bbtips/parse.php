@@ -3,12 +3,11 @@
 * bbTips Parser 
 *
 * @package bbDkp.includes
-* @version 0.3.5 $Id $
+* @version 0.3.7 $Id $
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @copyright (c) 2008 Adam Koch
 * @copyright (c) 2010 bbdkp <http://code.google.com/p/bbdkp/>
-* @author : Adam "craCkpot" Koch (admin@crackpot.us) 
 * @author : Sajaki (sajaki@bbdkp.com)
+* 
 *
 * 
 **/

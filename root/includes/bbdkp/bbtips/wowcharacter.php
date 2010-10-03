@@ -160,7 +160,6 @@ class wowcharacter
 			
 		}
 		
-		
 		$this->name = $name; 
 		
 		$base_url = ($this->region == "US") ? "http://www.wowarmory.com" : "http://eu.wowarmory.com"; 

@@ -1,14 +1,17 @@
 <?php
 /**
 * bbdkp-wowhead Link Parser v3 - Craftable Extension
-*
 * @package bbDkp.includes
 * @version $Id $
 * @Copyright (c) 2008 Adam Koch
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
-*
+* syntax
+* [craft {parameters}]{id or name}[/craft]
+* parameters : nomats will 
+* example usage
+* [craft nomats]Battlelord's Plate Boots[/craft]
+* 
 **/
 
 /**
@@ -28,31 +31,32 @@ class wowhead_craft extends wowhead
 	var $craft_reagents = array();
 	var $patterns;
 	var $nomats = false;
+	var $args = array();
 
-	function wowhead_craft()
+	function wowhead_craft($craftargs)
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $phpbb_root_path, $config; 
 		
 		if (!class_exists('wowhead_patterns')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_patterns.' . $phpEx); 
         }
+        $this->args = $craftargs;
         $this->patterns = new wowhead_patterns();
+		$this->lang = $config['bbtips_lang'];
 
 	}
 
-	function parse($name, $args = array())
+	function parse($name)
 	{
-		global $config; 
-		global $phpEx, $phpbb_root_path; 
+		global $config, $phpEx, $phpbb_root_path; 
 		
 		if (trim($name) == '')
 		{
 			return false;
 		}
 		
-		$this->lang = $config['bbtips_lang'];
-		$this->nomats = (!array_key_exists('nomats', $args)) ? false : $args['nomats'];
+		$this->nomats = (!array_key_exists('nomats', $this->args)) ? false : $this->args['nomats'];
 		
 		if (!class_exists('wowhead_cache')) 
         {

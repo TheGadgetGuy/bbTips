@@ -1,13 +1,10 @@
 <?php
 /**
 * bbdkp-wowhead Link Parser v3 
-*
+* @author sajaki@gmail.com
 * @package bbDkp.includes
 * @version $Id$
-* @Copyright (c) 2008 Adam Koch
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* Wowhead (wowhead.com) Link Parser v3 - Spell Extension
-* By: Adam "craCkpot" Koch (admin@crackpot.us) -- Adapted by bbdkp Team (sajaki9@gmail.com)
 *
 **/
 
@@ -86,7 +83,7 @@ class wowhead
 		    case 'itemico':   
 		    case 'itemdkp':   
 				if(is_numeric($url))
-				{
+				{	
 					$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
 					$html_data = bbDkp_Admin::read_php($built_url, 0, 0 );
 				}

@@ -6,6 +6,22 @@
 * @Copyright bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
+* 
+* Syntax
+* [item {parameters}]{name or ID}[/item]
+* [itemico {parameters}]{name or ID}[/itemico]
+* [itemdkp {parameters}]{name or ID}[/itemdkp]
+*   
+* parameters can be gems or enchant
+* itemico has extra size parameter
+* 
+* example usage
+* [item gems="40133" enchant="3825"]50468[/item]
+* [itemico gems="40133" enchant="3825"]50468[/item]
+* [itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]
+* [itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
+* [itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
+*
 **/
 
 /**

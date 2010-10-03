@@ -1,7 +1,7 @@
 <?php
 /**
  * bbdkp admin language file [German]
- * @author Sajaki@betenoire
+ * @author sajaki@bbdkp.com
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -49,7 +49,7 @@ $lang = array_merge($lang, array(
     'UMIL_BBCODE_REMOVED' => 'BBCodes entfernt',
 
     'ACP_BBTOOLTIPS' => 'Popup Einstellungen',
-    'BBTOOLTIPS' => 'bbTips 0.3.6 Plugin',
+    'BBTOOLTIPS' => 'bbTips 0.3.7 Plugin',
     'BBTOOLTIPS_EXPLAIN' => 'Tooltips von Wowhead',
 
     'BBTIPS_SETTING' => 'Tooltip Einstellungen',
