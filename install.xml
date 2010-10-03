@@ -15,6 +15,10 @@
 		[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]
 		[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
 		[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
+		[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
+		[spell rank=14]Power Word: Shield[/spell]
+		[wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
+		[wowchar realm=Blade's_Edge region=US]Johnjohnson[/wowchar] 
 		
 		]]></description>
 		<description lang="de"><![CDATA[BBCode für bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)
@@ -24,6 +28,10 @@
 		[itemico gems="40133" enchant="3825" size=small]Des ehrwürdigen Dal'Rends hochheilige Attacke[/itemico]
 		[itemico gems="40133" enchant="3825" size=medium]Andonisus, Der Seelenschlächter[/itemico]
 		[itemico gems="40133" enchant="3825" size=large]Akil'zons Krallenklinge[/itemico]
+		[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
+		[spell rank=14]Power Word: Shield[/spell]
+		[wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
+		[wowchar realm=Blade's_Edge region=US]Johnjohnson[/wowchar] 
 		
 		]]></description>
 		<description lang="fr"><![CDATA[BBCode pour bbDKP. WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp)
@@ -34,6 +42,10 @@
 		[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]
 		[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
 		[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
+		[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
+		[spell rank=14]Power Word: Shield[/spell]
+		[wowchar realm=Lightbringer region=EU]Sajaki[/wowchar]
+		[wowchar realm=Blade's_Edge region=US]Johnjohnson[/wowchar] 
 		
 		]]></description>
 		<author-notes lang="en"><![CDATA[requirement : bbDKP 1.1]]></author-notes>
