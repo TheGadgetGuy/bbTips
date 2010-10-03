@@ -136,6 +136,7 @@ class wowhead_itemset extends wowhead
 			return false;	
 		}
 		
+		// quotes are escaped with backslashes in json
 		$this->itemset = array(
 			'setid'			=>	$id,
 			'name'			=>	stripslashes($linematch[1]),
@@ -149,7 +150,7 @@ class wowhead_itemset extends wowhead
 			$this->itemset_items[] = array(
 				'setid'		=>	$id,
 				'itemid'	=>	$items[2],
-				'name'		=>	stripslashes($items[3]),
+				'name'		=>	$items[3],
 				'quality'	=>	$items[1],
 				'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . $this->_getItemIcon($items[2])
 			);
@@ -275,7 +276,7 @@ class wowhead_itemset extends wowhead
 			
 			$this->itemset = array(
 				'setid'			=>	$match[1],
-				'name'			=>	stripslashes($linematch[1]),
+				'name'			=>	$linematch[1],
 				'search_name'	=>	$name,
 				'lang'			=>	$this->lang
 			);
@@ -286,7 +287,7 @@ class wowhead_itemset extends wowhead
 				$this->itemset_items[] = array(
 					'setid'		=>	$match[1],
 					'itemid'	=>	$items[2],
-					'name'		=>	stripslashes($items[3]),
+					'name'		=>	$items[3],
 					'quality'	=>	$items[1],
 					'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . $this->_getItemIcon($items[2])
 				);
@@ -323,11 +324,11 @@ class wowhead_itemset extends wowhead
 				// strip the first character from the name
 				$itemset['name'] = substr($itemset['name'], 1);
 				
-				if (stripslashes(strtolower($itemset['name'])) == stripslashes(strtolower($name)))
+				if (strtolower($itemset['name']) == strtolower($name))
 				{
 					$this->itemset = array(
 						'setid'			=>	$itemset['id'],
-						'name'			=>	stripslashes($itemset['name']),
+						'name'			=>	$itemset['name'],
 						'search_name'	=>	$name,
 						'lang'			=>	$this->lang
 					);
@@ -407,7 +408,7 @@ class wowhead_itemset extends wowhead
 			$patt = $this->patterns->pattern('itemset_item');
 			$search = array(
 				'{link}'	=>	$this->_generateLink($item['itemid'], 'item'),
-				'{name}'	=>	stripslashes($item['name']),
+				'{name}'	=>	$item['name'],
 				'{qid}'		=>	$item['quality'],
 				'{icon}'	=>	$item['icon']
 			);
