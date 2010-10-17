@@ -41,7 +41,7 @@ class wowhead_item extends wowhead
 	var $args = array();
 
 	/*
-	 * $bbcode : either 'item' or 'itemico'
+	 * $bbcode : either 'item' or 'itemico' or 'itemdkp'
 	 */
 	function wowhead_item($bbcode, $argin = array())
 	{
@@ -139,7 +139,7 @@ class wowhead_item extends wowhead
 		if (trim($gems) != '')
 		{
 			$info['gems'] = $gems;
-			if ($this->type =='item')
+			if ($this->type =='item' or $this->type =='itemdkp')
 			{
 			    return $this->_replaceWildcards($this->patterns->pattern('item_gems'), $info);
 			}
@@ -150,7 +150,7 @@ class wowhead_item extends wowhead
 		}
 		else
 		{
-			if ($this->type =='item')
+			if ($this->type =='item' or $this->type =='itemdkp')
 			{
 				return $this->_replaceWildcards($this->patterns->pattern('item'), $info);
 			}
