@@ -280,6 +280,13 @@ $versions = array(
 
      ),
      
+     
+     '0.3.8'    => array( 
+		// no db changes, just a php bugfix
+		
+     ),
+     
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
