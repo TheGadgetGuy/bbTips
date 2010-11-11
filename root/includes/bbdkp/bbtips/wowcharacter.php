@@ -496,7 +496,7 @@ class wowcharacter extends wowhead
 		//gearlist
 		$search['{TALENTS}'] = $this->talent1 . '  ' . $this->talent2;  
 		$search['{MEMBERURL}'] = $memberportraiturl;
-		$search['{FRAME}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/gear_list_portrait_frame.png';  
+		$search['{FRAME}'] = $phpbb_root_path . 'styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/gear_list_portrait_frame.png';  
 		
 		for($slot = 0 ; $slot <= 18; $slot++)
 		{
