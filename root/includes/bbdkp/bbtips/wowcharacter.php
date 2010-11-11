@@ -483,9 +483,9 @@ class wowcharacter extends wowhead
 
 		//class icon : if the class name has a space in it then take just the first part, or else take the whole classname
 		$build1img = (strstr($this->talent1name,' ')) ? strtolower(substr($this->talent1name, 0, strpos($this->talent1name, ' '))) : strtolower($this->talent1name);
-		$search['{TALENT1ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $build1img . '.png';  
+		$search['{TALENT1ICON}'] = $phpbb_root_path . 'styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $build1img . '.png';  
 		$build2img = (strstr($this->talent2name,' ')) ? strtolower(substr($this->talent2name, 0, strpos($this->talent2name, ' '))) : strtolower($this->talent2name);
-		$search['{TALENT2ICON}'] = $phpbb_root_path . '/styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $build2img . '.png';  
+		$search['{TALENT2ICON}'] = $phpbb_root_path . 'styles/' . $user->theme['theme_path'] . '/theme/images/bbtips/spec_icons/' . strtolower($this->class) . '_' . $build2img . '.png';  
 
 		$search['{TALENTTREE1}'] = $this->talent1;  
 		$search['{TALENTTREE2}'] = $this->talent2;
