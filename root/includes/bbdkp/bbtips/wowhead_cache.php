@@ -16,11 +16,6 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
-if (! defined('EMED_BBDKP')) 
-{
-	$user->add_lang ( array ('mods/dkp_admin' ));
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
 
 class wowhead_cache
 {
