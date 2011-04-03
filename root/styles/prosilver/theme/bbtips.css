@@ -2,37 +2,31 @@
 *  bbTips css wowchar overlay
 * 
 * @package bbTips
-* @copyright 2010 bbDKP <http://code.google.com/p/bbdkp/>
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version $Id$
 * 
-*
 **/
 
 /**
-* WoW Head Item Links
+* [item][/item]
 * 
 */
 
 /* Poor (Gray) */
-
-.quality0, .quality0 a:link, .quality0 a:active, .quality0 a:visited, .quality0 a:hover {
-	color: gray !important;
+.q0, .q0 a:link, .q0 a:active, .q0 a:visited, .q0 a:hover {
+	color: #9D9D9D !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Common (White) */
-
-.quality1, .quality1 a:link, .quality1 a:active, .quality1 a:visited, .quality1 a:hover {
-	color: #4679A6 !important;
+.q1, .q1 a:link, .q1 a:active, .q1 a:visited, .q1 a:hover {
+	color: #FFFFFF !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Uncommon (Green) */
-
-.quality2, .quality2 a:link, .quality2 a:active, .quality2 a:visited, .quality2 a:hover {
+.q2, .q2 a:link, .q2 a:active, .q2 a:visited, .q2 a:hover {
 	color: #1EFF00 !important;
 	text-decoration: none;
 	font-weight: bold;
@@ -40,45 +34,63 @@
 
 /* Rare (Blue) */
 
-.quality3, .quality3 a:link, .quality3 a:active, .quality3 a:visited, .quality3 a:hover {
-	color: #0870C1 !important;
+.q3, .q3 a:link, .q3 a:active, .q3 a:visited, .q3 a:hover {
+	color: #0070DD !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Epic (Purple) */
 
-.quality4, .quality4 a:link, .quality4 a:active, .quality4 a:visited, .quality4 a:hover {
-	color: #9035CF !important;
+.q4, .q4 a:link, .q4 a:active, .q4 a:visited, .q4 a:hover {
+	color: #A335EE !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Legendary (Orange) */
 
-.quality5, .quality5 a:link, .quality5 a:active, .quality5 a:visited, .quality5 a:hover {
-	color: #DE800D !important;
+.q5, .q5 a:link, .q5 a:active, .q5 a:visited, .q5 a:hover {
+	color: #FF8000 !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Artifact (Tan-ish) */
 
-.quality6, .quality6 a:link, .quality6 a:active, .quality6 a:visited, .quality6 a:hover {
-	color: #E5CC63 !important;
+.q6, .q6 a:link, .q6 a:active, .q6 a:visited, .q6 a:hover {
+	color: #E5CC80 !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Heirloom (Tan-ish) - Added in Wrath of the Lich King*/
 
-.quality7, .quality7 a:link, .quality7 a:active, .quality7 a:visited, .quality7 a:hover {
-	color: #E5CC63 !important;
+.q7, .q7 a:link, .q7 a:active, .q7 a:visited, .q7 a:hover {
+	color: #E5CC80 !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-/* Quests */
+.q8, .q8 a:link, .q8 a:active, .q8 a:visited, .q8 a:hover {
+	color: #FFFF98 !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.q9, .q9 a:link, .q9 a:active, .q9 a:visited, .q9 a:hover {
+	color: #71D5FF !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.q10, .q10 a:link, .q10 a:active, .q10 a:visited, .q10 a:hover {
+	color: #FF4040 !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* [quest][/quest]  */
 
 .quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
 	color: #0000FF !important;
@@ -86,15 +98,15 @@
 	font-weight: bold;
 }
 
-/* Spells */
-
+/* [spell][/spell]  */
 .spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
 	color: navy !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-/* Achievements */
+
+/* [achievement][/achievement]  */
 
 .achievement, .achievement a:link, .achievement a:active, .achievement a:visited, .achievement a:hover,
 .itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
@@ -103,7 +115,7 @@
 	font-weight: bold;
 }
 
-/* NPC's */
+/* [npc][/npc]  */
 
 .npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
 	color: #C09E79 !important;
@@ -111,7 +123,10 @@
 	font-weight: bold;
 }
 
-/* Profiles */
+/** todo **/
+
+/* 
+Profiles
 
 .wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
 	color: #4679A6 !important;
@@ -119,7 +134,7 @@
 	font-weight: bold;
 }
 
-/* Guilds */
+ Guilds 
 
 .guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
 	color: #099F2C !important;
@@ -127,15 +142,15 @@
 	font-weight: bold;
 }
 
-/* Armory */
+ Armory 
 
 .armory, .armory a:link, .armory a:active, .armory a:visited, .armory a:hover {
 	color: #CFA60C;
 	text-decoration: none;
 }
+*/
 
-/* For Item Icons */
-
+/* [itemico][/itemico]  */
 .iconlarge {
 	background: transparent none no-repeat scroll 6px 6px;
 	height: 68px;
@@ -331,3 +346,9 @@ li.itemset-item {
 	margin: 0px;
 	list-style-type: none !important;
 }
+
+
+
+
+
+
