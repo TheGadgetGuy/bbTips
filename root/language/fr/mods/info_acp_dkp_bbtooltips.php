@@ -25,7 +25,7 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_DKPTOOLTIPS'	=> 'Règlages',  
+	'ACP_DKP_DKPTOOLTIPS'	=> 'Règlages bbTips',  
 	'ACP_CAT_BBTIPS'	=> 'bbTips', 
 
 ));

@@ -509,8 +509,13 @@ function moduleinstall($action, $version)
 				if (isset($config['bbdkp_version']))
 				{
 					// bbdkp found. install module under the raids module
-					$umil->module_add(array(
-   						 array('acp', 'ACP_DKP_RAIDS', array('dkp_bbtooltips' => 'bbtooltips')), ));
+
+					$umil->module_add('acp', 'ACP_DKP_RAIDS', array(
+					    'module_basename'   => 'dkp_bbtooltips',
+					    'modes'             => array('bbtooltips'),
+						));
+						
+						
 				}
 				else
 				{	
@@ -530,7 +535,11 @@ function moduleinstall($action, $version)
         		/* check if bbdkp is installed*/
 				if (isset($config['bbdkp_version']))
 				{
-					$umil->module_remove('acp', 'ACP_DKP_RAIDS', array('dkp_bbtooltips' => 'bbtooltips'));
+					$umil->module_remove('acp', 'ACP_DKP_RAIDS', array(
+					    'module_basename'   => 'dkp_bbtooltips',
+					    'modes'             => array('bbtooltips'),
+						));					
+					
 				}
 				else
 				{	
