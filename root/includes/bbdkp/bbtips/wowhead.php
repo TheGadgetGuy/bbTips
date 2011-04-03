@@ -45,7 +45,7 @@ class wowhead
 	* @param $headers
 	* 
 	**/
-	function _read_url($url, $type = 'item', $headers = true)
+	public function _read_url($url, $type = 'item', $headers = true)
 	{
 		// build the url depending on bbcode
 		switch ($type)
@@ -62,7 +62,7 @@ class wowhead
 					//use search and parse page
 					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
 				}
-				$html_data = $this->read_php($built_url, 1, 0 );
+				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'spell':
 			case 'quest':  
@@ -77,7 +77,7 @@ class wowhead
 					//use search and parse page
 					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
 				}
-				$html_data = $this->read_php($built_url, 1, 0 );
+				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'item':      
 		    case 'itemico':   
@@ -85,24 +85,71 @@ class wowhead
 				if(is_numeric($url))
 				{	
 					$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
-					$html_data = $this->read_php($built_url, 0, 0 );
+					$html_data = $this->_read_php($built_url, 0, 0 );
 				}
 				else 
 				{
 					//use search and parse page
 					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
-					$html_data = $this->read_php($built_url, 1, 0 );
+					$html_data = $this->_read_php($built_url, 1, 0 );
 				}
 				break;
 			case 'craftable':
 			default:
 				//xml
 				$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
-				$html_data = $this->read_php($built_url, 0, 0 );
+				$html_data = $this->_read_php($built_url, 0, 0 );
 				break;
 		}
 		return $html_data;
 	
+	}
+	
+	/**
+	* Returns the link to the spell/quest
+	* @access private
+	**/
+	public function _generateLink($id, $type)
+	{
+		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp')
+		{
+			return $this->_getDomain() . '/item=' . $id;
+		}
+		else
+		{
+			return $this->_getDomain() . '/' . $type . '=' . $id;
+		}
+	}
+
+	/**
+	* Checks if SimpleXML can accept 3 parameters
+	* @access private
+	**/
+	public function _allowSimpleXMLOptions()
+	{
+		$parts = explode('.', phpversion());
+		return ($parts[0] == 5 && $parts[1] >= 1) ? true : false;
+	}
+
+	/**
+	* Determines if we can use SimpleXML
+	* @access private
+	**/
+	public function _useSimpleXML()
+	{
+		$parts = explode('.', phpversion());
+		return ($parts[0] == 5) ? true : false;
+	}
+	
+	/**
+	* Called when object isn't found
+	* @access private
+	**/
+	public function _notFound($type, $name)
+	{
+		global $user; 
+		$user->add_lang ( array ('mods/dkp_tooltips' ));
+		return '<span class="notfound">[' . sprintf($user->lang['ITEMNOTFOUND'], ucwords($type) , $name) . ']</span>';
 	}
 
 	/**
@@ -230,53 +277,6 @@ class wowhead
 			return 'http://' . strtolower($this->lang) . '.wowhead.com';
 
 		return 'http://www.wowhead.com';
-	}
-
-	/**
-	* Returns the link to the spell/quest
-	* @access private
-	**/
-	public function _generateLink($id, $type)
-	{
-		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp')
-		{
-			return $this->_getDomain() . '/item=' . $id;
-		}
-		else
-		{
-			return $this->_getDomain() . '/' . $type . '=' . $id;
-		}
-	}
-
-	/**
-	* Checks if SimpleXML can accept 3 parameters
-	* @access private
-	**/
-	public function _allowSimpleXMLOptions()
-	{
-		$parts = explode('.', phpversion());
-		return ($parts[0] == 5 && $parts[1] >= 1) ? true : false;
-	}
-
-	/**
-	* Determines if we can use SimpleXML
-	* @access private
-	**/
-	public function _useSimpleXML()
-	{
-		$parts = explode('.', phpversion());
-		return ($parts[0] == 5) ? true : false;
-	}
-
-	/**
-	* Called when object isn't found
-	* @access private
-	**/
-	private function _notFound($type, $name)
-	{
-		global $user; 
-		$user->add_lang ( array ('mods/dkp_tooltips' ));
-		return '<span class="notfound">[' . sprintf($user->lang['ITEMNOTFOUND'], ucwords($type) , $name) . ']</span>';
 	}
 
 	/**
@@ -459,7 +459,7 @@ class wowhead
 	 * @param char $loud default false
 	 * @return xml
 	 */
-  	private function read_php($url, $return_Server_Response_Header = false, $loud= false) 
+  	private function _read_php($url, $return_Server_Response_Header = false, $loud= false) 
 	{
 		$errmsg1= '';
 		$errmsg2= '';

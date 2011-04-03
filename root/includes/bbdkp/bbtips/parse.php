@@ -3,7 +3,7 @@
 * bbTips Parser 
 *
 * @package bbDkp.includes
-* @version 0.3.7 $Id $
+* @version 0.4.0 $Id $
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @copyright (c) 2010 bbdkp <http://code.google.com/p/bbdkp/>
 * @author : Sajaki (sajaki@bbdkp.com)
@@ -23,7 +23,7 @@ if (!defined('IN_PHPBB'))
 class bbtips
 {
 	
-	function parse($whp_message)
+	public function parse($message)
 	{
 	    global $phpbb_root_path, $phpEx, $config;
 	    unset($match); 
@@ -34,8 +34,8 @@ class bbtips
 	    $maxparse = min(600,(int) $config['bbtips_maxparse']); 
 	    while (
 	    	($parses < $maxparse) &&
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $whp_message, $match) or
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar) (.+?)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $whp_message, $match) 
+		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $message, $match) or
+		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar) (.+?)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $message, $match) 
 		  	)
 		  {
 				$args = array();
@@ -127,24 +127,24 @@ class bbtips
 				$nameout = $this->html2txt($namein);
 				if ($nameout != $namein)
 				{
-				    $whp_message = str_replace($match[0], "<span class=\"notfound\">Illegal HTML/JavaScript found.</span>", $whp_message);
+				    $message = str_replace($match[0], "<span class=\"notfound\">Illegal HTML/JavaScript found.</span>", $message);
 				}
 				else
 				{
 					// ok tag content allowed, go to parser
-				    $whp_message = str_replace($match[0], $object->parse(trim($nameout)), $whp_message);
+				    $message = str_replace($match[0], $object->parse(trim($nameout)), $message);
 				}
 		   		$parses++;
 		}
 		
 		unset($object);
-		return $whp_message;
+		return $message;
 	}
 	
 	/**
 	 * strips illegal html/javascript
 	 */
-	function html2txt($document)
+	private function html2txt($document)
 	{
 	  $search = array('@]*?>.*?@si',          // Strip out javascript
 	                 '@]*?>.*?@siU',          // Strip style tags properly
@@ -160,7 +160,7 @@ class bbtips
 
 	
 	// turn the arguments into an array
-	function whp_arguments($in)
+	private function whp_arguments($in)
 	{
 		if (strlen($in) == 0) 
 		{ 
