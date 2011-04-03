@@ -7,11 +7,12 @@
 **/
 
 /**
-* [item][/item]
+* WoW Head Item Links
 * 
 */
 
 /* Poor (Gray) */
+
 .q0, .q0 a:link, .q0 a:active, .q0 a:visited, .q0 a:hover {
 	color: #9D9D9D !important;
 	text-decoration: none;
@@ -19,13 +20,15 @@
 }
 
 /* Common (White) */
-.q1, .q1 a:link, .q1 a:active, .q1 a:visited, .q1 a:hover {
+
+.q1, .qq1 a:link, .q1 a:active, .q1 a:visited, .q1 a:hover {
 	color: #FFFFFF !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
 /* Uncommon (Green) */
+
 .q2, .q2 a:link, .q2 a:active, .q2 a:visited, .q2 a:hover {
 	color: #1EFF00 !important;
 	text-decoration: none;
@@ -90,7 +93,7 @@
 	font-weight: bold;
 }
 
-/* [quest][/quest]  */
+/* Quests */
 
 .quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
 	color: #0000FF !important;
@@ -98,15 +101,15 @@
 	font-weight: bold;
 }
 
-/* [spell][/spell]  */
+/* Spells */
+
 .spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
 	color: navy !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-
-/* [achievement][/achievement]  */
+/* Achievements */
 
 .achievement, .achievement a:link, .achievement a:active, .achievement a:visited, .achievement a:hover,
 .itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
@@ -115,7 +118,7 @@
 	font-weight: bold;
 }
 
-/* [npc][/npc]  */
+/* NPC's */
 
 .npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
 	color: #C09E79 !important;
@@ -123,10 +126,7 @@
 	font-weight: bold;
 }
 
-/** todo **/
-
-/* 
-Profiles
+/* Profiles */
 
 .wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
 	color: #4679A6 !important;
@@ -134,7 +134,7 @@ Profiles
 	font-weight: bold;
 }
 
- Guilds 
+/* Guilds */
 
 .guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
 	color: #099F2C !important;
@@ -142,15 +142,15 @@ Profiles
 	font-weight: bold;
 }
 
- Armory 
+/* Armory */
 
 .armory, .armory a:link, .armory a:active, .armory a:visited, .armory a:hover {
 	color: #CFA60C;
 	text-decoration: none;
 }
-*/
 
-/* [itemico][/itemico]  */
+/* For Item Icons */
+
 .iconlarge {
 	background: transparent none no-repeat scroll 6px 6px;
 	height: 68px;
@@ -244,97 +244,11 @@ Profiles
 	background-position: 0 0;
 }
 
-.qual {
-	color: #ffd100 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* yellow/description */
-
-.qual0, .qual0 a {
-	color: gray !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* grey/poor */
-
-.qual1, .qual1 a {
-	color: #4679A6 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* white/common */
-
-.qual2, .qual2 a {
-	color: #1eff00 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* green/uncommon*/
-
-.qual3, .qual3 a {
-	color: #0070dd !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* blue/rare */
-
-.qual4, .qual4 a {
-	color: #a335ee !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* purple/epic */
-
-.qual5, .qual5 a {
-	color: #ff8000 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* orange/legendary */
-
-.qual6, .qual6 a {
-	color: #e5cc80 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* red/artifact */
-
-.qual7, .qual7 a {
-	color: #ff0000 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-.qual8, .qual8 a {
-	color: #ffff98 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
 .notfound {
 	color: #FF0000;
 	font-weight: bold;
 }
-
+/* itemsets */
 ul.itemset-items {
 	list-style-position: none !important;
 	padding: 0px;
@@ -346,9 +260,3 @@ li.itemset-item {
 	margin: 0px;
 	list-style-type: none !important;
 }
-
-
-
-
-
-
