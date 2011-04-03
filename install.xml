@@ -88,13 +88,12 @@
 			<edit>
 				<comment lang="en"><![CDATA[wowhead links in the ACP]]></comment>
 				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- bbTips -->
+				<action type="before-add"><![CDATA[
+<!-- bbTips -->
 <link href="{T_TEMPLATE_PATH}/dkp/bbtips.css" rel="stylesheet" type="text/css" />
-<!-- IF S_BBTIPS_REMOTE -->
-<script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script>
-<!-- ELSE -->
-<script src="{T_TEMPLATE_PATH}/dkp/power.js" type="text/javascript"></script>
-<!-- ENDIF -->]]></action>
+<!-- IF S_BBTIPS_REMOTE --><script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script><!-- ELSE --><script src="{T_TEMPLATE_PATH}/dkp/power.js" type="text/javascript"></script><!-- ENDIF -->
+<!-- end bbTips -->
+]]></action>
 			</edit>
 		</open>
 		

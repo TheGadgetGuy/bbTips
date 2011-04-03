@@ -19,6 +19,7 @@
 .quality0, .quality0 a:link, .quality0 a:active, .quality0 a:visited, .quality0 a:hover {
 	color: gray !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Common (White) */
@@ -26,6 +27,7 @@
 .quality1, .quality1 a:link, .quality1 a:active, .quality1 a:visited, .quality1 a:hover {
 	color: #4679A6 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Uncommon (Green) */
@@ -33,6 +35,7 @@
 .quality2, .quality2 a:link, .quality2 a:active, .quality2 a:visited, .quality2 a:hover {
 	color: #1EFF00 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Rare (Blue) */
@@ -40,6 +43,7 @@
 .quality3, .quality3 a:link, .quality3 a:active, .quality3 a:visited, .quality3 a:hover {
 	color: #0870C1 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Epic (Purple) */
@@ -47,6 +51,7 @@
 .quality4, .quality4 a:link, .quality4 a:active, .quality4 a:visited, .quality4 a:hover {
 	color: #9035CF !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Legendary (Orange) */
@@ -54,6 +59,7 @@
 .quality5, .quality5 a:link, .quality5 a:active, .quality5 a:visited, .quality5 a:hover {
 	color: #DE800D !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Artifact (Tan-ish) */
@@ -61,6 +67,7 @@
 .quality6, .quality6 a:link, .quality6 a:active, .quality6 a:visited, .quality6 a:hover {
 	color: #E5CC63 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Heirloom (Tan-ish) - Added in Wrath of the Lich King*/
@@ -68,6 +75,7 @@
 .quality7, .quality7 a:link, .quality7 a:active, .quality7 a:visited, .quality7 a:hover {
 	color: #E5CC63 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Quests */
@@ -75,6 +83,7 @@
 .quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
 	color: #0000FF !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Spells */
@@ -82,6 +91,7 @@
 .spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
 	color: navy !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Achievements */
@@ -90,6 +100,7 @@
 .itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
 	color: #D53057;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* NPC's */
@@ -97,6 +108,7 @@
 .npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
 	color: #C09E79 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Profiles */
@@ -104,6 +116,7 @@
 .wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
 	color: #4679A6 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Guilds */
@@ -111,6 +124,7 @@
 .guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
 	color: #099F2C !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Armory */
