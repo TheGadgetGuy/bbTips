@@ -26,9 +26,9 @@ if (!defined('IN_PHPBB'))
         
 class wowhead_spell extends wowhead
 {
-	var $lang;
-	var $patterns; 
-	var $args = array();
+	public $lang;
+	public $patterns; 
+	private $args = array();
 	
 	/**
 	* Constructor
@@ -53,7 +53,7 @@ class wowhead_spell extends wowhead
 	**/
 	function parse($name)
 	{
-	    global $phpbb_root_path, $phpEx, $config;
+	    global $phpbb_root_path, $phpEx;
 	    
 		if (trim($name) == '')
 		{
@@ -86,7 +86,7 @@ class wowhead_spell extends wowhead
 			else
 			{
 				$cache->saveObject($result);
-				return $this->_generateHTML($result, 'spell', '', $rank);
+				return $this->_generateHTML($result, 'spell', '');
 			}
 		}
 		else
@@ -150,7 +150,11 @@ class wowhead_spell extends wowhead
 			{
 				$spell['name'] = substr($spell['name'], 1);
 				if (stripslashes(strtolower($spell['name'])) == stripslashes(strtolower($name)))
-					$json_array[] = $spell;	// add it to the array
+				{
+					// add it to the array
+					$json_array[] = $spell;	
+					
+				}
 			}
 			
 			if (sizeof($json_array) == 0)
@@ -158,8 +162,9 @@ class wowhead_spell extends wowhead
 				return false;
 			}
 			
-			// which one we grab depends on the $rank variable
-			$result = ($rank != '') ? $json_array[$rank - 1] : $json_array[sizeof($json_array) - 1];
+			// grab first one since ranks dont exist anymore
+			//$result = ($rank != '') ? $json_array[$rank - 1] : $json_array[sizeof($json_array) - 1];
+			$result = $json_array[sizeof($json_array) - 1];
 
 			$spell = array(	// finally return what we found
 				'name'			=>	stripslashes($result['name']),
@@ -182,14 +187,9 @@ class wowhead_spell extends wowhead
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	function _generateHTML($info, $type, $size = '', $gems = '')
 	{
 	    $info['link'] = $this->_generateLink($info['itemid'], $type);
-		if (trim($rank) != '')
-		{
-			return $this->_replaceWildcards($this->patterns->pattern('spell_rank'), $info);
-		}
-		else
 		{
 			return $this->_replaceWildcards($this->patterns->pattern('spell'), $info);
 		}

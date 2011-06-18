@@ -18,15 +18,16 @@ if (!defined('IN_PHPBB'))
 	 
 /**
 * Wowhead Base Class
-* @package wowhead
+*
 **/
 class wowhead
 {
-	var $patterns; 
+	public $patterns; 
+	public $ptr;
 	
 	function wowhead()
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $phpbb_root_path;
 		
 		if (!class_exists('wowhead_patterns')) 
         {
@@ -42,62 +43,74 @@ class wowhead
 	* 
 	* @param $url
 	* @param $type default 'item'
-	* @param $headers
 	* 
 	**/
-	public function _read_url($url, $type = 'item', $headers = true)
+	public function _read_url($url, $type = 'item')
 	{
 		// build the url depending on bbcode
+		
+		$domain =  $this->_getDomain(); 
+		
 		switch ($type)
 		{
 			case 'npc':
 			case 'itemset':
+			case 'ptritemset':
+			case 'ptrnpc':				
 				if(is_numeric($url))
 				{
 					//parse page directly
-					$built_url = $this->_getDomain() . '/' . $type . '=' . $url; 
+					$built_url = $domain . '/' . $type . '=' . $url; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$built_url = $domain. '/search?q=' . $this->_convert_string($url);
 				}
 				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'spell':
 			case 'quest':  
-			case 'achievement':	
+			case 'achievement':
+			case 'ptrspell':
+			case 'ptrquest':  
+			case 'ptrachievement':	
+				
 				if(is_numeric($url))
 				{
 					//parse page directly
-					$built_url = $this->_getDomain() . '/' . $type . '=' . $url . '&power'; 
+					$built_url = $domain . '/' . $type . '=' . $url . '&power'; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
 				}
 				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'item':      
 		    case 'itemico':   
 		    case 'itemdkp':   
-				if(is_numeric($url))
+			case 'ptritem':      
+		    case 'ptritemico':   
+		    case 'ptritemdkp':
+		   		if(is_numeric($url))
 				{	
-					$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
+					$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
 					$html_data = $this->_read_php($built_url, 0, 0 );
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
 					$html_data = $this->_read_php($built_url, 1, 0 );
 				}
 				break;
 			case 'craftable':
+			case 'ptrcraftable':				
 			default:
 				//xml
-				$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
+				$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
 				$html_data = $this->_read_php($built_url, 0, 0 );
 				break;
 		}
@@ -111,7 +124,7 @@ class wowhead
 	**/
 	public function _generateLink($id, $type)
 	{
-		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp')
+		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp' || $type == 'ptritem' ||  $type == 'ptritemico')
 		{
 			return $this->_getDomain() . '/item=' . $id;
 		}
@@ -158,12 +171,18 @@ class wowhead
 	**/
 	private function _getGemInfo($name, $itemid, $slot)
 	{
+		$xml = '';
 		if (trim($name) == '')
+		{
 			return false;
+		}
 
 		$data = $this->_read_url($name);
 
-		if (empty($data)) { return false; }
+		if (empty($data)) 
+		{ 
+			return false; 
+		}
 
 		if ($this->_useSimpleXML())
 		{
@@ -197,19 +216,6 @@ class wowhead
 		}
 	}
 	
-	/**
-	* Strips Headers
-	* @access private
-	**/
-	private function _strip_headers($data)
-	{
-		// split the string
-		$chunks = explode(chr(10), $data);
-
-		// return the last index in the array, aka our xml
-		return $chunks[sizeof($chunks) - 1];
-	}
-
 	/**
 	* Cleans HTML for passing to Wowhead
 	* @access private
@@ -271,63 +277,21 @@ class wowhead
 	**/
 	private function _getDomain()
 	{
-		if ($this->lang == 'en')
-			return 'http://www.wowhead.com';
+		if (!$this->ptr)
+		{
+			if ($this->lang == 'en')
+			{
+				return 'http://www.wowhead.com';
+			}
+			else
+			{
+				return 'http://' . strtolower($this->lang) . '.wowhead.com';
+			}
+		}
 		else
-			return 'http://' . strtolower($this->lang) . '.wowhead.com';
-
-		return 'http://www.wowhead.com';
-	}
-
-	/**
-	* Returns the specific line we need
-	* @access private
-	**/
-	private function _abilityLine($data, $name)
-	{
-		$parts = explode(chr(10), $data);
-
-		foreach ($parts as $line)
 		{
-			if (strpos($line, "new Listview({template: 'spell', id: 'abilities'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'ability',
-					'line'	=>	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'talents'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'talent',
-					'line'	=> 	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'recipes'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'recipe',
-					'line'	=>	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'uncategorized-spells'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'ability',
-					'line'	=>	$line
-				);
+			return 'http://ptr.wowhead.com';			
 		}
-
-		return false;
-	}
-
-	/**
-	* Returns the specific line we need for achievements
-	* @access private
-	**/
-	private function _achievementLine($data)
-	{
-		$parts = explode(chr(10), $data);	// split by line breaks
-
-		foreach ($parts as $line)
-		{
-			if (strpos($line, "new Listview({template: 'achievement', id: 'achievements'") !== false)
-				return $line;
-		}
-		return false;
 	}
 
 	/**
@@ -383,51 +347,6 @@ class wowhead
 		return $in;
 	}
 
-	/**
-	* Builds Item Enhancement String
-	* @access private
-	**/
-	private function _buildEnhancement($args)
-	{
-		if (!is_array($args) || sizeof($args) == 0)
-			return false;
-
-		if (array_key_exists('gems', $args))
-		{
-			$gem_args = 'gems=' . str_replace(',', ':', $args['gems']);
-		}
-
-		if (array_key_exists('enchant', $args))
-		{
-			$enchant_args = 'ench=' . $args['enchant'];
-		}
-
-		if (!empty($gem_args) && !empty($enchant_args))
-		{
-			return $enchant_args . '&amp;' . $gem_args;
-		}
-		elseif (!empty($enchant_args))
-		{
-			return $enchant_args;
-		}
-		elseif (!empty($gem_args))
-		{
-			return $gem_args;
-		}
-
-		return false;
-	}
-
-
-	/**
-	* Strips out any apostrophes to prevent any display problems
-	* @access private
-	**/
-	private function _strip_apos($in)
-	{
-		return str_replace("'", "", $in);
-	}
-	
 	/****
 	 * 
 	 * if the user is using php 5.1 then strip CDATA from xml

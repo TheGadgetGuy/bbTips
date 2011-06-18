@@ -11,7 +11,10 @@
 * [item {parameters}]{name or ID}[/item]
 * [itemico {parameters}]{name or ID}[/itemico]
 * [itemdkp {parameters}]{name or ID}[/itemdkp]
-*   
+* [ptritem {parameters}]{name or ID}[/ptritem]
+* [ptritemico {parameters}]{name or ID}[/ptritemico]
+* [ptritemdkp {parameters}]{name or ID}[/ptritemdkp]
+* 
 * parameters can be gems or enchant
 * itemico has extra size parameter
 * 
@@ -32,13 +35,17 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+/**
+ * handles creation of item tooltips
+ *
+ */
 class wowhead_item extends wowhead
 {
-	var $lang;
-	var $patterns;
-	var $type; 
-	var $size;
-	var $args = array();
+	public $lang;
+	public $patterns;
+	private $type; 
+	private $size;
+	private $args = array();
 
 	/*
 	 * $bbcode : either 'item' or 'itemico' or 'itemdkp'
@@ -129,6 +136,42 @@ class wowhead_item extends wowhead
 	}
 	
 	/**
+	* Builds Item Enhancement String
+	* @access private
+	**/
+	private function _buildEnhancement($args)
+	{
+		if (!is_array($args) || sizeof($args) == 0)
+			return false;
+
+		if (array_key_exists('gems', $args))
+		{
+			$gem_args = 'gems=' . str_replace(',', ':', $args['gems']);
+		}
+
+		if (array_key_exists('enchant', $args))
+		{
+			$enchant_args = 'ench=' . $args['enchant'];
+		}
+
+		if (!empty($gem_args) && !empty($enchant_args))
+		{
+			return $enchant_args . '&amp;' . $gem_args;
+		}
+		elseif (!empty($enchant_args))
+		{
+			return $enchant_args;
+		}
+		elseif (!empty($gem_args))
+		{
+			return $gem_args;
+		}
+
+		return false;
+	}
+	
+	
+	/**
 	* Generates HTML for link
 	* @access private
 	**/
@@ -136,25 +179,27 @@ class wowhead_item extends wowhead
 	{
 		
 		$info['link'] = $this->_generateLink($info['itemid'], $this->type);
+		
 		if (trim($gems) != '')
 		{
 			$info['gems'] = $gems;
-			if ($this->type =='item' or $this->type =='itemdkp')
+			if ($this->type =='item' or $this->type =='itemdkp' or $this->type =='ptritem')
 			{
 			    return $this->_replaceWildcards($this->patterns->pattern('item_gems'), $info);
 			}
-            elseif  ($this->type =='itemico')
+            elseif  ($this->type =='itemico' or $this->type =='ptritemico')
             {
 			    return $this->_replaceWildcards($this->patterns->pattern('icon_'.$this->size.'_gems'), $info);
             }
 		}
 		else
 		{
-			if ($this->type =='item' or $this->type =='itemdkp')
+			// no gems
+			if ($this->type =='item' or $this->type =='itemdkp' or $this->type =='ptritem')
 			{
 				return $this->_replaceWildcards($this->patterns->pattern('item'), $info);
 			}
-			elseif  ($this->type =='itemico')
+			elseif  ($this->type =='itemico' or $this->type =='ptritemico')
 			{
 				return $this->_replaceWildcards($this->patterns->pattern('icon_'.$this->size), $info);
 			}

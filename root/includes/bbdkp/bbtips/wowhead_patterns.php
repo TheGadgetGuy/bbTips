@@ -22,7 +22,7 @@ if (!defined('IN_PHPBB'))
 class wowhead_patterns
 {
 	// variable for each pattern
-	var $patterns = array();
+	public $patterns = array();
 
 	function wowhead_patterns()
 	{

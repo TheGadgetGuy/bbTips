@@ -20,9 +20,9 @@ if (!defined('IN_PHPBB'))
 
 class wowhead_achievement extends wowhead
 {
-	var $lang;
-	var $patterns;
-	var $args; 
+	private $lang;
+	private $patterns;
+	private $args; 
 
 	function wowhead_achievement($arguments = array())
 	{

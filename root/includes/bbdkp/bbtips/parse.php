@@ -20,6 +20,10 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+/**
+ * Handles Wowhead tooltips
+ *
+ */
 class bbtips
 {
 	
@@ -31,11 +35,22 @@ class bbtips
 	    
 	    //max 600 items will be parsed no matter what the setting of maxparse is set too
 		//600 will parse approximetly 8 different wowchar character profiles...
-	    $maxparse = min(600,(int) $config['bbtips_maxparse']); 
+		if (isset($config['bbtips_maxparse']))
+		{
+		    $maxparse = min(600,(int) $config['bbtips_maxparse']); 
+			
+		}
+		else
+		{
+			return $message;
+		}
+		
+		$bbcodelist = "item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar|ptritem|ptrquest|ptrachievement|ptrcraft|ptritemset|ptrspell|ptritemico|ptritemdkp|ptrnpc";
+		
 	    while (
 	    	($parses < $maxparse) &&
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $message, $match) or
-		  	preg_match('#\[(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar) (.+?)\](.+?)\[/(item|quest|achievement|craft|itemset|spell|itemico|itemdkp|npc|wowchar)\]#s', $message, $match) 
+		  	preg_match('#\[('. $bbcodelist.')\](.+?)\[/('. $bbcodelist.')\]#s', $message, $match) or
+		  	preg_match('#\[('. $bbcodelist.') (.+?)\](.+?)\[/('. $bbcodelist.')\]#s', $message, $match) 
 		  	)
 		  {
 				$args = array();
@@ -47,7 +62,7 @@ class bbtips
 					)
 				{
 					// we have arguments
-					$args = $this->whp_arguments($match[2]);
+					$args = $this->arguments($match[2]);
 				}
 				
 			    if ( !class_exists('wowhead')) 
@@ -55,12 +70,14 @@ class bbtips
                 	require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead.' . $phpEx); 
                 }
                 
-                
 				switch ($match[1])
 				{
 					case 'item':
 					case 'itemico':
 					case 'itemdkp':
+					case 'ptritem':
+					case 'ptritemico':
+					case 'ptritemdkp':
 		        		if ( !class_exists('wowhead_item')) 
 		                {	                	
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
@@ -68,6 +85,7 @@ class bbtips
 		                $object = new wowhead_item($match[1], $args);
 						break;
 					case 'craft':
+					case 'ptrcraft':						
 					    if ( !class_exists('wowhead_craft')) 
 		                {
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_craft.' . $phpEx);    
@@ -75,6 +93,7 @@ class bbtips
 		                $object = new wowhead_craft($args);
 						break;
 					case 'itemset':
+					case 'ptritemset':
 		        		if ( !class_exists('wowhead_itemset')) 
 		                {
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_itemset.' . $phpEx);    
@@ -82,6 +101,7 @@ class bbtips
 		                $object = new wowhead_itemset($args);
 						break;
 					case 'quest':
+					case 'ptrquest':						
 					    if ( !class_exists('wowhead_quest')) 
 		                {
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_quest.' . $phpEx);    
@@ -89,6 +109,7 @@ class bbtips
 		                $object = new wowhead_quest($args);
 						break;
 					case 'spell':
+					case 'ptrspell':
 		        		if ( !class_exists('wowhead_spell')) 
 		                {
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_spell.' . $phpEx);    
@@ -96,6 +117,7 @@ class bbtips
 		                $object = new wowhead_spell($args);
 						break;
 					case 'achievement':
+					case 'ptrachievement':
 		                if ( !class_exists('wowhead_achievement')) 
 		                {
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_achievement.' . $phpEx);    
@@ -103,6 +125,7 @@ class bbtips
 		                $object = new wowhead_achievement($args);
 						break;
 					case 'npc':
+					case 'ptrnpc':
 		                if ( !class_exists('wowhead_npc')) 
 		                { 
 		                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_npc.' . $phpEx);    
@@ -120,6 +143,11 @@ class bbtips
 					default:
 						break;
 				}
+				
+				if (isset($object))
+				{
+					$object->ptr = (substr($match[1],0,3) == 'ptr') ? true: false;
+				}
 		
 				$namein = (sizeof($args) > 0) ? html_entity_decode($match[3], ENT_QUOTES) : html_entity_decode($match[2], ENT_QUOTES);
 		   		
@@ -132,7 +160,7 @@ class bbtips
 				else
 				{
 					// ok tag content allowed, go to parser
-				    $message = str_replace($match[0], $object->parse(trim($nameout)), $message);
+				    $message =  isset($object) ? str_replace($match[0], $object->parse(trim($nameout)), $message) : $message;
 				}
 		   		$parses++;
 		}
@@ -159,24 +187,32 @@ class bbtips
 	}
 
 	
-	// turn the arguments into an array
-	private function whp_arguments($in)
+	/**
+	 * turn arguments into array
+	 *
+	 * @param argumentstring $in
+	 * @return array
+	 */
+	private function arguments($in)
 	{
 		if (strlen($in) == 0) 
 		{ 
 			return false; 
 		}
 		
+		// has unencodes quotes ?
 		if (strpos($in, '"') !== false) 
 		{ 
 			$in = str_replace('"', '', $in); 
 		}
 		
+		// has encoded quotes ?
 		if (strpos($in, '&quot;') !== false) 
 		{ 
 			$in = str_replace('&quot;', '', $in); 
 		}
 		
+		// is there a space in the middle ?
 		if (strpos($in, ' ') === false)
 		{ 
 			$args = array();

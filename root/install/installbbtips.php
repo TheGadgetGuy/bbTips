@@ -12,7 +12,7 @@
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 
@@ -44,7 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbtips';
+$mod_name = 'bbTips 0.4.1';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -90,7 +90,6 @@ $options = array(
 * You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
-$bbdkp_table_prefix = "bbeqdkp_";
 
 /***************************************************************
  * 
@@ -210,10 +209,22 @@ $versions = array(
          ),
 
          'custom' => array( 
-             'insert_bbcodes_wrapper' , 'moduleinstall', 'bbdkp_caches' 
+             'bbdkp_caches' ,
+             'insert_bbcodes_wrapper' , 
+			 'moduleinstall',              
+             
          ) 
 
     ),
+    
+    '0.4.1' => array(
+    
+         'custom' => array( 
+             'bbdkp_caches' 
+         ) 
+    
+         
+     ), 
     
 
 
@@ -258,7 +269,7 @@ function langoptions($selected_value, $key)
  */
 function bbdkp_caches($action, $version)
 {
-    global $db, $table_prefix, $umil, $bbdkp_table_prefix;
+    global $db, $table_prefix, $umil;
     
     $umil->cache_purge();
     $umil->cache_purge('imageset');
@@ -380,7 +391,7 @@ function insert_bbcodes_wrapper($action, $version)
  */
 function insert_bbcodes($action, $version, $tag, $helpline)
 {	
-	global $db, $user, $auth, $template, $cache;
+	global $db, $user, $template, $cache;
 	global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		// Set up mode-specific vars
@@ -469,7 +480,7 @@ function insert_bbcodes($action, $version, $tag, $helpline)
  */
 function delete_bbcodes($action, $version, $tag)
 {	
-	global $db, $user, $auth, $template, $cache;
+	global $db, $user, $template, $cache;
 	global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 	
 	switch ($action)
@@ -497,7 +508,7 @@ function delete_bbcodes($action, $version, $tag)
  */
 function moduleinstall($action, $version)
 {
-    global $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
+    global $user, $config, $db, $table_prefix, $umil; 
 	switch ($action)
 	{
 		case 'install' :
@@ -513,6 +524,7 @@ function moduleinstall($action, $version)
 					$umil->module_add('acp', 'ACP_DKP_RAIDS', array(
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_dkp',
 						));
 						
 						
@@ -524,7 +536,8 @@ function moduleinstall($action, $version)
 				    array('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS'),
     				array('acp', 'ACP_CAT_BBTIPS', array(
         			     'module_basename'       => 'dkp_bbtooltips',
-     	  			     'modes'                 => array('bbtooltips')
+     	  			     'modes'                 => array('bbtooltips'),
+    					 'module_auth'       	=> 'acl_a_board',
      			   		 ))
      			   	));
 				}
@@ -538,6 +551,7 @@ function moduleinstall($action, $version)
 					$umil->module_remove('acp', 'ACP_DKP_RAIDS', array(
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_dkp',
 						));					
 					
 				}
@@ -547,6 +561,7 @@ function moduleinstall($action, $version)
 					$umil->module_remove('acp', 'ACP_CAT_BBTIPS', array(
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_board',
 						));
 						
 					$umil->module_remove('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS');

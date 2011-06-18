@@ -19,9 +19,9 @@ if (!defined('IN_PHPBB'))
 
 class wowhead_npc extends wowhead
 {
-	var $lang;
-	var $patterns;
-	var $args; 
+	public $lang;
+	public $patterns;
+	private $args; 
 	
 	function wowhead_npc($arguments = array())
 	{

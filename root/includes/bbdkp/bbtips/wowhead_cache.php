@@ -17,37 +17,21 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+/**
+ * wrapper sql interface
+ *
+ */
 class wowhead_cache
 {
 
-	var $sql;
-	
-	/**
-	* constructor
-	* @access public
-	**/
-	function wowhead_cache()
-	{
-
-	}
-
-	/**
-	* Destructor
-	* @access public
-	**/
-	function close()
-	{
-		unset($this->sql);
-	}
-
 	function saveCraftable($craft, $craft_spell, $craft_reagents = array())
 	{
+	    global $db;
+	    
 		if ( !is_array($craft) || !is_array($craft_spell)  || !isset($craft['itemid']) || !isset($craft['name'])  )
 		{
 		    return false;
 		}
-
-	    global $config, $db;
 	     
 	    // save the main craftable entry
         $sql_ary = array(
@@ -489,6 +473,7 @@ class wowhead_cache
 		else
 		{
 		    $row =  $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);		    
 			return $row; 
 		}
 		

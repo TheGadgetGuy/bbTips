@@ -50,7 +50,53 @@
 
 <ul>
 <li>Compatible with bbDKP. can also be installed as a standalone mod</li>
-<li>WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp</li>
+<li>WowHead-style Tooltips (Item, Craft, Spell, Quest, Achievements, npc, wowchar, itemset, item icon, item dkp with PTR support. </li>
+<li>BBcodes get installed automatically on your Board</li>
+<li>Example BBcode usage</li>
+<ul>
+<li>Item</li>
+<ul>
+
+<li>[item gems="40133" enchant="3825"]50468[/item]</li>
+<li>[item gems="40133" enchant="3825"]50468[/item]</li>
+</ul>
+
+<li>Item icon</li>
+<ul>
+<li>[itemico gems="40133" enchant="3825"]50468[/item]</li>
+<li>[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]</li>
+<li>[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]</li>
+<li>[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]</li>
+</ul>
+
+<li>Itemset</li>
+<ul>
+<li>[itemset]Sanctified Ymirjar Lord's Plate[/itemset]</li>
+</ul>
+
+<li>Spell</li>
+<ul>
+<li>[spell rank=14]Power Word: Shield[/spell]</li>
+</ul>
+
+<li>PTR usage : You can prefix the tags with "ptr" to access the Wowhead Public Test Realm database. <br />
+Example for PTR 4.2<br /></li>
+<ul>
+<li>[ptritem]Decimation Treads[/ptritem]</li>
+<li>[ptritem]Sho'ravon, Greatstaff of Annihilation[/ptritem]</li>
+</ul>
+
+
+</ul>
+
+
+
+
+
+</ul>
+
+
+
 </ul> 
 
 		</div>
@@ -107,7 +153,16 @@
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		
 		<div class="content">
-		
+	
+	
+	<ul>2011-06-19 : 0.4.1
+	<li>[NEW] Added PTR support</li>
+	<li>[FIX] Fixed installation error due to auth link missing in acp info</li>				
+	<li>[FIX] memory leak in get object from cache fixed.</li>				
+	<li>[FIX] parse.php reference to undefined $config after mod uninstallation fixed.</li>	
+	<li>[FIX] removed unused functions, updated var usage in classes to private/public</li>		
+	</ul>
+	<br />	
 	
 	<ul>2011-04-01 : 0.4.0
 	<li>[CHG] requires any previous bbtips to be fully uninstalled.</li>

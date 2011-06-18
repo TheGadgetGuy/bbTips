@@ -24,14 +24,14 @@ if (!defined('IN_PHPBB'))
 
 class wowhead_craft extends wowhead
 {
-	var $lang;
-	var $createdby = array();
-	var $craft = array();
-	var $craft_spell = array();
-	var $craft_reagents = array();
-	var $patterns;
-	var $nomats = false;
-	var $args = array();
+	public $lang;
+	private $createdby = array();
+	private $craft = array();
+	private $craft_spell = array();
+	private $craft_reagents = array();
+	private $patterns;
+	private $nomats = false;
+	private $args = array();
 
 	function wowhead_craft($craftargs)
 	{

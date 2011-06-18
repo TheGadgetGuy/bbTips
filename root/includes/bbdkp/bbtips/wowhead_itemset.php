@@ -30,12 +30,12 @@ if (!defined('IN_PHPBB'))
 class wowhead_itemset extends wowhead
 {
 	// variables
-	var $lang;
-	var $itemset = array();
-	var $itemset_items = array();
-	var $setid;
-	var $patterns; 
-	var $args;
+	public $lang;
+	private $itemset = array();
+	private $itemset_items = array();
+	private $setid;
+	public $patterns; 
+	private $args;
 
 	/**
 	* Constructor

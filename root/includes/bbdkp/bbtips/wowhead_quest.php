@@ -20,9 +20,9 @@ if (!defined('IN_PHPBB'))
 
 class wowhead_quest extends wowhead
 {
-	var $lang;
-	var $patterns;
-	var $args = array();
+	public $lang;
+	public $patterns;
+	private $args = array();
 		
 	function wowhead_quest($arguments = array())
 	{
@@ -94,9 +94,7 @@ class wowhead_quest extends wowhead
 	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
 	{
 	    $info['link'] = $this->_generateLink($info['itemid'], $type);
-	    
 	    $html = $this->_replaceWildcards($this->patterns->pattern($type), $info);
-	    
 	    return $html; 
 	}
 	
