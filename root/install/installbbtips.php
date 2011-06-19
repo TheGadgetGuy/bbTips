@@ -12,7 +12,7 @@
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 
@@ -44,7 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbtips';
+$mod_name = 'bbTips 0.4.1';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -79,7 +79,6 @@ $options = array(
 'spell'   => array('lang' => 'SPELL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'npc'     => array('lang' => 'NPC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 'achievement'   => array('lang' => 'ACHIEVEMENT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-'wowchar'   => array('lang' => 'CHARACTER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
 
 );
 
@@ -91,7 +90,6 @@ $options = array(
 * You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
-$bbdkp_table_prefix = "bbeqdkp_";
 
 /***************************************************************
  * 
@@ -101,24 +99,20 @@ $bbdkp_table_prefix = "bbeqdkp_";
 
 $versions = array(
     
-    '0.3'    => array(
+    '0.4.0'    => array(
 
      // Lets add global config settings
 	'config_add' => array(
 
 		// source site
 		array('bbtips_site', 'wowhead', true),
-		array('bbtips_maxparse', 20, true),		
+		array('bbtips_maxparse', 200, true),		
 		
 		// script source
 		array('bbtips_localjs', 1, true),
 		// automatic search
 		array('bbtips_autsrch', 1, true),
 
-		//		
-		array('bbtips_realm', 'Lightbringer', true),
-		array('bbtips_region', request_var('region', ''), true),
-		
 		// language choice
 		array('bbtips_lang', 'en', true),
 
@@ -126,14 +120,11 @@ $versions = array(
 		array('bbtips_ttshow', 1, true),
 		array('bbtips_type', 'ttbbdkp', true),
 		array('bbtips_label', 'Wowhead', true),
-		
 
 	),
-            
      'table_add' => array ( 
-        
         // adding new tables for wowhead-addin to replace itemstats                 
-              array($bbdkp_table_prefix . 'wowhead_cache', array(
+              array($table_prefix . 'bbtips_wowhead_cache', array(
                     'COLUMNS'		=> array(
                        'id'			=> array('INT:8', NULL, 'auto_increment' ),
                        'itemid'		=> array('INT:8', 0 ),
@@ -150,7 +141,7 @@ $versions = array(
               ),
             ),
             
-            array($bbdkp_table_prefix . 'wowhead_craftable', array(
+            array($table_prefix . 'bbtips_wowhead_craftable', array(
                     'COLUMNS'        => array(
                        'itemid'	  => array('INT:10', 0),
                        'name'	      => array('VCHAR_UNI:255', ''),
@@ -162,7 +153,7 @@ $versions = array(
               ),
             ),
             
-            array($bbdkp_table_prefix . 'wowhead_craftable_reagent', array(
+            array($table_prefix . 'bbtips_wowhead_craftable_reagent', array(
                     'COLUMNS'      => array(
                        'itemid'	=> array('INT:8', 0,), 
                        'reagentof'	=> array('INT:11', 0),        	
@@ -174,7 +165,7 @@ $versions = array(
               ),
             ),
             
-            array($bbdkp_table_prefix . 'wowhead_craftable_spell', array(
+            array($table_prefix . 'bbtips_wowhead_craftable_spell', array(
                     'COLUMNS'      => array(
                        'reagentof'	=> array('UINT', 0),        	
                        'spellid'  => array('UINT', 0),
@@ -183,7 +174,7 @@ $versions = array(
               ),
             ),
             
-            array($bbdkp_table_prefix . 'wowhead_itemset', array(
+            array($table_prefix . 'bbtips_wowhead_itemset', array(
                     'COLUMNS'          => array(
                        'setid'	        => array('INT:8', 0),        	
                        'name'  	    => array('VCHAR_UNI:255', ''),  
@@ -194,7 +185,7 @@ $versions = array(
               ),
             ),            
 
-            array($bbdkp_table_prefix . 'wowhead_itemset_reagent', array(
+            array($table_prefix . 'bbtips_wowhead_itemset_reagent', array(
                     'COLUMNS'      => array(
                        'setid'	    => array('INT:8', 0), 
                        'itemid'	=> array('UINT', 0), 
@@ -205,7 +196,7 @@ $versions = array(
               ),
             ),            
             
-            array($bbdkp_table_prefix . 'wowhead_npc', array(
+            array($table_prefix . 'bbtips_wowhead_npc', array(
                     'COLUMNS'         => array(
                        'npcid'	       => array('INT:8', 0),  
                        'name'  	   => array('VCHAR_UNI:255', ''), 
@@ -217,75 +208,25 @@ $versions = array(
 
          ),
 
-        		
-        // add the bbdkp modules to ACP using the info files, (old RC1 modules are already removed)
-		'module_add' => array(
-            
-            array('acp', 'ACP_DKP_ITEM', array(
-           		 'module_basename' => 'dkp_bbtooltips',
-            	 'modes'           => array('bbtooltips'),
-        		)),
-        ),
-         
          'custom' => array( 
-            'bbdkp_caches',  'insert_bbcodes_wrapper' 
+             'bbdkp_caches' ,
+             'insert_bbcodes_wrapper' , 
+			 'moduleinstall',              
+             
          ) 
 
     ),
     
-      '0.3.1'    => array( 
-     
-     // no db change
-     ), 
-     
+    '0.4.1' => array(
     
-      '0.3.2'    => array( 
-     
-     // no db change
-     ),      
-
-      '0.3.3'    => array( 
-     
-     // no db change
-     ),      
-     
-     '0.3.4'    => array( 
-     
-     // this is a bugfix because wowhead changed alot of backend urls
-		'config_update'  => array(
-		
-			array('bbtips_maxparse', 200), 
-			)   
-     ),
-      
-     '0.3.5'    => array( 
- 		// no db change, but added wowchar bbcode
-
-     ),
-     
-      '0.3.6'    => array( 
- 	
-       'custom' => array( 
-            'bbdkp_caches', 
-            'insert_bbcodes_wrapper' 
+         'custom' => array( 
+             'bbdkp_caches' 
          ) 
-     
+    
+         
+     ), 
+    
 
-     ),
-     
-     '0.3.7'    => array( 
- 	
-     'config_remove' => array( 'bbtips_realm', 'bbtips_region'), 
-	 'custom' => array( 'bbdkp_caches') 
-
-     ),
-     
-     
-     '0.3.8'    => array( 
-		// no db changes, just a php bugfix
-		
-     ),
-     
 
 );
 
@@ -328,7 +269,7 @@ function langoptions($selected_value, $key)
  */
 function bbdkp_caches($action, $version)
 {
-    global $db, $table_prefix, $umil, $bbdkp_table_prefix;
+    global $db, $table_prefix, $umil;
     
     $umil->cache_purge();
     $umil->cache_purge('imageset');
@@ -419,17 +360,11 @@ function insert_bbcodes_wrapper($action, $version)
 				 insert_bbcodes($action, $version, 'achievement', 'Achievement tooltip'); 			
 			}
 		
-			if(request_var('wowchar', 0) == 1)
-			{
-				 
-				 insert_bbcodes($action, $version, 'wowchar', 'Character overlay'); 			
-			}
-			
 			return array('command' => array('UMIL_BBCODE_ADDED') , 'result' => 'SUCCESS'); 
 				
 	      break;
+
 		case 'uninstall' :
-	
 			delete_bbcodes($action, $version, 'item'); 
 			delete_bbcodes($action, $version, 'itemico');
 			delete_bbcodes($action, $version, 'itemdkp');
@@ -439,7 +374,6 @@ function insert_bbcodes_wrapper($action, $version)
 			delete_bbcodes($action, $version, 'spell');
 			delete_bbcodes($action, $version, 'npc');
 			delete_bbcodes($action, $version, 'achievement');
-			delete_bbcodes($action, $version, 'wowchar');																		
 			return array('command' => 'UMIL_BBCODE_REMOVED', 'result' => 'SUCCESS'); 												
 		    
 		  break; 
@@ -457,7 +391,7 @@ function insert_bbcodes_wrapper($action, $version)
  */
 function insert_bbcodes($action, $version, $tag, $helpline)
 {	
-	global $db, $user, $auth, $template, $cache;
+	global $db, $user, $template, $cache;
 	global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		// Set up mode-specific vars
@@ -546,7 +480,7 @@ function insert_bbcodes($action, $version, $tag, $helpline)
  */
 function delete_bbcodes($action, $version, $tag)
 {	
-	global $db, $user, $auth, $template, $cache;
+	global $db, $user, $template, $cache;
 	global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 	
 	switch ($action)
@@ -569,4 +503,73 @@ function delete_bbcodes($action, $version, $tag)
 }
 
 
+/**
+ *  module installer
+ */
+function moduleinstall($action, $version)
+{
+    global $user, $config, $db, $table_prefix, $umil; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+			switch ($version)
+			{
+				case '0.4.0':
+				// check if bbdkp is installed
+				if (isset($config['bbdkp_version']))
+				{
+					// bbdkp found. install module under the raids module
+
+					$umil->module_add('acp', 'ACP_DKP_RAIDS', array(
+					    'module_basename'   => 'dkp_bbtooltips',
+					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_dkp',
+						));
+						
+						
+				}
+				else
+				{	
+					$umil->module_add(array(
+				    // Add a new category named ACP_CAT_BBTIPS to ACP_CAT_DOT_MODS
+				    array('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS'),
+    				array('acp', 'ACP_CAT_BBTIPS', array(
+        			     'module_basename'       => 'dkp_bbtooltips',
+     	  			     'modes'                 => array('bbtooltips'),
+    					 'module_auth'       	=> 'acl_a_board',
+     			   		 ))
+     			   	));
+				}
+        	}
+        	break;
+        	
+        case 'uninstall' :
+        		/* check if bbdkp is installed*/
+				if (isset($config['bbdkp_version']))
+				{
+					$umil->module_remove('acp', 'ACP_DKP_RAIDS', array(
+					    'module_basename'   => 'dkp_bbtooltips',
+					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_dkp',
+						));					
+					
+				}
+				else
+				{	
+					
+					$umil->module_remove('acp', 'ACP_CAT_BBTIPS', array(
+					    'module_basename'   => 'dkp_bbtooltips',
+					    'modes'             => array('bbtooltips'),
+						'module_auth'       	=> 'acl_a_board',
+						));
+						
+					$umil->module_remove('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS');
+				}
+        		
+        
+        
+    }
+
+}
 ?>

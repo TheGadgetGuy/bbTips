@@ -18,15 +18,16 @@ if (!defined('IN_PHPBB'))
 	 
 /**
 * Wowhead Base Class
-* @package wowhead
+*
 **/
 class wowhead
 {
-	var $patterns; 
+	public $patterns; 
+	public $ptr;
 	
 	function wowhead()
 	{
-		global $phpEx, $phpbb_root_path; 
+		global $phpEx, $phpbb_root_path;
 		
 		if (!class_exists('wowhead_patterns')) 
         {
@@ -42,81 +43,146 @@ class wowhead
 	* 
 	* @param $url
 	* @param $type default 'item'
-	* @param $headers
 	* 
 	**/
-	function _read_url($url, $type = 'item', $headers = true)
+	public function _read_url($url, $type = 'item')
 	{
 		// build the url depending on bbcode
+		
+		$domain =  $this->_getDomain(); 
+		
 		switch ($type)
 		{
 			case 'npc':
 			case 'itemset':
+			case 'ptritemset':
+			case 'ptrnpc':				
 				if(is_numeric($url))
 				{
 					//parse page directly
-					$built_url = $this->_getDomain() . '/' . $type . '=' . $url; 
+					$built_url = $domain . '/' . $type . '=' . $url; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$built_url = $domain. '/search?q=' . $this->_convert_string($url);
 				}
-				$html_data = bbDkp_Admin::read_php($built_url, 1, 0 );
+				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'spell':
 			case 'quest':  
-			case 'achievement':	
+			case 'achievement':
+			case 'ptrspell':
+			case 'ptrquest':  
+			case 'ptrachievement':	
+				
 				if(is_numeric($url))
 				{
 					//parse page directly
-					$built_url = $this->_getDomain() . '/' . $type . '=' . $url . '&power'; 
+					$built_url = $domain . '/' . $type . '=' . $url . '&power'; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
+					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
 				}
-				$html_data = bbDkp_Admin::read_php($built_url, 1, 0 );
+				$html_data = $this->_read_php($built_url, 1, 0 );
 				break;
 			case 'item':      
 		    case 'itemico':   
 		    case 'itemdkp':   
-				if(is_numeric($url))
+			case 'ptritem':      
+		    case 'ptritemico':   
+		    case 'ptritemdkp':
+		   		if(is_numeric($url))
 				{	
-					$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
-					$html_data = bbDkp_Admin::read_php($built_url, 0, 0 );
+					$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
+					$html_data = $this->_read_php($built_url, 0, 0 );
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $this->_getDomain() . '/search?q=' . $this->_convert_string($url);
-					$html_data = bbDkp_Admin::read_php($built_url, 1, 0 );
+					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
+					$html_data = $this->_read_php($built_url, 1, 0 );
 				}
 				break;
 			case 'craftable':
+			case 'ptrcraftable':				
 			default:
 				//xml
-				$built_url = $this->_getDomain() . '/item=' . $this->_convert_string($url) . '&xml';
-				$html_data = bbDkp_Admin::read_php($built_url, 0, 0 );
+				$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
+				$html_data = $this->_read_php($built_url, 0, 0 );
 				break;
 		}
 		return $html_data;
 	
+	}
+	
+	/**
+	* Returns the link to the spell/quest
+	* @access private
+	**/
+	public function _generateLink($id, $type)
+	{
+		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp' || $type == 'ptritem' ||  $type == 'ptritemico')
+		{
+			return $this->_getDomain() . '/item=' . $id;
+		}
+		else
+		{
+			return $this->_getDomain() . '/' . $type . '=' . $id;
+		}
+	}
+
+	/**
+	* Checks if SimpleXML can accept 3 parameters
+	* @access private
+	**/
+	public function _allowSimpleXMLOptions()
+	{
+		$parts = explode('.', phpversion());
+		return ($parts[0] == 5 && $parts[1] >= 1) ? true : false;
+	}
+
+	/**
+	* Determines if we can use SimpleXML
+	* @access private
+	**/
+	public function _useSimpleXML()
+	{
+		$parts = explode('.', phpversion());
+		return ($parts[0] == 5) ? true : false;
+	}
+	
+	/**
+	* Called when object isn't found
+	* @access private
+	**/
+	public function _notFound($type, $name)
+	{
+		global $user; 
+		$user->add_lang ( array ('mods/dkp_tooltips' ));
+		return '<span class="notfound">[' . sprintf($user->lang['ITEMNOTFOUND'], ucwords($type) , $name) . ']</span>';
 	}
 
 	/**
 	* Gets Gem Info
 	* @access private
 	**/
-	function _getGemInfo($name, $itemid, $slot)
+	private function _getGemInfo($name, $itemid, $slot)
 	{
+		$xml = '';
 		if (trim($name) == '')
+		{
 			return false;
+		}
 
 		$data = $this->_read_url($name);
 
-		if (empty($data)) { return false; }
+		if (empty($data)) 
+		{ 
+			return false; 
+		}
 
 		if ($this->_useSimpleXML())
 		{
@@ -151,23 +217,10 @@ class wowhead
 	}
 	
 	/**
-	* Strips Headers
-	* @access private
-	**/
-	function _strip_headers($data)
-	{
-		// split the string
-		$chunks = explode(chr(10), $data);
-
-		// return the last index in the array, aka our xml
-		return $chunks[sizeof($chunks) - 1];
-	}
-
-	/**
 	* Cleans HTML for passing to Wowhead
 	* @access private
 	**/
-	function _cleanHTML($string)
+	private function _cleanHTML($string)
 	{
 	    if (function_exists("mb_convert_encoding"))
 	        $string = mb_convert_encoding($string, "ISO-8859-1", "HTML-ENTITIES");
@@ -185,7 +238,7 @@ class wowhead
 	* Encodes the string in UTF-8 if it already isn't
 	* @access private
 	**/
-	function _convert_string($str)
+	private function _convert_string($str)
 	{
 		// convert to utf8, if necessary
 		if (!$this->_is_utf8($str))
@@ -204,7 +257,7 @@ class wowhead
 	* Returns true if the $string is UTF-8, false otherwise.
 	* @access private
 	**/
-	function _is_utf8($string) {
+	private function _is_utf8($string) {
 		// From http://w3.org/International/questions/qa-forms-utf-8.html
 		return preg_match('%^(?:
 			[\x09\x0A\x0D\x20-\x7E]            # ASCII
@@ -222,119 +275,30 @@ class wowhead
 	* Gets the proper domain for the language selected
 	* @access private
 	**/
-	function _getDomain()
+	private function _getDomain()
 	{
-		if ($this->lang == 'en')
-			return 'http://www.wowhead.com';
-		else
-			return 'http://' . strtolower($this->lang) . '.wowhead.com';
-
-		return 'http://www.wowhead.com';
-	}
-
-	/**
-	* Returns the link to the spell/quest
-	* @access private
-	**/
-	function _generateLink($id, $type)
-	{
-		if ($type == 'itemico' || $type == 'item' || $type == 'itemdkp')
+		if (!$this->ptr)
 		{
-			return $this->_getDomain() . '/item=' . $id;
+			if ($this->lang == 'en')
+			{
+				return 'http://www.wowhead.com';
+			}
+			else
+			{
+				return 'http://' . strtolower($this->lang) . '.wowhead.com';
+			}
 		}
 		else
 		{
-			return $this->_getDomain() . '/' . $type . '=' . $id;
+			return 'http://ptr.wowhead.com';			
 		}
-	}
-
-	/**
-	* Checks if SimpleXML can accept 3 parameters
-	* @access private
-	**/
-	function _allowSimpleXMLOptions()
-	{
-		$parts = explode('.', phpversion());
-		return ($parts[0] == 5 && $parts[1] >= 1) ? true : false;
-	}
-
-	/**
-	* Determines if we can use SimpleXML
-	* @access private
-	**/
-	function _useSimpleXML()
-	{
-		$parts = explode('.', phpversion());
-		return ($parts[0] == 5) ? true : false;
-	}
-
-	/**
-	* Called when object isn't found
-	* @access private
-	**/
-	function _notFound($type, $name)
-	{
-		global $user; 
-		$user->add_lang ( array ('mods/dkp_tooltips' ));
-		return '<span class="notfound">[' . sprintf($user->lang['ITEMNOTFOUND'], ucwords($type) , $name) . ']</span>';
-	}
-
-	/**
-	* Returns the specific line we need
-	* @access private
-	**/
-	function _abilityLine($data, $name)
-	{
-		$parts = explode(chr(10), $data);
-
-		foreach ($parts as $line)
-		{
-			if (strpos($line, "new Listview({template: 'spell', id: 'abilities'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'ability',
-					'line'	=>	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'talents'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'talent',
-					'line'	=> 	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'recipes'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'recipe',
-					'line'	=>	$line
-				);
-			elseif (strpos($line, "new Listview({template: 'spell', id: 'uncategorized-spells'") !== false && strpos(strtolower($line), strtolower(addslashes($name))) !== false)
-				return array(
-					'type'	=>	'ability',
-					'line'	=>	$line
-				);
-		}
-
-		return false;
-	}
-
-	/**
-	* Returns the specific line we need for achievements
-	* @access private
-	**/
-	function _achievementLine($data)
-	{
-		$parts = explode(chr(10), $data);	// split by line breaks
-
-		foreach ($parts as $line)
-		{
-			if (strpos($line, "new Listview({template: 'achievement', id: 'achievements'") !== false)
-				return $line;
-		}
-		return false;
 	}
 
 	/**
 	* Replaces wildcards from patterns
 	* @access private
 	**/
-	function _replaceWildcards($in, $info)
+	public function _replaceWildcards($in, $info)
 	{
 		$wildcards = array();
 
@@ -383,56 +347,11 @@ class wowhead
 		return $in;
 	}
 
-	/**
-	* Builds Item Enhancement String
-	* @access private
-	**/
-	function _buildEnhancement($args)
-	{
-		if (!is_array($args) || sizeof($args) == 0)
-			return false;
-
-		if (array_key_exists('gems', $args))
-		{
-			$gem_args = 'gems=' . str_replace(',', ':', $args['gems']);
-		}
-
-		if (array_key_exists('enchant', $args))
-		{
-			$enchant_args = 'ench=' . $args['enchant'];
-		}
-
-		if (!empty($gem_args) && !empty($enchant_args))
-		{
-			return $enchant_args . '&amp;' . $gem_args;
-		}
-		elseif (!empty($enchant_args))
-		{
-			return $enchant_args;
-		}
-		elseif (!empty($gem_args))
-		{
-			return $gem_args;
-		}
-
-		return false;
-	}
-
-
-	/**
-	* Strips out any apostrophes to prevent any display problems
-	* @access private
-	**/
-	function _strip_apos($in)
-	{
-		return str_replace("'", "", $in);
-	}
-	
 	/****
 	 * 
 	 * if the user is using php 5.1 then strip CDATA from xml
 	 */
-	function _removeCData($xml) 
+	private function _removeCData($xml) 
 	{
 	    $new_xml = NULL;
 	    preg_match_all("/\<\!\[CDATA \[(.*)\]\]\>/U", $xml, $args);
@@ -452,6 +371,215 @@ class wowhead
 	
 	    return $new_xml;
 	}
+	
+	  /**
+	 * connects to remote site and gets xml or html using Curl, fopen, or fsockopen
+	 * @param char $url
+	 * @param char $loud default false
+	 * @return xml
+	 */
+  	private function _read_php($url, $return_Server_Response_Header = false, $loud= false) 
+	{
+		$errmsg1= '';
+		$errmsg2= '';
+		$errmsg3= '';
+		$errstrfsk='';
+		$read_phperror=false;
+		$xml_data= '';
+	    
+	    if ( function_exists ( 'curl_init' )) 
+		{
+			 /* Create a CURL handle. */
+			if (($curl = curl_init($url)) === false)
+			{
+				trigger_error('curl_init Failed' , E_USER_WARNING);   
+			}
+			
+			$useragent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9) Gecko/2008061004 Firefox/3.0';
+			//$useragent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9) Gecko/2008052906 Firefox/3.0';
+			//$useragent="Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.2) Gecko/20070319 Firefox/2.0.0.3";
+			@curl_setopt ( $curl, CURLOPT_USERAGENT, $useragent );
+
+			@curl_setopt ( $curl, CURLOPT_URL, $url );
+			if ($return_Server_Response_Header == true)
+			{   
+			    // only for html, leave this default false if you want xml (like from armory or wowhead items)
+    			@curl_setopt ( $curl, CURLOPT_HEADER, 1);
+			}
+			else 
+			{   
+			    // only for html, leave this default false if you want xml (like from armory or wowhead items)
+    			@curl_setopt ( $curl, CURLOPT_HEADER, 0);
+			}
+			
+			@curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, TRUE );
+		    
+			$headers = array(
+				'Accept: text/xml,application/xml,application/xhtml+xml',
+				'Accept-Charset: utf-8,ISO-8859-1'
+				);
+			@curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+			
+			
+			if (!(ini_get("safe_mode") || ini_get("open_basedir"))) 
+			{
+				@curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+			}
+			
+			@curl_setopt ( $curl, CURLOPT_TIMEOUT, 30 );
+			
+			
+			if (curl_errno ( $curl )) 
+			{
+				/*
+                      CURLE_OK = 0,
+                      CURLE_UNSUPPORTED_PROTOCOL,     1
+                      CURLE_FAILED_INIT,              2
+                      CURLE_URL_MALFORMAT,            3
+                      CURLE_URL_MALFORMAT_USER,       4 - NOT USED
+                      CURLE_COULDNT_RESOLVE_PROXY,    5
+                      CURLE_COULDNT_RESOLVE_HOST,     6
+                      CURLE_COULDNT_CONNECT,          7
+                      CURLE_FTP_WEIRD_SERVER_REPLY,   8
+                    */
+		       
+				switch ($errnum) 
+				{
+				    case "0" :
+				         $read_phperror = false; 
+				        
+					case "28" :
+				        $read_phperror = true; 
+					    $errmsg1 = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $errnum . "  ";
+						break;
+					case "1" :
+				        $read_phperror = true;
+				        $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : UNSUPPORTED_PROTOCOL ";					
+						break;
+					case "2" :
+   				        $read_phperror = true;
+						$errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : FAILED_INIT ";				
+						break;
+					case "3" :
+   				        $read_phperror = true;				    
+					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : URL_MALFORMAT ";					
+						break;
+					case "5" :
+   				        $read_phperror = true;
+						$errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_PROXY ";
+						break;
+					case "6" :
+   				        $read_phperror = true;
+					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_HOST ";		
+						break;
+					case "7" :
+   				        $read_phperror = true;
+					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_CONNECT ";
+				}
+			}
+			$xml_data = @curl_exec ($curl);
+			@curl_close ($curl);
+		}
+		
+		if ( strlen (rtrim ($xml_data) ) == 0) 
+		{
+		
+			// for file_get_contents to work allow_url_fopen must be set
+		    // safe mode must be OFF
+			if (@ini_get('allow_url_fopen') and !(@ini_get("safe_mode"))) 
+			{
+				ini_set ( 'user_agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9) Gecko/2008052906 Firefox/3.0' );
+				$xml_data = @file_get_contents (rtrim ($url));
+				$status_code = isset($http_response_header [0]) ? $http_response_header [0] : 0; 
+				switch ($status_code) 
+				{
+					case 200 :
+					    $read_phperror = false; 
+					    // success
+						break;
+					case 503 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP error status 503 :  Service unavailable. An internal problem prevented Blizzard from returning Armory data to you.';				
+						break;
+					case 403 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 403 : Forbidden. You do not have permission to access this resource, or are over your rate limit.';		
+						break;
+					case 400 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 400. Bad request using file_get_contents. The parameters passed did not match as expected. The exact error is returned in the XML response.';
+						break;
+					case 500 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 500.  Internal Server Error. The other side is down.';
+						break; 
+					case 0 : 
+						$read_phperror = true;
+						$errmsg2 = 'file_get_contents error : No response header. The other side is down.';
+					default :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : Unexpected HTTP status of : ' . $status_code . '.';
+				}
+			}
+		
+		}
+			
+		if ( strlen (rtrim ($xml_data) ) == 0) 
+		{
+				$url_array = parse_url ($url);
+				$remote = @fsockopen ( $url_array ['host'], 80, $errno, $errstr, 5 );
+				if (! $remote) 
+				{
+				    $read_phperror = true; 
+					$errmsg3 = "fsockopen error : socket opening failed : " . $errno . ' ' . $errstr; 
+				} 
+				else 
+				{
+				    $read_phperror = false; 
+					$out = "GET " . $url_array ['path'] . "?" . $url_array ['query'] . " HTTP/1.0\r\n";
+					$out .= "Host: " . $url_array ['host'] . " \r\n";
+					$out .= "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.0.4) Gecko/20060508 Firefox/1.5.0.4\r\n";
+					$out .= "Accept: text/xml\r\n\r\n"; 
+					$out .= "Connection: Close\r\n\r\n";
+					 fwrite ( $remote, $out );
+					
+				    // Get rid of the HTTP headers
+					while ( $remote && ! feof ( $remote ) ) 
+					{
+						$headerbuffer = fgets ( $remote, 1024 );
+						if (urlencode ( $headerbuffer ) == "%0D%0A") 
+						{
+							break;
+						}
+					}
+                    // now get xml data
+					$received = '';
+					while ( ! feof ( $remote ))
+					{
+					    $received .= fgets ( $remote, 128 );
+					}
+					fclose($remote);
+					// extract xml					
+					$start = strpos($received, "<?xml");
+                   $endTag = "</page>";
+                   $end = strpos($received, $endTag) + strlen($endTag);
+                   $xml_data = substr($received, $start, $end-$start);
+					
+				}
+		}
+		
+		if ($loud == true)
+		{
+		    if ( $read_phperror == true  )
+		    {
+		         trigger_error($errmsg1 . '<br />' . $errmsg2 . '<br />' . $errmsg3 , E_USER_WARNING);   
+		    }
+		}
+		
+		return $xml_data;
+	}
+	
+	
 	
 }
 ?>

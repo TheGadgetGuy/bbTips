@@ -22,14 +22,15 @@ if (!defined('IN_PHPBB'))
 class wowhead_patterns
 {
 	// variable for each pattern
-	var $patterns = array();
+	public $patterns = array();
 
-	function wowhead_patterns()
+	public function wowhead_patterns()
 	{
-        global $phpbb_root_path, $phpEx;
-
-		if (!$opendir = @opendir($phpbb_root_path . 'includes/bbdkp/bbtips/patterns/'))
+        global $phpbb_root_path, $user, $phpEx;
+		$path = $phpbb_root_path . 'styles/' . $user->theme['template_path'] . '/template/bbtips/';
+		if (!$opendir = @opendir($path) )
 		{
+			echo $path;
 			trigger_error('Failed to open templates directory.  Please make sure the permissions were set properly.');
 		}
 		else
@@ -39,7 +40,7 @@ class wowhead_patterns
 				if (substr($file, strpos($file, '.') + 1) == 'html')
 				{
 					$filename = (strpos($file, 'php') !== false) ? str_replace('.php', '', $file) : str_replace('.html', '', $file);
-					$this->patterns[$filename] = @file_get_contents($phpbb_root_path . 'includes/bbdkp/bbtips/patterns/' . $file);
+					$this->patterns[$filename] = @file_get_contents($path . $file);
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu - German
+ * bbdkp acp language file for mainmenu - French
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -26,6 +26,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_DKPTOOLTIPS'	=> 'Règlages bbTips',  
+	'ACP_CAT_BBTIPS'	=> 'bbTips', 
 
 ));
 

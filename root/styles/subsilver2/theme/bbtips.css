@@ -2,404 +2,9 @@
 *  bbTips css wowchar overlay
 * 
 * @package bbTips
-* @copyright 2010 bbDKP <http://code.google.com/p/bbdkp/>
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version $Id$
 * 
-*
 **/
-
-/* 3d view */
-.wowchar_armory_bg 
-{
-	width: 517px;
-	height: 695px;
-	position: relative;
-	background: url("./images/bbtips/3d_model_armory.png") no-repeat;
-}
-
-.wowchar_armory_shadow {
-	width: 467px;
-	height: 645px;
-	position: absolute;
-	top: 25px;
-	left: 25px;
-	z-index: 1000;
-	-moz-box-shadow: 0 0 35px 35px #000;
-	-webkit-box-shadow: 0 0 35px 35px #000;
-}
-
-.wowchar_armory_pane_overlay_container {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1001;
-}
-
-
-
-/* gear list */
-
-.wowchar_gearlist_bg {
-	width: 673px;
-	height: 952px;
-	position: relative;
-	background: url("./images/bbtips/gear_list.png") no-repeat;
-}
-
-.gear_list_pane_overlay_container {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1001;
-}
-
-.gear_list_shadow {
-	width: 623px;
-	height: 902px;
-	position: absolute;
-	top: 25px;
-	left: 25px;
-	z-index: 1000;
-	-moz-box-shadow: 0 0 35px 35px #000;
-	-webkit-box-shadow: 0 0 35px 35px #000;
-}
-
-/* achievements */
-
-.wowchar_achievements_bg {
-	width: 593px;
-	height: 867px;
-	position: relative;
-	background: url("./images/bbtips/achievements_list.png") no-repeat;
-}
-
-.achievements_list_pane_overlay_container {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1001;
-}
-
-.achievements_list_shadow {
-	width: 543px;
-	height: 817px;
-	position: absolute;
-	top: 25px;
-	left: 25px;
-	z-index: 1000;
-	-moz-box-shadow: 0 0 35px 35px #000;
-	-webkit-box-shadow: 0 0 35px 35px #000;
-}
-
-.achievementslist {
-	margin-left: auto;
-	margin-right: auto;
-	width: 80%;
-	font-size: 10px;
-	font-weight: bold;
-	font-family: arial;
-	text-align: center;
-}
-
-.tab_container {
-	width: 440px;
-	min-width: 440px;
-	max-width: 440px;
-	height: 50px;
-	min-height: 50px;
-	max-height: 50px;
-}
-
-.Horde {
-	background: url("./images/bbtips/achievements_list_horde_top.jpg") no-repeat;
-	position: absolute;
-	top: 22px;
-	left: 173px;
-	width: 254px;
-	min-width: 254px;
-	max-width: 254px;
-	height: 80px;
-	min-height: 80px;
-	max-height: 80px;
-}
-
-.Alliance {
-	background: url("./images/bbtips/achievements_list_alliance_top.jpg") no-repeat;
-	position: absolute;
-	top: 22px;
-	left: 173px;
-	width: 254px;
-	min-width: 254px;
-	max-width: 254px;
-	height: 80px;
-	min-height: 80px;
-	max-height: 80px;
-}
-
-/*jquery tools*/
-
-/* start overlayed element */
-
-.simple_overlay {
-	
-
-/* must be initially hidden */
-    display: none;
-	
-
-/* place overlay on top of other elements */
-    z-index: 10000;
-	
-
-/* styling */
-                            
-
-/* background: transparent url("./images/row2_bg.png") top repeat-x; */
-    width: auto;
-	padding: 0px 0px 0px 0px;
-	min-height: 600px;
-	border: 0px solid #666;
-	
-
-/* CSS3 styling for latest browsers */
-    -moz-box-shadow: 0 0 0 0 #000;
-	-webkit-box-shadow: 0 0 0 0 #000;
-}
-
-/* end overlayed element */
-
-/* start close button positioned on upper right corner */
-
-.simple_overlay .close {
-	background-image: url("./images/bbtips/close.png");
-	background-position: 0px 0px;
-	position: absolute;
-	right: -40px;
-	top: -15px;
-	cursor: pointer;
-	height: 36px;
-	width: 36px;
-}
-
-.simple_overlay .close:hover {
-	background-image: url("./images/bbtips/close.png");
-	background-position: 0px 36px;
-}
-
-/* end close button positioned on upper right corner */
-
-/* start Layout helpers */
-
-.ui-helper-hidden {
-	display: none;
-}
-
-.ui-helper-hidden-accessible {
-	position: absolute;
-	left: -99999999px;
-}
-
-.ui-helper-reset {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	line-height: 1.3;
-	text-decoration: none;
-	font-size: 100%;
-	list-style: none;
-}
-
-.ui-helper-clearfix:after {
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
-}
-
-.ui-helper-clearfix {
-	display: inline-block;
-}
-
-/* end Layout helpers */
-
-/* required comment for clearfix to work in Opera */
-
-* html .ui-helper-clearfix {
-	height: 1%;
-}
-
-.ui-helper-clearfix {
-	display: block;
-}
-
-/* end clearfix */
-
-.ui-helper-zfix {
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	position: absolute;
-	opacity: 0;
-	filter: Alpha(Opacity=0);
-}
-
-/* Interaction Cues */
-
-.ui-state-disabled {
-	cursor: default !important;
-}
-
-/* Icons */
-
-/* states and images */
-
-.ui-icon {
-	display: block;
-	text-indent: -99999px;
-	overflow: hidden;
-	background-repeat: no-repeat;
-}
-
-/* Misc visuals */
-
-/* Overlays */
-
-.ui-widget-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
-
-/* element for tabs  */
-
-ul.tabs {
-	list-style: none;
-	margin: 0 !important;
-	padding: 0 0 5px 0;
-	border-bottom: 0px solid #666;
-	height: 38px;
-}
-
-/* single tab */
-
-ul.tabs li {
-	float: left;
-	text-indent: 0;
-	padding: 0 4px 0 0;
-	margin: 0 !important;
-	list-style-image: none !important;
-}
-
-/* link inside the tab. uses a background image */
-
-ul.tabs a {
-	background: url("./images/bbtips/bliz_red.png") no-repeat;
-	font-size: 14px;
-	font-weight: bold;
-	font-family: arial;
-	display: block;
-	height: 38px;
-	line-height: 38px;
-	width: 142px;
-	text-align: center;
-	text-decoration: none;
-	color: #ffc800;
-	padding: 0px;
-	margin: 0px;
-	position: relative;
-	top: 1px;
-	border: 0px;
-}
-
-ul.tabs a:active {
-	outline: none;
-}
-
-/* when mouse enters the tab move the background image */
-
-ul.tabs a:hover {
-	background-position: 0px -76px;
-	color: #fff;
-}
-
-/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-
-ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-	background-position: 0px -38px;
-	cursor: default !important;
-	color: #fff !important;
-}
-
-/* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
-
-/* width 1 */
-
-ul.tabs a.s {
-	background-position: -553px 0;
-	width: 81px;
-}
-
-ul.tabs a.s:hover {
-	background-position: -553px -31px;
-}
-
-ul.tabs a.s.current {
-	background-position: -553px -62px;
-}
-
-/* width 2 */
-
-ul.tabs a.l {
-	background-position: -248px -0px;
-	width: 174px;
-}
-
-ul.tabs a.l:hover {
-	background-position: -248px -31px;
-}
-
-ul.tabs a.l.current {
-	background-position: -248px -62px;
-}
-
-/* width 3 */
-
-ul.tabs a.xl {
-	background-position: 0 -0px;
-	width: 248px;
-}
-
-ul.tabs a.xl:hover {
-	background-position: 0 -31px;
-}
-
-ul.tabs a.xl.current {
-	background-position: 0 -62px;
-}
-
-/* initially all panes are hidden */
-
-div.panes div.pane {
-	display: none;
-}
-
-#triggers img {
-	cursor: pointer;
-	margin: 0 5px;
-	background-color: #FFCC66;
-	border: 1px solid #ccc;
-	padding: 2px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-}
-
-/*end of jquery tools*/
 
 /**
 * WoW Head Item Links
@@ -408,58 +13,84 @@ div.panes div.pane {
 
 /* Poor (Gray) */
 
-.quality0, .quality0 a:link, .quality0 a:active, .quality0 a:visited, .quality0 a:hover {
-	color: gray !important;
+.q0, .q0 a:link, .q0 a:active, .q0 a:visited, .q0 a:hover {
+	color: #9D9D9D !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Common (White) */
 
-.quality1, .quality1 a:link, .quality1 a:active, .quality1 a:visited, .quality1 a:hover {
-	color: #4679A6 !important;
+.q1, .qq1 a:link, .q1 a:active, .q1 a:visited, .q1 a:hover {
+	color: #FFFFFF !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Uncommon (Green) */
 
-.quality2, .quality2 a:link, .quality2 a:active, .quality2 a:visited, .quality2 a:hover {
+.q2, .q2 a:link, .q2 a:active, .q2 a:visited, .q2 a:hover {
 	color: #1EFF00 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Rare (Blue) */
 
-.quality3, .quality3 a:link, .quality3 a:active, .quality3 a:visited, .quality3 a:hover {
-	color: #0870C1 !important;
+.q3, .q3 a:link, .q3 a:active, .q3 a:visited, .q3 a:hover {
+	color: #0070DD !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Epic (Purple) */
 
-.quality4, .quality4 a:link, .quality4 a:active, .quality4 a:visited, .quality4 a:hover {
-	color: #9035CF !important;
+.q4, .q4 a:link, .q4 a:active, .q4 a:visited, .q4 a:hover {
+	color: #A335EE !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Legendary (Orange) */
 
-.quality5, .quality5 a:link, .quality5 a:active, .quality5 a:visited, .quality5 a:hover {
-	color: #DE800D !important;
+.q5, .q5 a:link, .q5 a:active, .q5 a:visited, .q5 a:hover {
+	color: #FF8000 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Artifact (Tan-ish) */
 
-.quality6, .quality6 a:link, .quality6 a:active, .quality6 a:visited, .quality6 a:hover {
-	color: #E5CC63 !important;
+.q6, .q6 a:link, .q6 a:active, .q6 a:visited, .q6 a:hover {
+	color: #E5CC80 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Heirloom (Tan-ish) - Added in Wrath of the Lich King*/
 
-.quality7, .quality7 a:link, .quality7 a:active, .quality7 a:visited, .quality7 a:hover {
-	color: #E5CC63 !important;
+.q7, .q7 a:link, .q7 a:active, .q7 a:visited, .q7 a:hover {
+	color: #E5CC80 !important;
 	text-decoration: none;
+	font-weight: bold;
+}
+
+.q8, .q8 a:link, .q8 a:active, .q8 a:visited, .q8 a:hover {
+	color: #FFFF98 !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.q9, .q9 a:link, .q9 a:active, .q9 a:visited, .q9 a:hover {
+	color: #71D5FF !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.q10, .q10 a:link, .q10 a:active, .q10 a:visited, .q10 a:hover {
+	color: #FF4040 !important;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Quests */
@@ -467,6 +98,7 @@ div.panes div.pane {
 .quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
 	color: #0000FF !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Spells */
@@ -474,6 +106,7 @@ div.panes div.pane {
 .spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
 	color: navy !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Achievements */
@@ -482,6 +115,7 @@ div.panes div.pane {
 .itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
 	color: #D53057;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* NPC's */
@@ -489,6 +123,7 @@ div.panes div.pane {
 .npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
 	color: #C09E79 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Profiles */
@@ -496,6 +131,7 @@ div.panes div.pane {
 .wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
 	color: #4679A6 !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Guilds */
@@ -503,6 +139,7 @@ div.panes div.pane {
 .guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
 	color: #099F2C !important;
 	text-decoration: none;
+	font-weight: bold;
 }
 
 /* Armory */
@@ -607,97 +244,11 @@ div.panes div.pane {
 	background-position: 0 0;
 }
 
-.qual {
-	color: #ffd100 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* yellow/description */
-
-.qual0, .qual0 a {
-	color: gray !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* grey/poor */
-
-.qual1, .qual1 a {
-	color: #4679A6 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* white/common */
-
-.qual2, .qual2 a {
-	color: #1eff00 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* green/uncommon*/
-
-.qual3, .qual3 a {
-	color: #0070dd !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* blue/rare */
-
-.qual4, .qual4 a {
-	color: #a335ee !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* purple/epic */
-
-.qual5, .qual5 a {
-	color: #ff8000 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* orange/legendary */
-
-.qual6, .qual6 a {
-	color: #e5cc80 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-/* red/artifact */
-
-.qual7, .qual7 a {
-	color: #ff0000 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
-.qual8, .qual8 a {
-	color: #ffff98 !important;
-	position: absolute;
-	padding-top: 2px;
-	padding-left: 2px;
-}
-
 .notfound {
 	color: #FF0000;
 	font-weight: bold;
 }
-
+/* itemsets */
 ul.itemset-items {
 	list-style-position: none !important;
 	padding: 0px;

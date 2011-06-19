@@ -30,18 +30,18 @@ if (!defined('IN_PHPBB'))
 class wowhead_itemset extends wowhead
 {
 	// variables
-	var $lang;
-	var $itemset = array();
-	var $itemset_items = array();
-	var $setid;
-	var $patterns; 
-	var $args;
+	public $lang;
+	private $itemset = array();
+	private $itemset_items = array();
+	private $setid;
+	public $patterns; 
+	private $args;
 
 	/**
 	* Constructor
 	* @access public
 	**/
-	function wowhead_itemset($argin)
+	public function wowhead_itemset($argin)
 	{
 		global $phpEx, $config, $phpbb_root_path; 
 		if (!class_exists('wowhead_patterns')) 
@@ -57,7 +57,7 @@ class wowhead_itemset extends wowhead
 	* Parses itemset bbcode
 	* @access public
 	**/
-	function parse($name)
+	public function parse($name)
 	{
 		global $config, $phpEx, $phpbb_root_path; 
 		
@@ -106,7 +106,7 @@ class wowhead_itemset extends wowhead
 		} 
 	}
 	
-	function _getItemsetByID($id)
+	private function _getItemsetByID($id)
 	{
 		if (trim($id) == '' || !is_numeric($id))
 		{
@@ -210,7 +210,7 @@ class wowhead_itemset extends wowhead
 	* Returns the summary line we need for getting itemset items
 	* @access private
 	**/
-	function _summaryLine($data)
+	private function _summaryLine($data)
 	{
 		$parts = explode(chr(10), $data);
 		foreach ($parts as $line)
@@ -240,7 +240,7 @@ class wowhead_itemset extends wowhead
 		return false;
 	}
 	
-	function _getItemsetByName($name)
+	private function _getItemsetByName($name)
 	{
 		if (trim($name) == '')
 		{
@@ -398,7 +398,7 @@ class wowhead_itemset extends wowhead
 	* Generates HTML
 	* @access private
 	**/
-	function _generateHTML()
+	private function _generateHTML()
 	{
 		// generate item HTML first
 		$item_html = ''; $set_html = $this->patterns->pattern('itemset');
