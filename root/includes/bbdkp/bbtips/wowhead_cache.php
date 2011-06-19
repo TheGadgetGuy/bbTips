@@ -16,43 +16,22 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
-if (! defined('EMED_BBDKP')) 
-{
-	$user->add_lang ( array ('mods/dkp_admin' ));
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
 
+/**
+ * wrapper sql interface
+ *
+ */
 class wowhead_cache
 {
 
-	var $sql;
-	
-	/**
-	* constructor
-	* @access public
-	**/
-	function wowhead_cache()
+	public function saveCraftable($craft, $craft_spell, $craft_reagents = array())
 	{
-
-	}
-
-	/**
-	* Destructor
-	* @access public
-	**/
-	function close()
-	{
-		unset($this->sql);
-	}
-
-	function saveCraftable($craft, $craft_spell, $craft_reagents = array())
-	{
+	    global $db;
+	    
 		if ( !is_array($craft) || !is_array($craft_spell)  || !isset($craft['itemid']) || !isset($craft['name'])  )
 		{
 		    return false;
 		}
-
-	    global $config, $db;
 	     
 	    // save the main craftable entry
         $sql_ary = array(
@@ -118,7 +97,7 @@ class wowhead_cache
 	}
 
 
-	function saveNPC($info)
+	public function saveNPC($info)
 	{
 		if (sizeof($info) == 0  || !isset($info['npcid']) || !isset($info['name'])  )
 		{
@@ -151,9 +130,9 @@ class wowhead_cache
 	* Saves itemset
 	* @access public
 	**/
-	function saveItemset($itemset, $items )
+	public function saveItemset($itemset, $items )
 	{
-	    global $db;;
+	    global $db;
 	    
 	    
 		if (!is_array($itemset) || !is_array($items) || !isset($itemset['setid']) || !isset($itemset['name']) )
@@ -204,7 +183,7 @@ class wowhead_cache
 		}
 	}
 
-	function getNPC($name, $lang)
+	public function getNPC($name, $lang)
 	{
 		global $config, $db; 
 		if (trim($lang) == '')
@@ -239,7 +218,7 @@ class wowhead_cache
 	* Gets itemset
 	* @access public
 	**/
-	function getItemset($name)
+	public function getItemset($name)
 	{
 		global $db, $config; 
 		
@@ -270,7 +249,7 @@ class wowhead_cache
 	* Gets craftable
 	* @access public
 	**/
-	function getCraftable($name)
+	public function getCraftable($name)
 	{
         global $db, $config;  
 
@@ -301,7 +280,7 @@ class wowhead_cache
 	* Gets craftable spell
 	* @access public
 	**/
-	function getCraftableSpell($id)
+	public function getCraftableSpell($id)
 	{
 		if (trim($id) == '')
 		{
@@ -309,7 +288,7 @@ class wowhead_cache
 		}
 			
         global $db; 
-		$query_text = "SELECT spellid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . " WHERE reagentof='$id'";		
+		$query_text = "SELECT spellid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . ' WHERE reagentof="' . $db->sql_escape($id) . "'";		
 	    $result = $db->sql_query($query_text);
 							
 	    if ( $db->sql_affectedrows() == 0)
@@ -329,7 +308,7 @@ class wowhead_cache
 	* Gets craftable reagents
 	* @access public
 	**/
-	function getCraftableReagents($id)
+	public function getCraftableReagents($id)
 	{
 	    if (trim($id) == '')
 		{
@@ -340,8 +319,8 @@ class wowhead_cache
         
 		$reagents = array();
 
-		$query_text = "SELECT itemid, name, quantity, quality, icon FROM " . BBTIPS_CRAFT_REAGENT_TBL . " 
-		WHERE reagentof='$id' ORDER BY name ASC";
+		$query_text = 'SELECT itemid, name, quantity, quality, icon FROM ' . BBTIPS_CRAFT_REAGENT_TBL . ' 
+		WHERE reagentof=' . $db->sql_escape($id) . ' ORDER BY name ASC';
 		
 		$result = $db->sql_query($query_text);
 	    if ( $db->sql_affectedrows() == 0)
@@ -364,7 +343,7 @@ class wowhead_cache
 	* Gets itemset components
 	* @access public
 	**/
-	function _getItemsetReagents($id)
+	public function _getItemsetReagents($id)
 	{
 	    if (trim($id) == '')
 		{
@@ -401,7 +380,7 @@ class wowhead_cache
 	* Gets Gem from 
 	* @access public
 	**/
-	function getGems($itemid)
+	public function getGems($itemid)
 	{
 	    
 	    global $db;
@@ -439,7 +418,7 @@ class wowhead_cache
 	* Saves Gem to 
 	* @access public
 	**/
-	function saveGems($gems)
+	public function saveGems($gems)
 	{
 		if (!is_array($gems) || sizeof($gems) == 0)
 		{
@@ -449,11 +428,11 @@ class wowhead_cache
 
 
 	
-/**
+	/**
 	* Gets object from cache table
 	* @access public
 	**/
-	function getObject($name, $type = 'item', $lang = '', $rank = '', $size = '')
+	public function getObject($name, $type = 'item', $lang = '', $rank = '', $size = '')
 	{
 	    
 	    global $db, $config;
@@ -494,6 +473,7 @@ class wowhead_cache
 		else
 		{
 		    $row =  $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);		    
 			return $row; 
 		}
 		
@@ -503,7 +483,7 @@ class wowhead_cache
 	* Saves an object to 
 	* @access public
 	**/
-	function saveObject($info)
+	public function saveObject($info)
 	{
 	    global $db;
 	      
