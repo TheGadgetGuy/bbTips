@@ -50,7 +50,7 @@ class wowhead_item extends wowhead
 	/*
 	 * $bbcode : either 'item' or 'itemico' or 'itemdkp'
 	 */
-	function wowhead_item($bbcode, $argin = array())
+	public function wowhead_item($bbcode, $argin = array())
 	{
 		global $phpEx, $phpbb_root_path, $config; 
 		
@@ -70,7 +70,7 @@ class wowhead_item extends wowhead
 	*
 	* @access public
 	**/
-	function parse($name)
+	public function parse($name)
 	{
 		global $config, $phpEx, $phpbb_root_path; 
 
@@ -175,7 +175,7 @@ class wowhead_item extends wowhead
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $gems = '')
+	private function _generateHTML($info, $gems = '')
 	{
 		
 		$info['link'] = $this->_generateLink($info['itemid'], $this->type);
@@ -210,7 +210,7 @@ class wowhead_item extends wowhead
 	* Queries Wowhead for Item id
 	* @access private
 	**/
-	function _getItembyID($id, $search='')
+	private function _getItembyID($id, $search='')
 	{
 		
 		$id = (int) $id;
@@ -289,7 +289,7 @@ class wowhead_item extends wowhead
 		}
 	}
 	
-	function _getItemByName($name)
+	private function _getItemByName($name)
 	{
 		if (trim($name) == '')
 		{
@@ -341,7 +341,7 @@ class wowhead_item extends wowhead
 		}
 	}
 	
-	function _itemLine($data)
+	private function _itemLine($data)
 	{
 		$parts = explode(chr(10), $data);
 		foreach ($parts as $line)

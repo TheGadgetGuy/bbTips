@@ -33,7 +33,7 @@ class wowhead_craft extends wowhead
 	private $nomats = false;
 	private $args = array();
 
-	function wowhead_craft($craftargs)
+	public function wowhead_craft($craftargs)
 	{
 		global $phpEx, $phpbb_root_path, $config; 
 		
@@ -47,7 +47,7 @@ class wowhead_craft extends wowhead
 
 	}
 
-	function parse($name)
+	public function parse($name)
 	{
 		global $config, $phpEx, $phpbb_root_path; 
 		
@@ -158,7 +158,7 @@ class wowhead_craft extends wowhead
 	* Generates HTML for display
 	* @access private
 	**/
-	function _toHTML()
+	private function _toHTML()
 	{
 		if ($this->nomats == false)
 		{

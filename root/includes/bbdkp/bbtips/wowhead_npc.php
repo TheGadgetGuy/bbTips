@@ -23,7 +23,7 @@ class wowhead_npc extends wowhead
 	public $patterns;
 	private $args; 
 	
-	function wowhead_npc($arguments = array())
+	public function wowhead_npc($arguments = array())
 	{
 		global $phpEx, $config, $phpbb_root_path; 
 		
@@ -36,7 +36,7 @@ class wowhead_npc extends wowhead
 		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name)
+	public function parse($name)
 	{
 		if (trim($name) == '')
 		{
@@ -77,7 +77,7 @@ class wowhead_npc extends wowhead
 		}
 	}
 
-	function _getNPCInfo($name)
+	private function _getNPCInfo($name)
 	{
 		if (trim($name) == '')
 		{
@@ -128,7 +128,7 @@ class wowhead_npc extends wowhead
 
 	}
 
-	function _getIDFromSearch($name, $data)
+	private function _getIDFromSearch($name, $data)
 	{
 		if (trim($data) == '')
 		{
@@ -176,7 +176,7 @@ class wowhead_npc extends wowhead
 	}
 
 
-	function _getNPCNameFromID($data)
+	private function _getNPCNameFromID($data)
 	{
 		while (preg_match('#<h1>(.+?)</h1>#s', $data, $match))
 		{
@@ -194,7 +194,7 @@ class wowhead_npc extends wowhead
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	private function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
 	{
 	    $info['link'] = $this->_generateLink($info['npcid'], 'npc'); 
 		return $this->_replaceWildcards($this->patterns->pattern($type), $info);

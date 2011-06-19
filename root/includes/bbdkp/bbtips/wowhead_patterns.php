@@ -24,7 +24,7 @@ class wowhead_patterns
 	// variable for each pattern
 	public $patterns = array();
 
-	function wowhead_patterns()
+	public function wowhead_patterns()
 	{
         global $phpbb_root_path, $user, $phpEx;
 		$path = $phpbb_root_path . 'styles/' . $user->theme['template_path'] . '/template/bbtips/';

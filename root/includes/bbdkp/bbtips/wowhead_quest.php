@@ -24,7 +24,7 @@ class wowhead_quest extends wowhead
 	public $patterns;
 	private $args = array();
 		
-	function wowhead_quest($arguments = array())
+	public function wowhead_quest($arguments = array())
 	{
 		global $phpEx, $config, $phpbb_root_path; 
 		
@@ -37,7 +37,7 @@ class wowhead_quest extends wowhead
 		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name)
+	public function parse($name)
 	{
 		if (trim($name) == '')
 		{
@@ -91,7 +91,7 @@ class wowhead_quest extends wowhead
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	private function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
 	{
 	    $info['link'] = $this->_generateLink($info['itemid'], $type);
 	    $html = $this->_replaceWildcards($this->patterns->pattern($type), $info);

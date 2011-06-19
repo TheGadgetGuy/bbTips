@@ -20,11 +20,11 @@ if (!defined('IN_PHPBB'))
 
 class wowhead_achievement extends wowhead
 {
-	private $lang;
-	private $patterns;
+	public $lang;
+	public $patterns;
 	private $args; 
 
-	function wowhead_achievement($arguments = array())
+	public function wowhead_achievement($arguments = array())
 	{
 		global $config, $phpEx, $phpbb_root_path; 
 	    
@@ -37,7 +37,7 @@ class wowhead_achievement extends wowhead
 		$this->lang = $config['bbtips_lang'];
 	}
 
-	function parse($name)
+	public function parse($name)
 	{
 	    global $phpbb_root_path, $phpEx;
 	    
@@ -128,69 +128,68 @@ class wowhead_achievement extends wowhead
 	**/
 	private function _getAchievementByName($name)
 	{
-		if (trim($name) == '')
+		global $phpbb_root_path, $phpEx;
+		
+        if (trim($name) == '')
 		{
 			return false;
 		}
-
+		
 		$data = $this->_read_url($name, 'achievement', false);
+		
+		if ( !class_exists('simple_html_dom_node')) 
+        {
+            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
+        }
 
-		if (preg_match('#Location: /\?achievement=(.+?)\n#s', $data, $match))
+		$html = str_get_html ($data, $lowercase = true);
+		
+		// get name from meta tag
+		$element = $html->find('meta[property=og:title]'); 
+		$achievementname = "";
+		foreach($element as $attr)
 		{
-			// result returns a redirection header (aka only one result)
-			// so we can get the information we need from there
+			$achievementname = (string) $attr->getattribute('content');
+		}
+		
+		// get link from meta tag
+		$element = $html->find('link[rel=canonical]'); 
+		foreach($element as $attr)
+		{
+			$achievementlink = (string) $attr->getattribute('href');
+			// content="http://www.wowhead.com/achievement=4874/breaking-out-of-tol-barad"
+			$linkarray = explode("/" , $achievementlink, 5);
+			$achid = str_replace("achievement=", "", $linkarray[3])  ;
+		}
+		
+		$html->clear(); 
+        unset($html);
+		
+		if($name === $achievementname)
+		{
+			//success
 			return array(
-					'name'			=>	stripslashes(ucwords(strtolower($name))),
-					'search_name'	=>	$name,
-					'itemid'		=>	$match[1],
-					'type'			=>	'achievement',
-					'lang'			=>	$this->lang
+				'name'			=>	$achievementname,
+				'search_name'	=>	$achievementname,
+				'itemid'		=>	$achid,
+				'type'			=>	'achievement',
+				'lang'			=>	$this->lang
 			);
+					
 		}
-		else
+		else 
 		{
-			// result returns wowhead search page, now get results -> get to CDATA
-			$parts = explode(chr(10), $data);
-			foreach ($parts as $line)
-			{
-				if (strpos($line, "new Listview({template: 'achievement', id: 'achievements'") !== false)
-				{
-					$the_line = $line; 
-					break 1;
-				}
-			}
-
-			if (!$the_line)
-			{
-				return false;
-			}
-			
-			while (preg_match('#"id":([0-9]{1,10}),"name":"(.+?)"#s', $the_line, $match))
-			{
-				
-				if (strtolower($match[2]) == addslashes(strtolower($name)))
-				{
-					return array(
-						'name'			=>	$match[2],
-						'search_name'	=>	$name,
-						'itemid'		=>	$match[1],
-						'type'			=>	'achievement',
-						'lang'			=>	$this->lang
-					);
-				}
-				else
-				{
-					$the_line = str_replace($match[0], '', $the_line);
-				}
-			}
+			// not found
+			return false;
 		}
+		
 	}
 	
 	/**
 	* Generates HTML for link
 	* @access private
 	**/
-	function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
+	private function _generateHTML($info, $type, $size = '', $rank = '', $gems = '')
 	{
 	    $info['link'] = $this->_generateLink($info['itemid'], $type);
 		return $this->_replaceWildcards($this->patterns->pattern($type), $info);
