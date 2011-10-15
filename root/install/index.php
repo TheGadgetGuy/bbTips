@@ -37,14 +37,14 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
 }
 
-if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 {
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbTips 0.4.1';
+$mod_name = 'bbTips 0.5.0';
 
 /*
 * The name of the config variable which will hold the currently installed version
