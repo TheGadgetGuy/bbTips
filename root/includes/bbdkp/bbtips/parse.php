@@ -154,7 +154,7 @@ class bbtips
 					}
 			
 					$namein = (sizeof($args) > 0) ? html_entity_decode($match[3], ENT_QUOTES) : html_entity_decode($match[2], ENT_QUOTES);
-			   		
+			   		$namein= trim($namein);
 				   	// prevent any unwanted script execution or html formatting
 					$nameout = $this->html2txt($namein);
 					if ($nameout != $namein)
