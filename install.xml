@@ -6,7 +6,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbTips 0.4.0]]></title>
+		<title lang="en"><![CDATA[bbTips 0.4.2]]></title>
 		<description lang="en"><![CDATA[
 		a BBCode Tooltip mod
 		* bbDKP compatible 
@@ -52,7 +52,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.5.0</mod-version>
+		<mod-version>0.4.2</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>300</time>
@@ -170,10 +170,10 @@ define('BBTIPS_NPC_TBL', $table_prefix . 'bbtips_wowhead_npc');								// npc ta
 				<action type="after-add"><![CDATA[<!-- INCLUDE bbtips/bbtips_header.html -->]]></action>
 			</edit>
 		</open>
-		<php-installer><![CDATA[install/installbbtips.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[Browse to install/installbbtips.php]]></diy-instructions>
-		<diy-instructions lang="de"><![CDATA[Rufe install/installbbtips.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
+		<php-installer><![CDATA[install/index.php]]></php-installer>
+		<diy-instructions lang="en"><![CDATA[Browse to install/index.php]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[Rufe install/index.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
 oder eine Aktualisierung.]]></diy-instructions>
-		<diy-instructions lang="fr"><![CDATA[Surfez vers install/installbbtips.php et lancez l’installateur/mise à jour]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[Surfez vers install/index.php et lancez l’installateur/mise à jour]]></diy-instructions>
 	</action-group>
 </mod>
