@@ -59,9 +59,6 @@
 			<target-version>3.0.9</target-version>
 		</installation>
 		<link-group>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2 Style</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="de">subsilver2 Style</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="fr">Style subsilver2</link>
 			<link type="language" href="contrib/fr.xml" lang="en">French</link>
 			<link type="language" href="contrib/fr.xml" lang="fr">Français</link>
 			<link type="language" href="contrib/fr.xml" lang="de">Franzözisch</link>
