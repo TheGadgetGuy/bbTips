@@ -37,14 +37,13 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
 }
 
-if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 {
-    trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
+    trigger_error('Warning! Install directory has wrong name. it must be ’install’. Please rename it and launch again.', E_USER_WARNING);
 }
 
-
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbTips 0.4.1';
+$mod_name = 'bbTips 0.4.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -226,8 +225,10 @@ $versions = array(
          
      ), 
     
-
-
+    '0.4.2' => array(
+    	// nothing changed in database
+    ), 
+    
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -566,9 +567,6 @@ function moduleinstall($action, $version)
 						
 					$umil->module_remove('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS');
 				}
-        		
-        
-        
     }
 
 }
