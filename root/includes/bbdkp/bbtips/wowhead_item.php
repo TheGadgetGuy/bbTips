@@ -98,14 +98,26 @@ class wowhead_item extends wowhead
 			{
 				//json search
 				$result = $this->_getItemByName($name);
+				if (!$result)
+				{
+					//try without enchant
+					$pattern  = "( of the)[ A-Za-z0123456789]";
+					$unenchanted = split($pattern, $name);
+					if ($unenchanted)
+					{
+						$result = $this->_getItemByName($unenchanted[0]);
+					}
+				}
 			}
 			
-			// not in the cache so call wowhead
+			
 			if (!$result)
 			{
 				// item not found 
 				return $this->_notfound($this->type, $name);
 			}
+			
+			
 			else
 			{   //insert 
 				$cache->saveObject($result); 
