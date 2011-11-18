@@ -37,14 +37,14 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
 }
 
-if (!file_exists($phpbb_root_path . 'install/installbbtips.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 {
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbTips 0.4.1';
+$mod_name = 'bbTips 0.4.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -226,7 +226,9 @@ $versions = array(
          
      ), 
     
-
+    '0.4.2' => array(
+		//    
+     ), 
 
 );
 
@@ -524,7 +526,9 @@ function moduleinstall($action, $version)
 					$umil->module_add('acp', 'ACP_DKP_RAIDS', array(
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
-						'module_auth'       	=> 'acl_a_dkp',
+						'module_auth'       => 'acl_a_dkp',
+						'module_langname'	=> 'ACP_DKP_DKPTOOLTIPS', 
+						'module_mode'       => 'bbtooltips', 
 						));
 						
 						
@@ -538,6 +542,8 @@ function moduleinstall($action, $version)
         			     'module_basename'       => 'dkp_bbtooltips',
      	  			     'modes'                 => array('bbtooltips'),
     					 'module_auth'       	=> 'acl_a_board',
+    					 'module_langname'	=> 'ACP_DKP_DKPTOOLTIPS', 
+						 'module_mode'       => 'bbtooltips', 
      			   		 ))
      			   	));
 				}
@@ -552,6 +558,8 @@ function moduleinstall($action, $version)
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
 						'module_auth'       	=> 'acl_a_dkp',
+						'module_langname'	=> 'ACP_DKP_DKPTOOLTIPS', 
+						'module_mode'       => 'bbtooltips', 
 						));					
 					
 				}
@@ -562,6 +570,8 @@ function moduleinstall($action, $version)
 					    'module_basename'   => 'dkp_bbtooltips',
 					    'modes'             => array('bbtooltips'),
 						'module_auth'       	=> 'acl_a_board',
+						'module_langname'	=> 'ACP_DKP_DKPTOOLTIPS', 
+						'module_mode'       => 'bbtooltips', 
 						));
 						
 					$umil->module_remove('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBTIPS');
