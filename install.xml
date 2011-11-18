@@ -104,9 +104,9 @@ var theme_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
 		<open src="/styles/prosilver/theme/stylesheet.css">
 			<edit>
 				<comment lang="en"><![CDATA[css prosilver]]></comment>
-				<find><![CDATA[@import url("colours.css");]]></find>
+				<find><![CDATA[@import url("bbdkp.css");]]></find>
 				<action type="after-add"><![CDATA[
-				@import url("bbtips.css");]]></action>
+@import url("bbtips.css");]]></action>
 			</edit>
 		</open>
 		
