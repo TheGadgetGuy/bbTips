@@ -6,6 +6,9 @@
 * 
 **/
 
+/**
+ * wowhead tooltip
+*/
 
 .wowhead-tooltip {
 	visibility: hidden;
@@ -42,7 +45,7 @@
 
 .wowhead-tooltip td,.wowhead-tooltip th {
 	background: #000;
-	background: url("http://wowimg.zamimg.com/images/wow/tooltip.png");
+	background: url(//wowimg.zamimg.com/images/wow/tooltip.png);
 	font-family: Verdana,sans-serif;
 	font-size: 12px;
 	line-height: 17px;
@@ -100,7 +103,7 @@
 .wowhead-tooltip p div {
 	width: 44px;
 	height: 44px;
-	background-image: url("http://wowimg.zamimg.com/images/Icon/medium/border/default.png");
+	background-image: url(//wowimg.zamimg.com/images/Icon/medium/border/default.png);
 }
 
 .wowhead-tooltip table.shrink b {
@@ -131,7 +134,7 @@
 }
 
 .wowhead-tooltip-powered {
-	background: url("http://wowimg.zamimg.com/images/logos/powered.png") no-repeat;
+	background: url(//wowimg.zamimg.com/images/logos/powered.png) no-repeat;
 	width: 53px;
 	height: 33px;
 	position: absolute;
@@ -140,6 +143,10 @@
 	display: none;
 }
 
+/**
+* WoW Head Links
+* 
+*/
 
 .moneyitem,.moneygold,.moneysilver,.moneycopper,.moneyachievement,.moneysocketmeta,.moneysocketred,.moneysocketyellow,.moneysocketblue,.moneysocketprismatic {
 	background: no-repeat right center;
@@ -152,47 +159,47 @@
 
 .moneygold {
 	padding-right: 15px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/money-gold.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/money-gold.gif);
 }
 
 .moneysilver {
 	padding-right: 15px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/money-silver.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/money-silver.gif);
 }
 
 .moneycopper {
 	padding-right: 15px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/money-copper.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/money-copper.gif);
 }
 
 .moneyachievement {
 	padding-right: 13px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/achievement.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/achievement.gif);
 }
 
 .moneysocketmeta {
 	padding-right: 18px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/socket-meta.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/socket-meta.gif);
 }
 
 .moneysocketred {
 	padding-right: 18px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/socket-red.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/socket-red.gif);
 }
 
 .moneysocketyellow {
 	padding-right: 18px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/socket-yellow.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/socket-yellow.gif);
 }
 
 .moneysocketblue {
 	padding-right: 18px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/socket-blue.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/socket-blue.gif);
 }
 
 .moneysocketprismatic {
 	padding-right: 18px;
-	background-image: url("http://wowimg.zamimg.com/images/icons/socket-prismatic.gif");
+	background-image: url(//wowimg.zamimg.com/images/icons/socket-prismatic.gif);
 }
 
 a.moneyitem,a.moneysocketmeta,a.moneysocketred,a.moneysocketyellow,a.moneysocketblue,a.moneysocketprismatic,a.moneyachievement {
@@ -213,6 +220,9 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 	color: #00C0FF!important;
 }
 
+/*
+	phpbb bbcode template css	
+*/
 
 .q,.q a,.color-q,.wowhead-tooltip .q a {
 	color: #ffd100!important;
@@ -364,38 +374,40 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 
 .socket-meta {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-meta.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-meta.gif) no-repeat left center;
 }
 
 .socket-red {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-red.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-red.gif) no-repeat left center;
 }
 
 .socket-yellow {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-yellow.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-yellow.gif) no-repeat left center;
 }
 
 .socket-blue {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-blue.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-blue.gif) no-repeat left center;
 }
 
 .socket-prismatic {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-prismatic.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-prismatic.gif) no-repeat left center;
 }
 
 .socket-hydraulic {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-hydraulic.gif") no-repeat left center;
+	background: url(//wowimg.zamimg.com/images/icons/socket-hydraulic.gif) no-repeat left center;
 }
 
 .socket-cogwheel {
 	padding-left: 26px;
-	background: url("http://wowimg.zamimg.com/images/icons/socket-cogwheel.gif") no-repeat left center;
-}
+	background: url(//wowimg.zamimg.com/images/icons/socket-cogwheel.gif) no-repeat left center;
+
+	
+/* Quests */
 
 .quest, .quest a:link, .quest a:active, .quest a:visited, .quest a:hover {
 	color: #0000FF !important;
@@ -403,11 +415,15 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 	font-weight: bold;
 }
 
+/* Spells */
+
 .spell, .spell a:link, .spell a:active, .spell a:visited, .spell a:hover {
 	color: navy !important;
 	text-decoration: none;
 	font-weight: bold;
 }
+
+/* Achievements */
 
 .achievement, .achievement a:link, .achievement a:active, .achievement a:visited, .achievement a:hover,
 .itemset, .itemset a:link, .itemset a:active, .itemset a:visited, .itemset a:hover {
@@ -416,11 +432,15 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 	font-weight: bold;
 }
 
+/* NPC's */
+
 .npc, .npc a:link, .npc a:active, .npc a:visited, .npc a:hover {
 	color: #C09E79 !important;
 	text-decoration: none;
 	font-weight: bold;
 }
+
+/* Profiles */
 
 .wow_profile, .wow_profile a:link, .wow_profile a:active, .wow_profile a:visited, .wow_profile a:hover {
 	color: #4679A6 !important;
@@ -428,18 +448,22 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 	font-weight: bold;
 }
 
+/* Guilds */
+
 .guild, .guild a:link, .guild a:active, .guild a:visited, .guild a:hover {
 	color: #099F2C !important;
 	text-decoration: none;
 	font-weight: bold;
 }
 
+/* Armory */
 
 .armory, .armory a:link, .armory a:active, .armory a:visited, .armory a:hover {
 	color: #CFA60C;
 	text-decoration: none;
 }
 
+/* For Item Icons */
 
 .iconlarge {
 	background: transparent none no-repeat scroll 6px 6px;
@@ -450,7 +474,7 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 }
 
 .iconlarge .tile {
-	background-image: url("http://static.wowhead.com/images/Icon/large/border/default.png");
+	background-image: url(http://static.wowhead.com/images/Icon/large/border/default.png);
 	height: 68px;
 	width: 68px;
 }
@@ -479,7 +503,7 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 }
 
 .iconmedium .tile {
-	background-image: url("http://static.wowhead.com/images/Icon/medium/border/default.png");
+	background-image: url(http://static.wowhead.com/images/Icon/medium/border/default.png);
 	height: 44px;
 	width: 44px;
 }
@@ -508,13 +532,13 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 }
 
 .iconsmall .tile {
-	background-image: url("http://static.wowhead.com/images/Icon/small/border/default.png");
+	background-image: url(http://static.wowhead.com/images/Icon/small/border/default.png);
 	height: 26px;
 	width: 26px;
 }
 
 .iconsmall a {
-	background: transparent url("http://static.wowhead.com/images/Icon/small/hilite/default.png") no-repeat scroll 20px 0;
+	background: transparent url(http://static.wowhead.com/images/Icon/small/hilite/default.png) no-repeat scroll 20px 0;
 	border: 0 none;
 	display: block;
 	height: 20px;
@@ -538,7 +562,7 @@ a span.moneyitem,a span.moneysocketmeta,a span.moneysocketred,a span.moneysocket
 	color: #FF0000;
 	font-weight: bold;
 }
-
+/* itemsets */
 ul.itemset-items {
 	list-style-position: none !important;
 	padding: 0px;
@@ -550,4 +574,3 @@ li.itemset-item {
 	margin: 0px;
 	list-style-type: none !important;
 }
-
