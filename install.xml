@@ -91,10 +91,10 @@
 <link href="{T_TEMPLATE_PATH}/dkp/bbtips/bbtips.css" rel="stylesheet" type="text/css" />
 <script src="http://www.wowhead.com/widgets/power.js" type="text/javascript"></script>
 <!-- ELSE -->
-<script>
+<script type="text/javascript">
 var template_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
 var theme_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
-</script>
+</script type="text/javascript">
 <script src="{T_TEMPLATE_PATH}/dkp/bbtips/power.js" type="text/javascript"></script>
 <!-- ENDIF -->
 <!-- end bbTips -->
