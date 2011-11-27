@@ -44,7 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbTips 0.4.2';
+$mod_name = 'bbTips 0.4.3';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -230,6 +230,10 @@ $versions = array(
 		//    
      ), 
 
+    '0.4.3' => array(
+		//    
+     ), 
+     
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -517,7 +521,7 @@ function moduleinstall($action, $version)
 		case 'update' :
 			switch ($version)
 			{
-				case '0.4.0':
+				case '0.4.3':
 				// check if bbdkp is installed
 				if (isset($config['bbdkp_version']))
 				{
