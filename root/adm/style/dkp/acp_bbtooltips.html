@@ -26,10 +26,10 @@
  </dl>
  
  <dl>
- <dt><label for="aut_search">{L_BBTOOLTIPS_LOCALJS}</label>{L_BBTOOLTIPS_LOCALJS_EXPLAIN}</dt>
+ <dt><label for="localjs">{L_BBTOOLTIPS_LOCALJS}</label>{L_BBTOOLTIPS_LOCALJS_EXPLAIN}</dt>
   <dd>
-     <input type="radio" name="aut_search" value="1"{LOCALJS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
-     <input type="radio" name="aut_search" value="0"{LOCALJS_NO_CHECKED} /> {L_NO}
+     <input type="radio" name="localjs" value="1"{LOCALJS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+     <input type="radio" name="localjs" value="0"{LOCALJS_NO_CHECKED} /> {L_NO}
    </dd>
 </dl>
 
@@ -37,38 +37,6 @@
     <input type="submit" name="site_submit" value="{L_SUBMIT}" class="button1" />
  </p>
 </fieldset>
-
-<!-- IF S_CUSTOM -->  
-<fieldset>
-<legend>Tooltip customisation</legend>
-  <dl>
-	  <dt><label for="showsiteintooltip">Show site in tooltips</label></dt>
-      <dd><input type="checkbox" name="showsiteintooltip" value="{showsiteintooltip}"/>
-  </dl>
-  
-   <dl>
-   <dt><label for="ttlabeltype">{L_TOOLTIPLABEL}:</label></dt>
-   <dd>
-     <select name="ttlabeltype" class="input">
-       <!-- BEGIN ttlabeltype_row -->
-     	 <option value="{ttlabeltype_row.VALUE}"{ttlabeltype_row.SELECTED}>{ttlabeltype_row.OPTION}</option>
-       <!-- END ttlabeltype_row -->
-     </select>
-   </dd>
-   </dl>
-  
-  
-    <dl>
-        <dt><label for="ttlabeltxt">Label to append to tooltip - (20 char)</label></dt>
-        <dd><input class="medium" type="text" name="ttlabeltxt" value="{ttlabeltxt}" /></dd>
-    </dl>
-  
-
-  <p class="quick">
-    <input type="submit" name="tt_submit" value="{L_SUBMIT}" class="button1" />
-  </p>
-</fieldset>
-<!-- ENDIF -->
 
 
 </form>
