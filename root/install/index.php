@@ -208,21 +208,14 @@ $versions = array(
 
          ),
 
-         'custom' => array( 
-             'bbdkp_caches' ,
-             'insert_bbcodes_wrapper' , 
+     'custom' => array( 
 			 'moduleinstall',              
-             
+             'insert_bbcodes_wrapper' , 
          ) 
 
     ),
     
     '0.4.1' => array(
-    
-         'custom' => array( 
-             'bbdkp_caches' 
-         ) 
-    
          
      ), 
     
@@ -231,7 +224,9 @@ $versions = array(
      ), 
 
     '0.4.3' => array(
-		//    
+ 		'custom' => array( 
+             'bbdkp_caches' ,
+         ) 
      ), 
      
 );
@@ -521,7 +516,7 @@ function moduleinstall($action, $version)
 		case 'update' :
 			switch ($version)
 			{
-				case '0.4.3':
+				case '0.4.0':
 				// check if bbdkp is installed
 				if (isset($config['bbdkp_version']))
 				{
