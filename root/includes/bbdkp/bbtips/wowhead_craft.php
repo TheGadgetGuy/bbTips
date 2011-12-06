@@ -29,7 +29,7 @@ class wowhead_craft extends wowhead
 	private $craft = array();
 	private $craft_spell = array();
 	private $craft_reagents = array();
-	private $patterns;
+	public 	$patterns;
 	private $nomats = false;
 	private $args = array();
 

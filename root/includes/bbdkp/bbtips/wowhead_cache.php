@@ -288,7 +288,7 @@ class wowhead_cache
 		}
 			
         global $db; 
-		$query_text = "SELECT spellid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . ' WHERE reagentof="' . $db->sql_escape($id) . "'";		
+		$query_text = "SELECT spellid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . " WHERE reagentof='" . $db->sql_escape($id) . "'";		
 	    $result = $db->sql_query($query_text);
 							
 	    if ( $db->sql_affectedrows() == 0)
