@@ -113,7 +113,7 @@ class wowhead_quest extends wowhead
 
 		
 		$this->make_url($id, 'quest');
-		$data = $this->gethtml('quest');
+		$data = $this->gethtml($id, 'quest');
 			
 		// wowhead doesn't have the info
 		if ($data == '$WowheadPower.registerQuest(' . $id . ', {});')
@@ -154,7 +154,7 @@ class wowhead_quest extends wowhead
 		}
 		
 		$this->make_url($name, 'quest');
-		$html = $this->gethtml('quest');
+		$html = $this->gethtml($name, 'quest');
 		
 		if (!$html)
 		{

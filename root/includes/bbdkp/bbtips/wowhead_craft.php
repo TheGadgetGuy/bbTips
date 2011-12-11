@@ -53,6 +53,13 @@ class wowhead_craft extends wowhead
 
 	}
 
+	/**
+	 * parser
+	 * works ok for Blacksmithing, cooking, Alchemy
+	 *
+	 * @param unknown_type $name
+	 * @return unknown
+	 */
 	public function parse($name)
 	{
 		global $db, $config, $phpEx, $phpbb_root_path; 
@@ -131,36 +138,61 @@ class wowhead_craft extends wowhead
 						'icon'			=>	'http://static.wowhead.com/images/wow/icons/medium/' . strtolower( (string) $xml->item->icon) . '.jpg'
 					);
 					
-					// finally make reagents array from span 3
+					// span 2 is use
+					// finally make reagents array from span 3 onwards
 					// is there a mats array ?
+					
+					// blacksmithing : ok
+					// alchemy : ok
+					// cooking : ok
+					
+					// engineering ko
+					// enchanting ko
+					
+					$id = 0;
+					
 					if(isset($this->args['mats']) == true)
 					{
 						$this->mats = true;
-						$reagents_htmls = $prhtml->find('table tr td span[class*=q] a');
-						foreach($reagents_htmls as $id => $reagents_html)
+						
+						// find all q classes
+						$reagents_htmls = $prhtml->find('table tr td span[class*=q]');
+						foreach($reagents_htmls as $reagents_html)
 						{
-							if($id > 1)
+							// third q class will be reagents
+							if ($id >= 3)
 							{
-								$href = $reagents_html->href;
-								preg_match_all('/([\d]+)/', $href, $match);
-		 						$this->craft_reagents[$id]['itemid'] = (int) @$match[1][0];
-		 						$this->craft_reagents[$id]['name'] = (string) @$reagents_html->plaintext;
-		 						$this->craft_reagents[$id]['reagentof'] = (int) $prid;
-		 						$this->craft_reagents[$id]['quantity'] = 1;
-		 						
-		 						
-		 						if ( !class_exists('wowhead_item')) 
-				                {	                	
-				                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
-				                }
-				                $args = array();
-				                $object = new wowhead_item($this->craft_reagents[$id]['itemid'], $args);
-				                $object->parse(trim($this->craft_reagents[$id]['itemid']));
-		 						$this->craft_reagents[$id]['quality'] =  $object->quality;
-		 						$this->craft_reagents[$id]['icon'] = $object->icon;
-				                
-		 						 $debug=1;
+								// find all reagent links
+								$links = $reagents_html->find('a');
+								$reagents = 0;
+								// loop all links in this class
+								foreach($links as $link)
+								{
+									$href = (string) $link->href;
+									preg_match_all('/([\d]+)/', $href, $match);
+			 						$this->craft_reagents[$reagents]['itemid'] = (int) @$match[1][0];
+			 						
+			 						$text = (string) $link->plaintext;
+			 						$this->craft_reagents[$reagents]['name'] = $text;
+			 						$this->craft_reagents[$reagents]['reagentof'] = (int) $prid;
+			 						$this->craft_reagents[$reagents]['quantity'] = 1;
+			 						
+			 						if ( !class_exists('wowhead_item')) 
+					                {	                	
+					                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
+					                }
+					                $args = array();
+					                $object = new wowhead_item($this->craft_reagents[$reagents]['itemid'], $args);
+					                $object->parse(trim($this->craft_reagents[$reagents]['itemid']));
+			 						$this->craft_reagents[$reagents]['quality'] =  $object->quality;
+			 						$this->craft_reagents[$reagents]['icon'] = $object->icon;
+									$reagents += 1;
+								}
+								
 							}
+							$id +=1;
+			                
+	 						 $debug=1;
 						}
 					}
 

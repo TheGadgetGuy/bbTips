@@ -114,7 +114,7 @@ class wowhead_itemset extends wowhead
 		}
 
 		$this->make_url($id, 'itemset');
-		$data = $this->gethtml('itemset');
+		$data = $this->gethtml($id, 'itemset');
 		
 		if (trim($data) == '' || empty($data)) 
 		{ 
@@ -167,7 +167,7 @@ class wowhead_itemset extends wowhead
 	function _getItemIcon($id)
 	{
 		$this->make_url($id, 'item');
-		$xml_data = $this->gethtml('item');
+		$xml_data = $this->gethtml($id, 'item');
 			
 		libxml_use_internal_errors(true);
 		// accounts for SimpleXML not being able to handle 3 parameters if you're using PHP 5.1 or below.
@@ -250,7 +250,7 @@ class wowhead_itemset extends wowhead
 		}
 
 		$this->make_url($name, 'itemset');
-		$data = $this->gethtml('itemset');
+		$data = $this->gethtml($name, 'itemset');
 		
 		if (trim($data) == '' || empty($data)) 
 		{ 
@@ -261,7 +261,7 @@ class wowhead_itemset extends wowhead
 		{
 			// since it redirected to a new page, we must pull that data
 			$this->make_url($match[1], 'itemset');
-			$data = $this->gethtml('itemset');
+			$data = $this->gethtml($match[1], 'itemset');
 		
 			$nameline = '';
 			$parts = explode(chr(10), $data);
@@ -340,7 +340,7 @@ class wowhead_itemset extends wowhead
 					foreach ($itemset['pieces'] as $piece)
 					{
 						$this->make_url($piece, 'item');
-						$xml_data = $this->gethtml('item');
+						$xml_data = $this->gethtml($piece, 'item');
 			
 						libxml_use_internal_errors(true);
 						// accounts for SimpleXML not being able to handle 3 parameters if you're using PHP 5.1 or below.

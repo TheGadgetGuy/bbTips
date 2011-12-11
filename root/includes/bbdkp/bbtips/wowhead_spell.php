@@ -109,7 +109,7 @@ class wowhead_spell extends wowhead
         }
         
         $this->make_url($name, 'spell');
-		$html = $this->gethtml('spell');
+		$html = $this->gethtml($name, 'spell');
 		
 		if ($html == NULL)
 		{
@@ -212,7 +212,7 @@ class wowhead_spell extends wowhead
 			
 
         $this->make_url($id, 'spell');
-		$data = $this->gethtml('spell');
+		$data = $this->gethtml($id, 'spell');
 		
 		if ($data == '$WowheadPower.registerSpell')
 		{

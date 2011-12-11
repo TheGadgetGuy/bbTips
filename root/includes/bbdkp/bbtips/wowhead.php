@@ -122,7 +122,7 @@ class wowhead
 	* @param $type default 'item'
 	* 
 	**/
-	public function gethtml($type = 'item')
+	public function gethtml($name, $type = 'item')
 	{
 		// build the url depending on bbcode
 		switch ($type)
@@ -145,7 +145,7 @@ class wowhead
 			case 'ptritem':      
 		    case 'ptritemico':   
 		    case 'ptritemdkp':
-		   		if(is_numeric($url))
+		   		if(is_numeric($name))
 				{	
 				
 					$html_data = $this->_read_php($this->built_url, 0, 0 );
@@ -228,7 +228,7 @@ class wowhead
 		}
 
         $this->make_url($name, 'gem');
-		$data = $this->gethtml('gem');
+		$data = $this->gethtml($name, 'gem');
 		
 		if (empty($data)) 
 		{ 
