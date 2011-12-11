@@ -104,11 +104,13 @@ class wowhead_craft extends wowhead
 			        {
 			            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
 			        }
+			        
+			        // span 1 is the product
 					$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
-					$prhref = $prhtml->find('table tr td span.q1 a', 0)->href;
+					$prhref = $prhtml->find('table tr td span a', 1)->href;
 					preg_match_all('/([\d]+)/', $prhref, $match);
  					$prid= (int) @$match[1][0];
-					$prname = $prhtml->find('table tr td span.q1 a', 0)->plaintext;
+					$prname = $prhtml->find('table tr td span a', 1)->plaintext;
 					
 					// make recipe array
 					$this->craft_recipe = array(
@@ -128,16 +130,15 @@ class wowhead_craft extends wowhead
 						'icon'			=>	'http://static.wowhead.com/images/wow/icons/medium/' . strtolower( (string) $xml->item->icon) . '.jpg'
 					);
 					
-					// finally make reagents array
-					
+					// finally make reagents array from span 3
 					// is there a mats array ?
 					if(isset($this->args['mats']) == true)
 					{
 						$this->mats = true;
-						$reagents_htmls = $prhtml->find('table tr td span.q1 a');
+						$reagents_htmls = $prhtml->find('table tr td span a');
 						foreach($reagents_htmls as $id => $reagents_html)
 						{
-							if($id > 0)
+							if($id > 2)
 							{
 								$href = $reagents_html->href;
 								preg_match_all('/([\d]+)/', $href, $match);
