@@ -139,6 +139,13 @@ class wowhead_item extends wowhead
 		}
 		else
 		{
+			
+			$this->name = (string) $result['name'];
+			$this->search_name = (string) $result['search_name'];
+			$this->itemid = (string) $result['itemid'];
+			$this->quality = (string) $result['quality'];
+			$this->icon = (string) $result['icon']; 
+
 			// already in db
 			if (array_key_exists('gems', $this->args) || array_key_exists('enchant', $this->args))
 			{
