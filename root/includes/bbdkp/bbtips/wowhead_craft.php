@@ -105,12 +105,13 @@ class wowhead_craft extends wowhead
 			            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
 			        }
 			        
+			        // span 0 is the product
 			        // span 1 is the product
 					$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
-					$prhref = $prhtml->find('table tr td span a', 1)->href;
+					$prhref = $prhtml->find('table tr td span[class*=q] a', 1)->href;
 					preg_match_all('/([\d]+)/', $prhref, $match);
  					$prid= (int) @$match[1][0];
-					$prname = $prhtml->find('table tr td span a', 1)->plaintext;
+					$prname = $prhtml->find('table tr td span[class*=q] a', 1)->plaintext;
 					
 					// make recipe array
 					$this->craft_recipe = array(
@@ -135,10 +136,10 @@ class wowhead_craft extends wowhead
 					if(isset($this->args['mats']) == true)
 					{
 						$this->mats = true;
-						$reagents_htmls = $prhtml->find('table tr td span a');
+						$reagents_htmls = $prhtml->find('table tr td span[class*=q] a');
 						foreach($reagents_htmls as $id => $reagents_html)
 						{
-							if($id > 2)
+							if($id > 1)
 							{
 								$href = $reagents_html->href;
 								preg_match_all('/([\d]+)/', $href, $match);
