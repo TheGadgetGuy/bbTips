@@ -78,7 +78,7 @@ class wowhead_craft extends wowhead
 			// not in db, get html
 			
 			$this->make_url($name, 'craftable');
-			$data = $this->gethtml('craftable');
+			$data = $this->gethtml($name, 'craftable');
 
 			if ($this->_useSimpleXML())
 			{
@@ -145,13 +145,21 @@ class wowhead_craft extends wowhead
 		 						$this->craft_reagents[$id]['name'] = (string) @$reagents_html->plaintext;
 		 						$this->craft_reagents[$id]['reagentof'] = (int) $prid;
 		 						$this->craft_reagents[$id]['quantity'] = 1;
-		 						$this->craft_reagents[$id]['quality'] = 1;
-		 						$this->craft_reagents[$id]['icon'] = ' ';
-		 						 
+		 						
+		 						
+		 						if ( !class_exists('wowhead_item')) 
+				                {	                	
+				                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
+				                }
+				                $args = array();
+				                $object = new wowhead_item($this->craft_reagents[$id]['itemid'], $args);
+				                $object->parse(trim($this->craft_reagents[$id]['itemid']));
+		 						$this->craft_reagents[$id]['quality'] =  $object->quality;
+		 						$this->craft_reagents[$id]['icon'] = $object->icon;
+				                
+		 						 $debug=1;
 							}
 						}
-
-
 					}
 
 					
@@ -236,9 +244,17 @@ class wowhead_craft extends wowhead
 		{
 			// generate spell html first
 			$spell_html = $this->patterns->pattern('craftable_spell');
-			$spell_html = str_replace('{link}', $this->_generateLink($this->craft_recipe['recipeid'], 'item'), $spell_html);
-			$spell_html = str_replace('{name}', $this->craft_recipe['name'], $spell_html);
-
+			$spell_html = str_replace('{splink}', $this->_generateLink($this->craft_recipe['recipeid'], 'item'), $spell_html);
+			$spell_html = str_replace('{spname}', $this->craft_recipe['name'], $spell_html);
+			$spell_html = str_replace('{recipequality}', $this->craft_recipe['quality'], $spell_html);
+			
+			//product
+			$craft_html = $this->patterns->pattern('craftable');
+			$craft_html = str_replace('{recipe}' , $spell_html, $craft_html);
+			$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'item'), $craft_html);
+			$craft_html = str_replace('{qid}', $this->craft['quality'], $craft_html);
+			$craft_html = str_replace('{name}', stripslashes($this->craft['name']), $craft_html);
+			
 			// generate reagent html now
 			$reagent_html = '';
 			
@@ -263,13 +279,8 @@ class wowhead_craft extends wowhead
 				
 			}
 			
-			// finally put it all together
-			$craft_html = $this->patterns->pattern('craftable');
-			$craft_html = str_replace('{spell}' , $spell_html, $craft_html);
 			$craft_html = str_replace('{reagents}', $reagent_html, $craft_html);
-			$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'item'), $craft_html);
-			$craft_html = str_replace('{qid}', $this->craft['quality'], $craft_html);
-			$craft_html = str_replace('{name}', stripslashes($this->craft['name']), $craft_html);
+			$craft_html = str_replace('{CREATED_BY}', $user->lang['CREATED_BY'], $craft_html);
 		}
 		else
 		{
