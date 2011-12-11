@@ -231,8 +231,8 @@ class wowhead_item extends wowhead
 			return false;
 		}
 		
-		//get the raw XML data from wowhead 
-		$data = $this->_read_url($id);
+		$this->make_url($id, 'craftable');
+		$data = $this->gethtml('craftable');
 
 		if (trim($data) == '' || empty($data)) 
 		{ 
@@ -307,9 +307,10 @@ class wowhead_item extends wowhead
 		{
 			return false;
 		}
-		
-		$data = $this->_read_url($name, 'item', false);
-		
+
+		$this->make_url($name, 'item');
+		$data = $this->gethtml('item');
+				
 		if (!$data)
 		{
 			return false;

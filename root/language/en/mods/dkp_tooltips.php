@@ -79,6 +79,7 @@ $lang = array_merge($lang, array(
 'ITEMNOTFOUND' => '%s "%s" was not found',
 'INSERTFAILED' => 'Failed to insert %s in the cache.',
 'BBTOOLTIPS_SETTINGSAVED' => 'BBTips settings saved', 
+'CREATED_BY' => 'Created by',
 
 ));
 

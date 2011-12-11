@@ -33,7 +33,30 @@ class wowhead_cache
 		    return false;
 		}
 	     
-	    // save the main craftable entry
+		// save the recipe
+		$reagentof = $craft_spell['reagentof']; 
+		$spellid = $craft_spell['recipeid']; 
+		$name = $craft_spell['name'] ; 
+
+		unset ($sql_ary); 
+        $sql_ary = array(
+		    'reagentof'  => $reagentof, 
+		    'spellid'    => $spellid, 
+		    'name'       => $name,
+		    
+		);
+			
+		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_SPELL_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
+		$result = $db->sql_query($sql);
+		if (!$result)
+		{
+			global $user;
+			$user->add_lang(array('mods/dkp_tooltips'));
+			trigger_error('Failed to insert ' . $craft_spell['reagentof'] . ' in the ' . BBTIPS_CRAFT_SPELL_TBL . 'table <br/><br/>') ;
+			return false;
+		}
+				
+	    // save the product
         $sql_ary = array(
 		    'itemid'      => (int) $craft['itemid'],
 		    'name'    	  => (string) $craft['name'],
@@ -53,28 +76,7 @@ class wowhead_cache
 			return false;
 		}
 		
-		$reagentof = $craft_spell['reagentof']; 
-		$spellid = $craft_spell['spellid']; 
-		$name = $craft_spell['name'] ; 
 
-		// now save the spell used to create it
-		unset ($sql_ary); 
-        $sql_ary = array(
-		    'reagentof'  => $reagentof, 
-		    'spellid'    => $spellid, 
-		    'name'       => $name,
-		    
-		);
-		
-		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_SPELL_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
-		$result = $db->sql_query($sql);
-		if (!$result)
-		{
-			global $user;
-			$user->add_lang(array('mods/dkp_tooltips'));
-			trigger_error('Failed to insert ' . $craft_spell['reagentof'] . ' in the ' . BBTIPS_CRAFT_SPELL_TBL . 'table <br/><br/>') ;
-			return false;
-		}
 		
 		// now save the reagents
 		if (sizeof($craft_reagents) > 0)
@@ -254,12 +256,7 @@ class wowhead_cache
         global $db, $config;  
 
 		$search = $db->sql_like_expression($db->any_char . $db->sql_escape($name) . $db->any_char) ; 
-		
-		$query_text = 'SELECT itemid, name, quality, icon FROM ' . BBTIPS_CRAFT_TBL . ' WHERE 
-					 (search_name ' . $search . '
-					      OR itemid ' . $search . '
-						  OR name '. $search . " 
-					  )  AND lang='"  . $config['bbtips_lang'] . "'";
+		$query_text = 'SELECT name FROM ' . BBTIPS_CRAFT_SPELL_TBL . " WHERE name '". $search . "'" ;
 		
 		$result = $db->sql_query($query_text);
 							
@@ -288,7 +285,7 @@ class wowhead_cache
 		}
 			
         global $db; 
-		$query_text = "SELECT spellid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . " WHERE reagentof='" . $db->sql_escape($id) . "'";		
+		$query_text = "SELECT spellid as recipeid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . " WHERE reagentof='" . $db->sql_escape($id) . "'";		
 	    $result = $db->sql_query($query_text);
 							
 	    if ( $db->sql_affectedrows() == 0)

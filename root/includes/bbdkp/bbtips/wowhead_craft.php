@@ -26,11 +26,17 @@ class wowhead_craft extends wowhead
 {
 	public $lang;
 	private $createdby = array();
-	private $craft = array();
-	private $craft_spell = array();
+	
+	/**
+	 * the formula
+	 *
+	 * @var array
+	 */
+	private $craft_recipe = array();
+	private $craft_product = array();
 	private $craft_reagents = array();
 	public 	$patterns;
-	private $nomats = false;
+	private $mats = false;
 	private $args = array();
 
 	public function wowhead_craft($craftargs)
@@ -56,8 +62,6 @@ class wowhead_craft extends wowhead
 			return false;
 		}
 		
-		$this->nomats = (!array_key_exists('nomats', $this->args)) ? false : $this->args['nomats'];
-		
 		if (!class_exists('wowhead_cache')) 
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx); 
@@ -66,8 +70,9 @@ class wowhead_craft extends wowhead
 
 		if (!$result = $cache->getCraftable($name, $this->lang))
 		{
-			// not in cache
-			$data = $this->_read_url($name, 'craftable');
+			// not in cache, get html
+			$this->make_url($name, 'craftable');
+			$data = $this->gethtml('craftable');
 
 			if ($this->_useSimpleXML())
 			{
@@ -85,29 +90,41 @@ class wowhead_craft extends wowhead
 				if ($xml->error == '')
 				{
 					
-					// build our craft array
+					// the craft recipe
+					$craftrecipe = (array) json_decode((string) '{' .$xml->item->json[0] . '}');
+					
+					// get product by parsing through tooltip html
+					if (!class_exists('simple_html_dom_node')) 
+			        {
+			            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
+			        }
+					$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
+					$prhref = $prhtml->find('table tr td span.q1 a', 1)->href;
+					preg_match_all('/([\d]+)/', $prhref, $match);
+ 					$prid= (int) @$match[1][0];
+					$prname = $prhtml->find('table tr td span.q1 a', 1)->plaintext;
+					
+					// make recipe array
+					$this->craft_recipe = array(
+						'recipeid'		=>	(int) $craftrecipe['id'],
+						'name'			=>	(string) substr($craftrecipe['name'],1),
+						'quality'		=>	(int) $xml->item->quality['id'],
+						'reagentof'		=>	(int) $prid,
+					);
+					
+					// make product array					
 					$this->craft = array(
-						'itemid'		=>	(int) $xml->item['id'],
-						'name'			=>	(string) $xml->item->name,
-						'search_name'	=>	(string) $name,
+						'itemid'		=>	(int) $prid,
+						'name'			=>	(string) $prname,
+						'search_name'	=>	(string) $prname,
 						'quality'		=>	(int) $xml->item->quality['id'],
 						'lang'			=>	(string) $this->lang,
 						'icon'			=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($xml->item->icon) . '.jpg'
 					);
-
-					$id = (int) $xml->item['id']; 
-					$spellid = (int) $xml->item->createdBy->spell['id']; 
-					$name = (string) $xml->item->createdBy->spell['name']; 
 					
-					// build spell craft array
-					$this->craft_spell = array(
-						'reagentof'		=>	$id,
-						'spellid'		=>	$spellid,
-						'name'			=>	$name
-					);
-					
-					
-					if ($this->nomats == false)
+					// finally make reagents array
+					//$this->mats = (!array_key_exists('nomats', $this->args)) ? true : false;
+					/*if ($this->mats == true)
 					{
 						// build reagent array
 						foreach ($xml->item->createdBy->spell->reagent as $reagent)
@@ -122,6 +139,8 @@ class wowhead_craft extends wowhead
 							));
 						}
 					}
+*/
+					
 				}
 				else
 				{
@@ -130,21 +149,22 @@ class wowhead_craft extends wowhead
 				}
 			}
 
-			if ($this->nomats == false)
+			if ($this->mats == true)
 			{
-				$cache->saveCraftable($this->craft, $this->craft_spell, $this->craft_reagents);
+				$cache->saveCraftable($this->craft, $this->craft_recipe, $this->craft_reagents);
 			}
 			else
 			{
-				$cache->saveCraftable($this->craft, $this->craft_spell);
+				$cache->saveCraftable($this->craft, $this->craft_recipe);
 			}
+			
 			unset($xml);
 			return $this->_toHTML();
 		}
 		else
 		{  
 			$this->craft = $result;
-			$this->craft_spell = $cache->getCraftableSpell($this->craft['itemid']);
+			$this->craft_recipe = $cache->getCraftableSpell($this->craft['itemid']);
 			if ($this->nomats == false)
 			{
 				$this->craft_reagents = $cache->getCraftableReagents($this->craft['itemid']);
@@ -160,12 +180,15 @@ class wowhead_craft extends wowhead
 	**/
 	private function _toHTML()
 	{
-		if ($this->nomats == false)
+		global $user;
+		$user->add_lang(array('mods/dkp_tooltips'));
+		
+		if ($this->mats == true)
 		{
 			// generate spell html first
 			$spell_html = $this->patterns->pattern('craftable_spell');
-			$spell_html = str_replace('{link}', $this->_generateLink($this->craft_spell['spellid'], 'spell'), $spell_html);
-			$spell_html = str_replace('{name}', $this->craft_spell['name'], $spell_html);
+			$spell_html = str_replace('{link}', $this->_generateLink($this->craft_recipe['recipeid'], 'item'), $spell_html);
+			$spell_html = str_replace('{name}', $this->craft_recipe['name'], $spell_html);
 
 			// generate reagent html now
 			$reagent_html = '';
@@ -202,11 +225,16 @@ class wowhead_craft extends wowhead
 		else
 		{
 			$craft_html = $this->patterns->pattern('craftable_nomats');
+			//recipe
+			$craft_html = str_replace('{splink}', $this->_generateLink($this->craft_recipe['recipeid'], 'item'), $craft_html);
+			$craft_html = str_replace('{recipequality}', $this->craft_recipe['quality'], $craft_html);
+			$craft_html = str_replace('{spname}', stripslashes($this->craft_recipe['name']), $craft_html);
+			//product
 			$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'item'), $craft_html);
 			$craft_html = str_replace('{qid}', $this->craft['quality'], $craft_html);
 			$craft_html = str_replace('{name}', stripslashes($this->craft['name']), $craft_html);
-			$craft_html = str_replace('{splink}', $this->_generateLink($this->craft_spell['spellid'], 'spell'), $craft_html);
-			$craft_html = str_replace('{spname}', stripslashes($this->craft_spell['name']), $craft_html);
+			
+			$craft_html = str_replace('{CREATED_BY}', $user->lang['CREATED_BY'], $craft_html);
 		}
 		return $craft_html;
 	}

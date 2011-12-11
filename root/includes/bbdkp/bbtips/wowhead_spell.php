@@ -108,7 +108,9 @@ class wowhead_spell extends wowhead
             include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
         }
         
-        $html = $this->_read_url($name, 'spell', false);
+        $this->make_url($name, 'spell');
+		$html = $this->gethtml('spell');
+		
 		if ($html == NULL)
 		{
 		    //in case of bad request
@@ -209,8 +211,9 @@ class wowhead_spell extends wowhead
 		}
 			
 
-		$data = $this->_read_url($id, 'spell', false);
-
+        $this->make_url($id, 'spell');
+		$data = $this->gethtml('spell');
+		
 		if ($data == '$WowheadPower.registerSpell')
 		{
 			return false;
