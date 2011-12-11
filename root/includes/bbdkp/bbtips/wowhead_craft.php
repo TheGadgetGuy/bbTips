@@ -33,7 +33,7 @@ class wowhead_craft extends wowhead
 	 * @var array
 	 */
 	private $craft_recipe = array();
-	private $craft_product = array();
+	private $craft = array();
 	private $craft_reagents = array();
 	public 	$patterns;
 	private $mats = false;
@@ -55,7 +55,7 @@ class wowhead_craft extends wowhead
 
 	public function parse($name)
 	{
-		global $config, $phpEx, $phpbb_root_path; 
+		global $db, $config, $phpEx, $phpbb_root_path; 
 		
 		if (trim($name) == '')
 		{
@@ -66,11 +66,17 @@ class wowhead_craft extends wowhead
         {
             require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_cache.' . $phpEx); 
         }
-		$cache = new wowhead_cache();
-
-		if (!$result = $cache->getCraftable($name, $this->lang))
+		
+        
+        $sql = "SELECT spellid as recipeid, name FROM " . BBTIPS_CRAFT_SPELL_TBL . " WHERE name='" . $db->sql_escape($name) . "'";		
+	    $result = $db->sql_query($sql);
+	    $recipe_id = $db->sql_fetchfield('recipeid', false, $result);
+	    $db->sql_freeresult($result);
+	    
+		if (!$recipe_id)
 		{
-			// not in cache, get html
+			// not in db, get html
+			
 			$this->make_url($name, 'craftable');
 			$data = $this->gethtml('craftable');
 
@@ -99,10 +105,10 @@ class wowhead_craft extends wowhead
 			            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
 			        }
 					$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
-					$prhref = $prhtml->find('table tr td span.q1 a', 1)->href;
+					$prhref = $prhtml->find('table tr td span.q1 a', 0)->href;
 					preg_match_all('/([\d]+)/', $prhref, $match);
  					$prid= (int) @$match[1][0];
-					$prname = $prhtml->find('table tr td span.q1 a', 1)->plaintext;
+					$prname = $prhtml->find('table tr td span.q1 a', 0)->plaintext;
 					
 					// make recipe array
 					$this->craft_recipe = array(
@@ -119,27 +125,35 @@ class wowhead_craft extends wowhead
 						'search_name'	=>	(string) $prname,
 						'quality'		=>	(int) $xml->item->quality['id'],
 						'lang'			=>	(string) $this->lang,
-						'icon'			=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($xml->item->icon) . '.jpg'
+						'icon'			=>	'http://static.wowhead.com/images/wow/icons/medium/' . strtolower( (string) $xml->item->icon) . '.jpg'
 					);
 					
 					// finally make reagents array
-					//$this->mats = (!array_key_exists('nomats', $this->args)) ? true : false;
-					/*if ($this->mats == true)
+					
+					// is there a mats array ?
+					if(isset($this->args['mats']) == true)
 					{
-						// build reagent array
-						foreach ($xml->item->createdBy->spell->reagent as $reagent)
+						$this->mats = true;
+						$reagents_htmls = $prhtml->find('table tr td span.q1 a');
+						foreach($reagents_htmls as $id => $reagents_html)
 						{
-							array_push($this->craft_reagents, array(
-								'itemid'	=>	(int) $reagent['id'],
-								'reagentof'	=>	(int) $xml->item['id'],
-								'name'		=>	(string) $reagent['name'],
-								'quantity'	=>	(int) $reagent['count'],
-								'quality'	=>	$reagent['quality'],
-								'icon'		=>	'http://static.wowhead.com/images/wow/icons/small/' . strtolower($reagent['icon']) . '.jpg'
-							));
+							if($id > 0)
+							{
+								$href = $reagents_html->href;
+								preg_match_all('/([\d]+)/', $href, $match);
+		 						$this->craft_reagents[$id]['itemid'] = (int) @$match[1][0];
+		 						$this->craft_reagents[$id]['name'] = (string) @$reagents_html->plaintext;
+		 						$this->craft_reagents[$id]['reagentof'] = (int) $prid;
+		 						$this->craft_reagents[$id]['quantity'] = 1;
+		 						$this->craft_reagents[$id]['quality'] = 1;
+		 						$this->craft_reagents[$id]['icon'] = ' ';
+		 						 
+							}
 						}
+
+
 					}
-*/
+
 					
 				}
 				else
@@ -151,11 +165,11 @@ class wowhead_craft extends wowhead
 
 			if ($this->mats == true)
 			{
-				$cache->saveCraftable($this->craft, $this->craft_recipe, $this->craft_reagents);
+				$this->saveCraftable($this->craft, $this->craft_recipe, $this->craft_reagents);
 			}
 			else
 			{
-				$cache->saveCraftable($this->craft, $this->craft_recipe);
+				$this->saveCraftable($this->craft, $this->craft_recipe);
 			}
 			
 			unset($xml);
@@ -163,11 +177,46 @@ class wowhead_craft extends wowhead
 		}
 		else
 		{  
-			$this->craft = $result;
-			$this->craft_recipe = $cache->getCraftableSpell($this->craft['itemid']);
-			if ($this->nomats == false)
+			// get recipe
+			$sql = "SELECT a.spellid, a.name, b.quality, a.reagentof 
+				FROM " . BBTIPS_CRAFT_SPELL_TBL . " a 
+				INNER JOIN " . BBTIPS_CRAFT_TBL . " b 
+				ON  a.reagentof = b.itemid 
+				WHERE a.spellid='" . $db->sql_escape($recipe_id) . "'";
+					
+		    $result = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($result))
 			{
-				$this->craft_reagents = $cache->getCraftableReagents($this->craft['itemid']);
+				$this->craft_recipe = array(
+					'recipeid'		=>	(int) $row['spellid'],
+					'name'			=>	(string) $row['name'],
+					'quality'		=>	(int) $row['quality'],
+					'reagentof'		=>	(int) $row['reagentof'],
+				);
+				
+			}
+			$db->sql_freeresult($result);
+
+			// get craft product
+			$sql = 'SELECT * FROM ' . BBTIPS_CRAFT_TBL . " WHERE itemid = ". (int) $this->craft_recipe['reagentof'] ;
+			$result = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$this->craft = array(
+					'itemid'		=>	(int) $row['itemid'],
+					'name'			=>	(string) $row['name'],
+					'search_name'	=>	(string) $row['search_name'],
+					'quality'		=>	(int) $row['quality'],
+					'lang'			=>	(string) $row['lang'],
+					'icon'			=>	(string) $row['icon']
+				);
+			}
+			$db->sql_freeresult($result);
+			
+			if(isset($this->args['mats']) == true)
+			{
+				$this->mats = true;
+				$this->craft_reagents = $this->getCraftableReagents($this->craft['itemid']);
 			}
 			
 			return $this->_toHTML();
@@ -237,6 +286,123 @@ class wowhead_craft extends wowhead
 			$craft_html = str_replace('{CREATED_BY}', $user->lang['CREATED_BY'], $craft_html);
 		}
 		return $craft_html;
+	}
+	
+	/**
+	 * inserts craft recipe
+	 *
+	 * @param array $craft
+	 * @param array $craft_spell
+	 * @param array $craft_reagents
+	 * @return void
+	 */
+	private function saveCraftable($craft, $craft_spell, $craft_reagents = array())
+	{
+	    global $db;
+	    
+		if ( !is_array($craft) || !is_array($craft_spell)  || !isset($craft['itemid']) || !isset($craft['name'])  )
+		{
+		    return false;
+		}
+	     
+		// save the recipe
+		$reagentof = $craft_spell['reagentof']; 
+		$spellid = $craft_spell['recipeid']; 
+		$name = $craft_spell['name'] ; 
+
+		unset ($sql_ary); 
+        $sql_ary = array(
+		    'reagentof'  => $reagentof, 
+		    'spellid'    => $spellid, 
+		    'name'       => $name,
+		    
+		);
+			
+		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_SPELL_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
+		$result = $db->sql_query($sql);
+		if (!$result)
+		{
+			global $user;
+			$user->add_lang(array('mods/dkp_tooltips'));
+			trigger_error('Failed to insert ' . $craft_spell['reagentof'] . ' in the ' . BBTIPS_CRAFT_SPELL_TBL . 'table <br/><br/>') ;
+			return false;
+		}
+				
+	    // save the product
+        $sql_ary = array(
+		    'itemid'      => (int) $craft['itemid'],
+		    'name'    	  => (string) $craft['name'],
+		    'search_name' =>  (string) $craft['search_name'],
+		    'quality'     => (int) $craft['quality'],
+	        'lang'        => (string) $craft['lang'],
+	        'icon'        => (string) $craft['icon'] 
+		);
+		
+		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
+		$result = $db->sql_query($sql);
+		if (!$result)
+		{
+			global $user;
+			$user->add_lang(array('mods/dkp_tooltips'));
+			trigger_error(  sprintf($user->lang['BBTOOLTIPS_ERRORCACHING'], $craft['name'] , BBTIPS_CRAFT_TBL), E_USER_WARNING ) ;
+			return false;
+		}
+		
+		// now save the reagents
+		if (sizeof($craft_reagents) > 0)
+		{
+			foreach ($craft_reagents as $reagent)
+			{
+				unset ($sql_ary); 
+                $sql_ary = array(
+        		    'itemid'     => $reagent['itemid'], 
+        		    'reagentof'  => $reagent['reagentof'], 
+        		    'name'       => $reagent['name'], 
+        		    'quantity'   => $reagent['quantity'], 
+        		    'quality'    => $reagent['quality'], 
+        		    'icon'       => $reagent['icon'], 
+        		);
+        		$sql = 'INSERT INTO ' . BBTIPS_CRAFT_REAGENT_TBL . ' ' . $db->sql_build_array('INSERT', $sql_ary);
+               $db->sql_query($sql);
+			}
+		}
+	}
+
+	/**
+	* Gets craftable reagents
+	 *
+	 * @param unknown_type $id
+	 * @return unknown
+	 */
+	private function getCraftableReagents($id)
+	{
+	    if (trim($id) == '')
+		{
+		    return false;
+		}
+			
+        global $db; 
+        
+		$reagents = array();
+
+		$query_text = 'SELECT itemid, name, quantity, quality, icon FROM ' . BBTIPS_CRAFT_REAGENT_TBL . ' 
+		WHERE reagentof=' . $db->sql_escape($id) . ' ORDER BY name ASC';
+		
+		$result = $db->sql_query($query_text);
+	    if ( $db->sql_affectedrows() == 0)
+		{
+			$db->sql_freeresult($result);
+			return false;
+		}
+		else
+		{
+    		while ($row = $db->sql_fetchrow($result))
+            {
+                array_push($reagents, $row);
+            }
+            $db->sql_freeresult($result);
+    		return $reagents;
+		}
 	}
 
 }
