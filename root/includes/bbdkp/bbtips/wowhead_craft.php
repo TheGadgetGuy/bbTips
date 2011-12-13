@@ -103,107 +103,143 @@ class wowhead_craft extends wowhead
 				if ($xml->error == '')
 				{
 					
-					// the craft recipe
-					$craftrecipe = (array) json_decode((string) '{' .$xml->item->json[0] . '}');
-					
-					// get product by parsing through tooltip html
-					if (!class_exists('simple_html_dom_node')) 
-			        {
-			            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
-			        }
-			        
-			        // span 0 is the product
-			        // span 1 is the product
-					$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
-					$prhref = $prhtml->find('table tr td span[class*=q] a', 1)->href;
-					preg_match_all('/([\d]+)/', $prhref, $match);
- 					$prid= (int) @$match[1][0];
-					$prname = $prhtml->find('table tr td span[class*=q] a', 1)->plaintext;
-					
 					// make recipe array
-					$this->craft_recipe = array(
-						'recipeid'		=>	(int) $craftrecipe['id'],
-						'name'			=>	(string) substr($craftrecipe['name'],1),
-						'quality'		=>	(int) $xml->item->quality['id'],
-						'reagentof'		=>	(int) $prid,
-					);
+					$class =  (string)  $xml->item->class;
+					$subclass = (string) $xml->item->subclass;
+					$craftid = (string) $xml->item->attributes()->id;
+					$prid = 0;
+					$quality = (string) $xml->item->quality['id'];
+					$icon = (string) $xml->item->icon;
 					
-					// make product array					
-					$this->craft = array(
-						'itemid'		=>	(int) $prid,
-						'name'			=>	(string) $prname,
-						'search_name'	=>	(string) $prname,
-						'quality'		=>	(int) $xml->item->quality['id'],
-						'lang'			=>	(string) $this->lang,
-						'icon'			=>	'http://static.wowhead.com/images/wow/icons/medium/' . strtolower( (string) $xml->item->icon) . '.jpg'
-					);
-					
-					// span 2 is use
-					// finally make reagents array from span 3 onwards
-					// is there a mats array ?
-					
-					// blacksmithing : ok
-					// alchemy : ok
-					// cooking : ok
-					
-					// engineering ko
-					// enchanting ko
-					
-					$id = 0;
-					
-					if(isset($this->args['mats']) == true)
-					{
-						$this->mats = true;
-						
-						// find all q classes
-						$reagents_htmls = $prhtml->find('table tr td span[class*=q]');
-						foreach($reagents_htmls as $reagents_html)
-						{
-							// third q class will be reagents
-							if ($id >= 3)
-							{
-								// find all reagent links
-								$links = $reagents_html->find('a');
-								$reagents = 0;
-								// loop all links in this class
-								foreach($links as $link)
-								{
-									$href = (string) $link->href;
-									preg_match_all('/([\d]+)/', $href, $match);
-			 						$this->craft_reagents[$reagents]['itemid'] = (int) @$match[1][0];
-			 						
-			 						$text = (string) $link->plaintext;
-			 						$this->craft_reagents[$reagents]['name'] = $text;
-			 						$this->craft_reagents[$reagents]['reagentof'] = (int) $prid;
-			 						$this->craft_reagents[$reagents]['quantity'] = 1;
-			 						
-			 						if ( !class_exists('wowhead_item')) 
-					                {	                	
-					                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
-					                }
-					                $args = array();
-					                $object = new wowhead_item($this->craft_reagents[$reagents]['itemid'], $args);
-					                $object->parse(trim($this->craft_reagents[$reagents]['itemid']));
-			 						$this->craft_reagents[$reagents]['quality'] =  $object->quality;
-			 						$this->craft_reagents[$reagents]['icon'] = $object->icon;
-									$reagents += 1;
-								}
-								
-							}
-							$id +=1;
-			                
-	 						 $debug=1;
-						}
-					}
+					//find product name, mats
+					$prname = "";
 
+					switch ($subclass)
+					{
+						case 'Enchanting Formulae':
+						
+							// get product by parsing through tooltip html
+							if (!class_exists('simple_html_dom_node')) 
+					        {
+					            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
+					        }
+					        
+					        // span 0 is the product
+					        // span 1 is the product
+							$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
+							$prhref = $prhtml->find('table td span a', 0)->href;
+							preg_match_all('/([\d]+)/', $prhref, $match);
+		 					$prid= (int) @$match[1][0];
+							$prname = (string) $prhtml->find('table td span a', 0)->plaintext;
+							break;
+							
+						case 'Jewelcrafting Designs':
+						case 'Alchemy Recipes':
+						case 'Cooking Recipes':
+						case 'Blacksmithing Formulae':
+						case 'Engineering Schematics':	
+						case 'Leatherworking Patterns':
+						default:
+
+							// the craft recipe
+							//$craftrecipe = (array) json_decode((string) '{' .$xml->item->json[0] . '}');
+							
+							// get product by parsing through tooltip html
+							if (!class_exists('simple_html_dom_node')) 
+					        {
+					            include ($phpbb_root_path . 'includes/bbdkp/bbtips/simple_html_dom.' . $phpEx); 
+					        }
+					        
+					        // span 0 is the product
+					        // span 1 is the product
+							$prhtml = str_get_html ($xml->item->htmlTooltip[0], $lowercase = true);
+							$prhref = $prhtml->find('table tr td span[class*=q] a', 1)->href;
+							preg_match_all('/([\d]+)/', $prhref, $match);
+		 					$prid= (int) @$match[1][0];
+							$prname = (string) $prhtml->find('table tr td span[class*=q] a', 1)->plaintext;
+							
+							// span 2 is use
+							// finally make reagents array from span 3 onwards
+							// is there a mats array ?
+							$id = 0;
+							
+							if(isset($this->args['mats']) == true)
+							{
+								$this->mats = true;
+								
+								// find all q classes
+								$reagents_htmls = $prhtml->find('table tr td span[class*=q]');
+								foreach($reagents_htmls as $reagents_html)
+								{
+									// third q class will be reagents
+									if ($id >= 3)
+									{
+										// find all reagent links
+										$links = $reagents_html->find('a');
+										$reagents = 0;
+										// loop all links in this class
+										foreach($links as $link)
+										{
+											$href = (string) $link->href;
+											preg_match_all('/([\d]+)/', $href, $match);
+					 						$this->craft_reagents[$reagents]['itemid'] = (int) @$match[1][0];
+					 						
+					 						$text = (string) $link->plaintext;
+					 						$this->craft_reagents[$reagents]['name'] = $text;
+					 						$this->craft_reagents[$reagents]['reagentof'] = (int) $prid;
+					 						$this->craft_reagents[$reagents]['quantity'] = 1;
+					 						
+					 						if ( !class_exists('wowhead_item')) 
+							                {	                	
+							                    require($phpbb_root_path . 'includes/bbdkp/bbtips/wowhead_item.' . $phpEx);    
+							                }
+							                $args = array();
+							                $object = new wowhead_item($this->craft_reagents[$reagents]['itemid'], $args);
+							                $object->parse(trim($this->craft_reagents[$reagents]['itemid']));
+					 						$this->craft_reagents[$reagents]['quality'] =  $object->quality;
+					 						$this->craft_reagents[$reagents]['icon'] = $object->icon;
+											$reagents += 1;
+										}
+										
+									}
+									$id +=1;
+					                
+			 						 $debug=1;
+								}
+							}//endmake mats
+							
+							//end bs, cook, alchemy, crafting
+							break;
+							
+					}//end switch
 					
-				}
+					
+					//fill recipe array	
+					$this->craft_recipe = array(
+						'recipeid'		=>	$craftid,
+						'name'			=>	$name,
+						'quality'		=>	$quality,
+						'reagentof'		=>	$prid,
+						'icon'			=>  $icon,
+					);
+					
+					// fill product array					
+					$this->craft = array(
+						'itemid'		=>	$prid,
+						'name'			=>	$prname,
+						'search_name'	=>	$prname,
+						'quality'		=>	$quality,
+						'lang'			=>	(string) $this->lang,
+						'icon'			=>	'http://static.wowhead.com/images/wow/icons/medium/' . strtolower($icon) . '.jpg'
+					);
+					
+				}//end xml noerror
 				else
 				{
 					
 					return $this->_notfound('craftable', $name);
 				}
-			}
+			}//end usesimplexml
 
 			if ($this->mats == true)
 			{
@@ -215,7 +251,7 @@ class wowhead_craft extends wowhead
 			}
 			
 			unset($xml);
-			return $this->_toHTML();
+			return $this->_toHTML($subclass);
 		}
 		else
 		{  
@@ -269,12 +305,13 @@ class wowhead_craft extends wowhead
 	* Generates HTML for display
 	* @access private
 	**/
-	private function _toHTML()
+	private function _toHTML($subclass = '')
 	{
 		global $user;
 		$user->add_lang(array('mods/dkp_tooltips'));
+		//
 		
-		if ($this->mats == true)
+		if ($this->mats == true && $subclass != 'Enchanting Formulae')
 		{
 			// generate spell html first
 			$spell_html = $this->patterns->pattern('craftable_spell');
@@ -324,7 +361,15 @@ class wowhead_craft extends wowhead
 			$craft_html = str_replace('{recipequality}', $this->craft_recipe['quality'], $craft_html);
 			$craft_html = str_replace('{spname}', stripslashes($this->craft_recipe['name']), $craft_html);
 			//product
-			$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'item'), $craft_html);
+			
+			if ($subclass =='Enchanting Formulae')
+			{
+				$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'spell'), $craft_html);
+			}
+			else
+			{
+				$craft_html = str_replace('{link}', $this->_generateLink($this->craft['itemid'], 'item'), $craft_html);
+			}
 			$craft_html = str_replace('{qid}', $this->craft['quality'], $craft_html);
 			$craft_html = str_replace('{name}', stripslashes($this->craft['name']), $craft_html);
 			
