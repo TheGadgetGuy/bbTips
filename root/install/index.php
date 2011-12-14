@@ -44,7 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbTips 0.4.2';
+$mod_name = 'bbTips 0.4.3';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -208,21 +208,14 @@ $versions = array(
 
          ),
 
-         'custom' => array( 
-             'bbdkp_caches' ,
-             'insert_bbcodes_wrapper' , 
+     'custom' => array( 
 			 'moduleinstall',              
-             
+             'insert_bbcodes_wrapper' , 
          ) 
 
     ),
     
     '0.4.1' => array(
-    
-         'custom' => array( 
-             'bbdkp_caches' 
-         ) 
-    
          
      ), 
     
@@ -230,6 +223,12 @@ $versions = array(
 		//    
      ), 
 
+    '0.4.3' => array(
+ 		'custom' => array( 
+             'bbdkp_caches' ,
+         ) 
+     ), 
+     
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.

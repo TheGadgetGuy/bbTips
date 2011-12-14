@@ -111,8 +111,10 @@ class wowhead_quest extends wowhead
 				return false;
 		}
 
-		$data = $this->_read_url($id, 'quest', false);
-
+		
+		$this->make_url($id, 'quest');
+		$data = $this->gethtml($id, 'quest');
+			
 		// wowhead doesn't have the info
 		if ($data == '$WowheadPower.registerQuest(' . $id . ', {});')
 		{
@@ -151,7 +153,8 @@ class wowhead_quest extends wowhead
 		    return false;
 		}
 		
-		$html = $this->_read_url($name, 'quest', false);
+		$this->make_url($name, 'quest');
+		$html = $this->gethtml($name, 'quest');
 		
 		if (!$html)
 		{

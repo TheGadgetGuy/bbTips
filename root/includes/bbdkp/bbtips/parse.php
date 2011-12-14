@@ -63,7 +63,7 @@ class bbtips
 		        }
 				
 				if (  (count($match)>= 5) && ( 
-						strpos($match[2], 'lang=') !== false || strpos($match[2],'nomats') !== false || strpos($match[2], 'enchant=') !== false ||
+						strpos($match[2], 'lang=') !== false || strpos($match[2],'mats') !== false || strpos($match[2], 'enchant=') !== false ||
 						strpos($match[2], 'size=') !== false || strpos($match[2],'rank=')  !== false || strpos($match[2], 'gems=') !== false ||
 						strpos($match[2], 'loc=') !== false || strpos($match[2],'realm=')  !== false || strpos($match[2],'region=')  !== false  )
 					)
@@ -221,15 +221,15 @@ class bbtips
 			$in = str_replace('&quot;', '', $in); 
 		}
 		
-		// is there a space in the middle ?
+		// is there no space in the middle ?
 		if (strpos($in, ' ') === false)
 		{ 
 			$args = array();
 			// only one argument
-			if (trim($in) == 'nomats')
+			if (trim($in) == 'mats')
 			{
 				return array(
-					'nomats'	=>	true
+					'mats'	=>	true
 				);
 			}
 			elseif (trim($in) == 'realm')
@@ -259,10 +259,11 @@ class bbtips
 	
 			foreach ($in_array as $value)
 			{
-				if ($value == 'nomats')
+				if ($value == 'mats')
 				{
-					$args['nomats'] = true;
+					$args['mats'] = true;
 				}
+				
 				elseif ($value == 'realm')
 				{
 					// used with wowchar

@@ -43,9 +43,14 @@ class wowhead_item extends wowhead
 {
 	public $lang;
 	public $patterns;
-	private $type; 
-	private $size;
-	private $args = array();
+	public $type; 
+	public $size;
+	public $itemid;
+	public $name;
+	public $search_name;
+	public $icon;
+	public $quality;
+	public $args = array();
 
 	/*
 	 * $bbcode : either 'item' or 'itemico' or 'itemdkp'
@@ -134,6 +139,13 @@ class wowhead_item extends wowhead
 		}
 		else
 		{
+			
+			$this->name = (string) $result['name'];
+			$this->search_name = (string) $result['search_name'];
+			$this->itemid = (string) $result['itemid'];
+			$this->quality = (string) $result['quality'];
+			$this->icon = (string) $result['icon']; 
+
 			// already in db
 			if (array_key_exists('gems', $this->args) || array_key_exists('enchant', $this->args))
 			{
@@ -231,8 +243,8 @@ class wowhead_item extends wowhead
 			return false;
 		}
 		
-		//get the raw XML data from wowhead 
-		$data = $this->_read_url($id);
+		$this->make_url($id, 'craftable');
+		$data = $this->gethtml($id, 'craftable');
 
 		if (trim($data) == '' || empty($data)) 
 		{ 
@@ -271,14 +283,20 @@ class wowhead_item extends wowhead
 			 		return false;
 			 	}
 			 	
+			 	$this->name = (string) $xml->item->name;
+			 	$this->search_name = (trim($search) == '') ? $id : $search;
+			 	$this->itemid = (string)$xml->item['id'];
+			 	$this->quality = (string)$xml->item->quality['id'];
+			 	$this->icon = 'http://static.wowhead.com/images/wow/icons/' . $this->size . '/' . strtolower($xml->item->icon) . '.jpg'; 
+			 	
 			 	// will hold return
 				$item = array(
-					'name'			=>	(string)$xml->item->name,
-					'search_name'		=>	(trim($search) == '') ? $id : $search,
-					'itemid'		=>	(string)$xml->item['id'],
-					'icon'			=>	'http://static.wowhead.com/images/wow/icons/' . $this->size . '/' . strtolower($xml->item->icon) . '.jpg',
+					'name'			=>	$this->name, 
+					'search_name'	=>	$this->search_name, 
+					'itemid'		=>	$this->itemid,
+					'icon'			=>	$this->icon, 
 					'icon_size'		=>	$this->size,
-					'quality'		=>	(string)$xml->item->quality['id'],
+					'quality'		=>	$this->quality, 
 					'type'			=>	$this->type,
 					'lang'			=>	$this->lang
 				);
@@ -307,9 +325,10 @@ class wowhead_item extends wowhead
 		{
 			return false;
 		}
-		
-		$data = $this->_read_url($name, 'item', false);
-		
+
+		$this->make_url($name, 'item');
+		$data = $this->gethtml($name, 'item');
+				
 		if (!$data)
 		{
 			return false;

@@ -24,6 +24,7 @@ class wowhead
 {
 	public $patterns; 
 	public $ptr;
+	public $built_url;
 	
 	function wowhead()
 	{
@@ -38,16 +39,13 @@ class wowhead
 	}
 	
 	/**
-	* Attempts to read URL and return content
-	* @access private
-	* 
-	* @param $url
-	* @param $type default 'item'
-	* 
-	**/
-	public function _read_url($url, $type = 'item')
+	 * builds search url
+	 *
+	 * @param string $name
+	 * @param string $type
+	 */
+	public function make_url($name, $type = 'item')
 	{
-		// build the url depending on bbcode
 		
 		$domain =  $this->_getDomain(); 
 		
@@ -57,17 +55,17 @@ class wowhead
 			case 'itemset':
 			case 'ptritemset':
 			case 'ptrnpc':				
-				if(is_numeric($url))
+				if(is_numeric($name))
 				{
 					//parse page directly
-					$built_url = $domain . '/' . $type . '=' . $url; 
+					$this->built_url = $domain . '/' . $type . '=' . $name; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $domain. '/search?q=' . $this->_convert_string($url);
+					$this->built_url = $domain. '/search?q=' . $this->_convert_string($name);
 				}
-				$html_data = $this->_read_php($built_url, 1, 0 );
+				
 				break;
 			case 'spell':
 			case 'quest':  
@@ -76,17 +74,17 @@ class wowhead
 			case 'ptrquest':  
 			case 'ptrachievement':	
 				
-				if(is_numeric($url))
+				if(is_numeric($name))
 				{
 					//parse page directly
-					$built_url = $domain . '/' . $type . '=' . $url . '&power'; 
+					$this->built_url = $domain . '/' . $type . '=' . $name . '&power'; 
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
+					$this->built_url = $domain . '/search?q=' . $this->_convert_string($name);
 				}
-				$html_data = $this->_read_php($built_url, 1, 0 );
+				
 				break;
 			case 'item':      
 		    case 'itemico':   
@@ -94,24 +92,75 @@ class wowhead
 			case 'ptritem':      
 		    case 'ptritemico':   
 		    case 'ptritemdkp':
-		   		if(is_numeric($url))
+		   		if(is_numeric($name))
 				{	
-					$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
-					$html_data = $this->_read_php($built_url, 0, 0 );
+					$this->built_url = $domain . '/item=' . $this->_convert_string($name) . '&xml';
+				
 				}
 				else 
 				{
 					//use search and parse page
-					$built_url = $domain . '/search?q=' . $this->_convert_string($url);
-					$html_data = $this->_read_php($built_url, 1, 0 );
+					$this->built_url = $domain . '/search?q=' . $this->_convert_string($name);
+				
 				}
 				break;
 			case 'craftable':
 			case 'ptrcraftable':				
 			default:
 				//xml
-				$built_url = $domain . '/item=' . $this->_convert_string($url) . '&xml';
-				$html_data = $this->_read_php($built_url, 0, 0 );
+				$this->built_url = $domain . '/item=' . $this->_convert_string($name) . '&xml';
+				
+				break;
+		}
+		
+	}
+	
+	/**
+	* Attempts to read URL and return content
+	* @access public
+	* 
+	* @param $type default 'item'
+	* 
+	**/
+	public function gethtml($name, $type = 'item')
+	{
+		// build the url depending on bbcode
+		switch ($type)
+		{
+			case 'npc':
+			case 'itemset':
+			case 'ptritemset':
+			case 'ptrnpc':				
+			case 'spell':
+			case 'quest':  
+			case 'achievement':
+			case 'ptrspell':
+			case 'ptrquest':  
+			case 'ptrachievement':	
+				$html_data = $this->_read_php($this->built_url, 1, 0 );
+				break;
+			case 'item':      
+		    case 'itemico':   
+		    case 'itemdkp':   
+			case 'ptritem':      
+		    case 'ptritemico':   
+		    case 'ptritemdkp':
+		   		if(is_numeric($name))
+				{	
+				
+					$html_data = $this->_read_php($this->built_url, 0, 0 );
+				}
+				else 
+				{
+					//use search and parse page
+					$html_data = $this->_read_php($this->built_url, 1, 0 );
+				}
+				break;
+			case 'craftable':
+			case 'ptrcraftable':				
+			default:
+				//xml
+				$html_data = $this->_read_php($this->built_url, 0, 0 );
 				break;
 		}
 		return $html_data;
@@ -178,8 +227,9 @@ class wowhead
 			return false;
 		}
 
-		$data = $this->_read_url($name);
-
+        $this->make_url($name, 'gem');
+		$data = $this->gethtml($name, 'gem');
+		
 		if (empty($data)) 
 		{ 
 			return false; 

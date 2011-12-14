@@ -3,7 +3,7 @@
  * adapted to phpbb
  * 
  */
-window.onload = resizeIfOdd;
+onload_functions.push('resizeIfOdd();');
 window.onresize = forceBrowserEven;
 
 function resizeIfOdd(){

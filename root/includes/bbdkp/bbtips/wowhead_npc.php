@@ -86,7 +86,10 @@ class wowhead_npc extends wowhead
 
 		if (!is_numeric($name))
 		{
-			$data = $this->_read_url($name, 'npc', false);
+			
+			$this->make_url($name, 'npc');
+			$data = $this->gethtml($name, 'npc');
+			
 			// get the id of the npc
 			if (preg_match('#Location: /npc=([0-9]{1,10})#s', $data, $match))
 			{
@@ -113,7 +116,10 @@ class wowhead_npc extends wowhead
 		}
 		else
 		{
-			$data = $this->_read_url($name, 'npc', false);
+						
+			$this->make_url($name, 'npc');
+			$data = $this->gethtml($name, 'npc');
+			
 			$npc_name = $this->_getNPCNameFromID($data);
 			return array(
 				'npcid'			=>	$name,
