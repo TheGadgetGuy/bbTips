@@ -63,6 +63,15 @@
 			[craft]Schéma : Lunettes en khorium durci[/craft]
 			[npc]Illidan Hurlorage[/npc]
 		]]></description>
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
+If you install without bbDKP then the ACP is created under the .MODS tab, otherwise it is in the bbDKP Raids ACP. Please read docs\INSTALL.html before beginning. ]]>
+		</author-notes>
+		<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
+Veuillez lire docs\INSTALL.html avant de commencer ]]>
+		</author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
+Bitte lesen sie docs\INSTALL.html bevor. ]]>
+		</author-notes>
 		<author-group>
 			<author>
 				<username><![CDATA[Sajaki]]></username>
