@@ -27,9 +27,9 @@ class acp_dkp_bbtooltips
       global $db, $user, $auth, $template,  $sid, $cache;
       global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx; 
      
-      $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>Return to Index</h3></a>'; 
+      $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bbtooltips&amp;mode=bbtooltips") . '"><h3>Return to Index</h3></a>'; 
       
-	  $user->add_lang(array('mods/dkp_tooltips', 'mods/dkp_admin'));
+	  $user->add_lang(array('mods/dkp_tooltips'));
 	
       switch($mode)
       {
