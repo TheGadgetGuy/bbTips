@@ -61,12 +61,26 @@
 <li>[item gems="40133" enchant="3825"]50468[/item]</li>
 </ul>
 
+<li>PTR usage : You can prefix the tags with "ptr" to access the Wowhead Public Test Realm database. <br />
+Example for PTR 4.2<br /></li>
+<ul>
+<li>[ptritem]Decimation Treads[/ptritem]</li>
+<li>[ptritem]Sho'ravon, Greatstaff of Annihilation[/ptritem]</li>
+</ul>
+
 <li>Item icon</li>
 <ul>
 <li>[itemico gems="40133" enchant="3825"]50468[/item]</li>
 <li>[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]</li>
 <li>[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]</li>
 <li>[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]</li>
+</ul>
+
+<li>PTR usage : You can prefix the tags with "ptr" to access the Wowhead Public Test Realm database. <br />
+Example for PTR 4.2<br /></li>
+<ul>
+<li>[ptritem]Decimation Treads[/ptritem]</li>
+<li>[ptritem]Sho'ravon, Greatstaff of Annihilation[/ptritem]</li>
 </ul>
 
 <li>Itemset</li>
@@ -79,20 +93,36 @@
 <li>[achievement]Breaking Out of Tol Barad[/achievement]</li>
 <li>[achievement]4874[/achievement]</li>
 <li>[ptrachievement]Explore Hyjal[/ptrachievement]</li>
-
+<li>[achievement]Loremaster of Outland[/achievement]</li>
 </ul>
 
-<li>Spell : as of Wow 4.0, the spell ranks were removed. Existing spell tags with spell rank will ignore the rank argument.</li>
+<li>Spells: as of Wow 4.0, the spell ranks were removed. Existing spell tags with spell rank will ignore the rank argument.</li>
 <ul>
 <li>[spell]Power Word: Shield[/spell]</li>
+<li>[spell]Master of Beasts[/spell]</li>
 </ul>
 
-<li>PTR usage : You can prefix the tags with "ptr" to access the Wowhead Public Test Realm database. <br />
-Example for PTR 4.2<br /></li>
+<li>Quests</li>
 <ul>
-<li>[ptritem]Decimation Treads[/ptritem]</li>
-<li>[ptritem]Sho'ravon, Greatstaff of Annihilation[/ptritem]</li>
+<li>[quest]A Dire Situation[/quest]</li>
 </ul>
+
+<li>NPC bbCode</li>
+<ul>
+<li>[npc]Illidan Stormrage[/npc]</li>
+</ul>
+
+<li>Crafting bbcode. The Craft bbcode can be used with or without the mats argument. The mats argument can be used only once per post. </li>
+<ul>
+<li>[craft mats]Recipe: Dirge's Kickin' Chimaerok Chops[/craft]</li>
+<li>[craft mats]Design: Brazen Elementium Medallion[/craft]</li>
+<li>[craft mats]Schematic: Hard Khorium Goggles[/craft]</li>
+<li>[craft mats]Recipe: Destruction Potion[/craft]</li>
+<li>[craft]Plans: Black Felsteel Bracers[/craft]</li>
+<li>[craft mats]Recipe: Vial of the Sands[/craft]</li>
+</ul>	 	
+
+
 
 
 </ul>
@@ -158,12 +188,19 @@ Example for PTR 4.2<br /></li>
 		
 		<div class="content">
 	
-	<ul>2011-11-20 : 0.4.2
-	<li>[NEW] local wowhead javascript/css</li>	
-	<li>[NEW] PTR fix</li>		
+	<ul>2011-12-14 : 0.4.3
+	<li>[CHG] crafting redone. The nomats argument is gone, you have to select mats if you want to see materials. works with Blacksmithing, Alchemy, Leatherworking, Jewelcrafting, cooking, Engineering.</li>
+	<li>[FIX] quick reply now works when setting to locally hosted power.js</li>	
+	<li>[FIX] </li>		
+
+	</ul>
+	<br />	
+	
+	<ul>2011-10-16 : 0.4.2
+	<li>[FIX] renamed installer to index.php</li>
 	<li>[FIX] does a trim of the received text before testing it for html</li>	
 	<li>[FIX] randomly enchanted items are now recognised (example http://www.wowhead.com/item=31940)</li>		
-	<li>[FIX] renamed installer to index.php</li>
+
 	</ul>
 	<br />	
 	

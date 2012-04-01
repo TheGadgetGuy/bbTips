@@ -6,7 +6,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbTips 0.4.2]]></title>
+		<title lang="en"><![CDATA[bbTips 0.4.3]]></title>
 		<description lang="en"><![CDATA[
 		a BBCode Tooltip mod
 		* bbDKP compatible 
@@ -18,7 +18,17 @@
 		 	[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
 		 	[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
 		 	[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
-		 	[spell rank=14]Power Word: Shield[/spell]
+		 	[spell]Power Word: Shield[/spell]
+		 	[spell]Master of Beasts[/spell]
+		 	[craft mats]Recipe: Dirge's Kickin' Chimaerok Chops[/craft]
+		 	[quest]A Dire Situation[/quest]
+		 	[npc]Illidan Stormrage[/npc]
+		 	(The Craft bbcode can be used with or without the mats argument.)
+		 	[craft mats]Design: Brazen Elementium Medallion[/craft]
+		 	[craft mats]Schematic: Hard Khorium Goggles[/craft]
+		 	[craft mats]Recipe: Destruction Potion[/craft]
+		 	[craft]Plans: Black Felsteel Bracers[/craft]
+		 	[craft mats]Recipe: Vial of the Sands[/craft]
 		]]></description>
 		<description lang="de"><![CDATA[
 		* BBCode für bbDKP
@@ -29,8 +39,12 @@
 			[itemico gems="40133" enchant="3825" size=small]Des ehrwürdigen Dal'Rends  hochheilige Attacke[/itemico]
 			[itemico gems="40133" enchant="3825" size=medium]Andonisus, Der Seelenschlächter[/itemico]
 			[itemico gems="40133" enchant="3825" size=large]Akil'zons Krallenklinge[/itemico]
-			[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
-			[spell rank=14]Power Word: Shield[/spell]
+			[itemset]Geweihte Plattenrüstung des Ymirjarfürsten[/itemset]
+			[spell]Power Word: Shield[/spell]
+			[craft mats]Rezept: Phiole der Sande[/craft]
+			[craft]Rezept: Zerstörungstrank[/craft]
+			[craft]Bauplan: Brille aus Hartkhorium[/craft]
+			[npc]Illidan Sturmgrimm[/npc]
 		]]></description>
 		<description lang="fr"><![CDATA[
 		* BBCode pour bbDKP. 
@@ -38,12 +52,26 @@
 		* example BBCode usage : 
 			[item gems="40133" enchant="3825"]50468[/item]
 			[itemico gems="40133" enchant="3825"]50468[/item]
-			[itemico gems="40133" enchant="3825" size=small]Ardent Guard[/itemico]
-		 	[itemico gems="40133" enchant="3825" size=medium]Ardent Guard[/itemico]
-		 	[itemico gems="40133" enchant="3825" size=large]Ardent Guard[/itemico]
-		 	[itemset]Sanctified Ymirjar Lord's Plate[/itemset]
-		 	[spell rank=14]Power Word: Shield[/spell]
+			[itemico gems="40133" enchant="3825" size=small]Garde ardente[/itemico]
+		 	[itemico gems="40133" enchant="3825" size=medium]Garde ardente[/itemico]
+		 	[itemico gems="40133" enchant="3825" size=large]Garde ardente[/itemico]
+		 	[spell]Power Word: Shield[/spell]
+			[itemset]Armure de seigneur ymirjar en plaques sanctifiée[/itemset]
+			[spell]Mot de pouvoir : Bouclier[/spell]
+			[craft mats]Recette : Fiole des sables[/craft]
+			[craft]Recette : Potion de destruction[/craft]
+			[craft]Schéma : Lunettes en khorium durci[/craft]
+			[npc]Illidan Hurlorage[/npc]
 		]]></description>
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
+If you install without bbDKP then the ACP is created under the .MODS tab, otherwise it is in the bbDKP Raids ACP. Please read docs\INSTALL.html before beginning. ]]>
+		</author-notes>
+		<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
+Veuillez lire docs\INSTALL.html avant de commencer ]]>
+		</author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
+Bitte lesen sie docs\INSTALL.html bevor. ]]>
+		</author-notes>
 		<author-group>
 			<author>
 				<username><![CDATA[Sajaki]]></username>
@@ -52,7 +80,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.4.2</mod-version>
+		<mod-version>0.4.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>300</time>
@@ -94,7 +122,7 @@
 <script type="text/javascript">
 var template_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
 var theme_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
-</script>
+</script type="text/javascript">
 <script src="{T_TEMPLATE_PATH}/dkp/bbtips/power.js" type="text/javascript"></script>
 <!-- ENDIF -->
 <!-- end bbTips -->
@@ -104,7 +132,7 @@ var theme_path= "{T_TEMPLATE_PATH}/dkp/bbtips";
 		<open src="/styles/prosilver/theme/stylesheet.css">
 			<edit>
 				<comment lang="en"><![CDATA[css prosilver]]></comment>
-				<find><![CDATA[@import url("bbdkp.css");]]></find>
+				<find><![CDATA[@import url("colours.css");]]></find>
 				<action type="after-add"><![CDATA[
 @import url("bbtips.css");]]></action>
 			</edit>
