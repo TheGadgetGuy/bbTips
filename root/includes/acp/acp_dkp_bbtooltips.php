@@ -30,6 +30,11 @@ class acp_dkp_bbtooltips
       $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bbtooltips&amp;mode=bbtooltips") . '"><h3>Return to Index</h3></a>'; 
       
 	  $user->add_lang(array('mods/dkp_tooltips'));
+	  
+		// bbtips version
+		$template->assign_vars ( array (
+				'BBTIPS_VERS' 		 	=> $config['bbdkp_plugin_bbtips_version'],
+		));			  
 	
       switch($mode)
       {
