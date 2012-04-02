@@ -49,7 +49,7 @@ $lang = array_merge($lang, array(
 'UMIL_BBCODE_REMOVED' => 'Removed bbcodes', 
 
 'ACP_BBTOOLTIPS' => 'Popup Configuration',
-'BBTOOLTIPS' => 'bbTips 0.4.3', 
+'BBTOOLTIPS' => 'bbTips', 
 'BBTOOLTIPS_EXPLAIN' => 'Tooltips from Wowhead', 
 
 'BBTIPS_SETTING' => 'Tooltip Settings', 
